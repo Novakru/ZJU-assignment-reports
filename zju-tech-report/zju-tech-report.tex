@@ -1,0 +1,279 @@
+\documentclass[10pt,a4paper,twoside]{article}
+
+\usepackage[left=22mm,right=22mm,top=15mm,bottom=23mm,includehead,headheight=11pt,headsep=6mm,footskip=12mm]{geometry}
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Termes}
+\setsansfont{Latin Modern Sans}
+\setmonofont{Latin Modern Mono}
+\usepackage{amsmath,amssymb,booktabs,caption,enumitem,fancyhdr,graphicx,hyperref,microtype,natbib,titlesec,xcolor}
+\usepackage[most]{tcolorbox}
+
+% Zhejiang University's Qiushi Blue (Truth-Seeking Blue):
+% CMYK 100, 70, 0, 25; RGB 0, 63, 136.
+\definecolor{QiushiBlue}{RGB}{0,63,136}
+\colorlet{ReportBlue}{QiushiBlue}
+\definecolor{TextGray}{HTML}{555B66}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=ReportBlue,
+  citecolor=ReportBlue,
+  urlcolor=ReportBlue,
+  pdfauthor={First Author, Second Author},
+  pdftitle={Adaptive Spatial Reasoning with Structured Visual Tokens}
+}
+
+% Choose `report` or `paper`; the title label, author block, and running header
+% adapt to the selected mode.
+\newcommand{\ReportMode}{report}
+% In report mode, choose `front` or `back` for the author information.
+\newcommand{\ReportAuthorPlacement}{back}
+
+% Replace these fields with the report's metadata.
+\newcommand{\ReportTitle}{Adaptive Spatial Reasoning with Structured Visual Tokens}
+\newcommand{\ReportShortTitle}{Adaptive Spatial Reasoning}
+\newcommand{\ReportShortAuthors}{First Author et al.}
+\newcommand{\ReportAuthors}{First Author\textsuperscript{1,*}, Second Author\textsuperscript{1,2,\ensuremath{\dagger}}, Third Author\textsuperscript{2}}
+\newcommand{\ReportLabName}{ReLER Lab}
+\newcommand{\ReportInstitution}{\ReportLabName, Zhejiang University}
+\newcommand{\ReportAffiliations}{\textsuperscript{1}Zhejiang University\hspace{1em}\textsuperscript{2}Research Institute}
+\newcommand{\ReportAuthorNotes}{\textsuperscript{*}Equal contribution \quad \textsuperscript{\ensuremath{\dagger}}Corresponding author}
+\newcommand{\ReportNumber}{ZJU-TR-2026-01}
+\newcommand{\ReportDate}{September 27, 2026}
+\newcommand{\ReportContact}{Second Author at \href{mailto:author@example.edu}{author@example.edu}}
+\newcommand{\ReportKeywords}{spatial reasoning, visual generation, structured representations}
+\newcommand{\ZJULogo}{assets/zju-horizontal-blue.png}
+\newcommand{\LabLogo}{assets/lab-logo.png}
+
+\newif\ifpaperreport
+\newif\iffrontauthorblock
+\newif\ifbackauthorlist
+\newcommand{\PaperReportMode}{paper}
+\newcommand{\FrontAuthorPlacement}{front}
+\newcommand{\BackAuthorPlacement}{back}
+\newcommand{\ReportHeaderLabLogo}{}
+\ifx\ReportMode\PaperReportMode
+  \paperreporttrue
+  \frontauthorblocktrue
+  \backauthorlistfalse
+  \newcommand{\ReportTypeLabel}{RESEARCH PAPER}
+  \newcommand{\ReportOddLeftHeader}{\ReportShortTitle}
+  \newcommand{\ReportOddRightHeader}{}
+  \newcommand{\ReportEvenLeftHeader}{}
+  \newcommand{\ReportEvenRightHeader}{\ReportShortAuthors}
+  \newcommand{\ReportIdentifierLine}{}
+\else
+  \paperreportfalse
+  \frontauthorblockfalse
+  \backauthorlistfalse
+  \ifx\ReportAuthorPlacement\FrontAuthorPlacement
+    \frontauthorblocktrue
+  \fi
+  \ifx\ReportAuthorPlacement\BackAuthorPlacement
+    \backauthorlisttrue
+  \fi
+  \newcommand{\ReportTypeLabel}{TECHNICAL REPORT}
+  \renewcommand{\ReportHeaderLabLogo}{\hspace{6mm}\raisebox{2mm}{\includegraphics[height=5.5mm]{\LabLogo}}}
+  \newcommand{\ReportOddLeftHeader}{}
+  \newcommand{\ReportOddRightHeader}{\ReportShortTitle}
+  \newcommand{\ReportEvenLeftHeader}{}
+  \newcommand{\ReportEvenRightHeader}{\ReportShortTitle}
+  \newcommand{\ReportIdentifierLine}{\quad\ReportNumber}
+\fi
+
+\titleformat{\section}
+  {\rmfamily\bfseries\fontsize{12}{14}\selectfont\color{ReportBlue}}
+  {\thesection}{0.65em}{}
+\titleformat{\subsection}
+  {\rmfamily\bfseries\fontsize{11}{13}\selectfont\color{ReportBlue}}
+  {\thesubsection}{0.65em}{}
+\titlespacing*{\section}{0pt}{1.8ex plus 0.5ex minus 0.2ex}{0.7ex}
+\titlespacing*{\subsection}{0pt}{1.3ex plus 0.4ex minus 0.2ex}{0.5ex}
+\captionsetup{font=small,labelfont=bf,skip=5pt}
+\setlist{itemsep=2pt,topsep=4pt}
+% Keep the English body close to the compact 10pt/11.5pt report rhythm.
+\linespread{0.95}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlength{\emergencystretch}{2em}
+
+\newcommand{\makezjutitle}{%
+  \noindent
+  \raisebox{-0.5mm}{\includegraphics[height=10.5mm]{\ZJULogo}}%
+  \ReportHeaderLabLogo
+  \hfill
+  {\sffamily\small\color{TextGray}\ReportTypeLabel\ReportIdentifierLine}\par
+  \vspace{5pt}\noindent\textcolor{QiushiBlue}{\rule{\linewidth}{0.8pt}}\par
+  \vspace{13pt}
+  {\centering\rmfamily\bfseries\fontsize{18}{21}\selectfont\ReportTitle\par}
+  \vspace{10pt}\noindent\textcolor{QiushiBlue}{\rule{\linewidth}{0.8pt}}\par
+  \vspace{9pt}
+  \ifpaperreport
+  {\centering\rmfamily\bfseries\fontsize{12}{14}\selectfont\ReportAuthors\par}
+  \vspace{3pt}
+  {\centering\fontsize{10}{12}\selectfont\ReportAffiliations\par}
+  \vspace{3pt}
+  {\centering\includegraphics[height=5.4mm]{\LabLogo}\par}
+  \vspace{2pt}
+  {\centering\itshape\fontsize{9}{11}\selectfont\color{TextGray}\ReportAuthorNotes\par}
+  \vspace{10pt}
+  \else
+    \iffrontauthorblock
+    {\centering\rmfamily\bfseries\fontsize{12}{14}\selectfont\ReportAuthors\par}
+    \vspace{3pt}
+    {\centering\rmfamily\fontsize{10}{12}\selectfont\ReportInstitution\par}
+    \vspace{2pt}
+    {\centering\itshape\fontsize{9}{11}\selectfont\color{TextGray}\ReportAuthorNotes\par}
+    \vspace{10pt}
+    \else
+    {\centering\rmfamily\bfseries\fontsize{11}{13}\selectfont\ReportInstitution\par}
+    \vspace{10pt}
+    \fi
+  \fi
+  \begin{tcolorbox}[
+    enhanced,
+    colback=white,
+    colframe=QiushiBlue,
+    boxrule=0.8pt,
+    arc=2mm,
+    left=8mm,right=8mm,top=5mm,bottom=5mm,
+    before skip=0pt,after skip=0pt
+  ]
+  % Keep every element of the abstract block in the report's serif face.
+  {\rmfamily
+  {\centering\rmfamily\bfseries\fontsize{12}{14}\selectfont\color{ReportBlue}Abstract\par}
+  \vspace{3pt}
+  {\small
+    Generative visual models can follow broad textual descriptions while still
+    missing exact spatial constraints. We study a structured representation
+    that separates object identity from position, scale, and orientation, then
+    use it to guide generation and revision. The method is designed to make
+    spatial requirements inspectable before rendering and to support targeted
+    corrections without regenerating the entire scene. This sample document
+    demonstrates the report layout; all names, claims, and numerical values are
+    placeholders and should be replaced with verified project material.\par}
+  \vspace{4pt}
+  {\footnotesize\textbf{Date:} \ReportDate\par
+  \iffrontauthorblock
+  \textbf{Correspondence:} \ReportContact\par
+  \fi
+  \textbf{Keywords:} \ReportKeywords\par}
+  }
+  \end{tcolorbox}
+  \vspace{13pt}
+  \thispagestyle{plain}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LO]{\footnotesize\rmfamily\color{TextGray}\ReportOddLeftHeader}
+\fancyhead[RO]{\footnotesize\rmfamily\color{TextGray}\ReportOddRightHeader}
+\fancyhead[LE]{\footnotesize\rmfamily\color{TextGray}\ReportEvenLeftHeader}
+\fancyhead[RE]{\footnotesize\rmfamily\color{TextGray}\ReportEvenRightHeader}
+\fancyfoot[C]{\footnotesize\rmfamily\color{TextGray}\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\footnotesize\rmfamily\color{TextGray}\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+\begin{document}
+
+\makezjutitle
+
+\section{Introduction}
+
+Text-to-image systems have improved substantially, but precise spatial control
+remains difficult. Large pretrained models provide a powerful basis for visual
+generation \citep{radford2021clip}, yet a prompt can name the right objects and
+still produce the wrong arrangement, scale, or relative position. This gap limits use cases where
+the visual output must satisfy a layout or scene specification.
+
+We represent a scene as a set of object records. Each record contains a label
+and a normalized bounding box, so users can inspect and edit spatial intent
+before image generation. The representation is deliberately simple: it can be
+created from language, edited directly, and translated into constraints for a
+downstream generator.
+
+\section{Method}
+
+For an image of width $W$ and height $H$, an object $i$ is represented by
+$o_i=(c_i,x_i,y_i,w_i,h_i)$, where $c_i$ is its category and the remaining
+values are normalized coordinates. The center of the object is
+$(x_iW,y_iH)$ and its size is $(w_iW,h_iH)$. A scene is the collection
+$\mathcal{S}=\{o_i\}_{i=1}^{N}$.
+
+An instruction such as ``move the cup to the left of the plate'' can be encoded
+as an ordering constraint:
+\begin{equation}
+  x_{\mathrm{cup}} + \frac{w_{\mathrm{cup}}}{2}
+  < x_{\mathrm{plate}} - \frac{w_{\mathrm{plate}}}{2}.
+  \label{eq:left-of}
+\end{equation}
+The layout can then be checked against explicit constraints before it is sent
+to an image generator.
+
+\subsection{A small example}
+
+Table~\ref{tab:layout} shows example object records. The values are illustrative
+and are included only to demonstrate table styling.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Example normalized object layout.}
+  \label{tab:layout}
+  \begin{tabular}{lrrrr}
+    \toprule
+    Object & $x$ & $y$ & $w$ & $h$ \\
+    \midrule
+    Cup   & 0.28 & 0.62 & 0.12 & 0.20 \\
+    Plate & 0.66 & 0.62 & 0.26 & 0.18 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Evaluation}
+
+A useful evaluation should measure both visual quality and constraint
+satisfaction. For example, a benchmark can report the fraction of generated
+scenes that satisfy all specified relations, alongside human preference or a
+perceptual quality metric. Reporting only an aggregate image score can obscure
+whether the system followed the requested layout.
+
+\section{Limitations}
+
+Bounding boxes do not fully describe occlusion, articulated pose, or complex
+three-dimensional relations. Some instructions are also ambiguous without
+additional context. A practical system should allow users to inspect the
+parsed layout, clarify uncertain constraints, and revise individual objects.
+
+\section{Conclusion}
+
+Structured scene records provide a compact interface between language and
+visual generation. They make spatial requirements easier to inspect and can
+support targeted editing. The example content in this template should be
+replaced with the report's own methods, evidence, and limitations.
+
+\begin{thebibliography}{9}
+\bibitem[Radford et~al.(2021)]{radford2021clip}
+  Alec Radford et~al.
+  \newblock Learning transferable visual models from natural language supervision.
+  \newblock In \emph{Proceedings of the International Conference on Machine
+  Learning}, pages 8748--8763, 2021.
+\end{thebibliography}
+
+\ifbackauthorlist
+\section*{Author List}
+{\rmfamily\bfseries\ReportAuthors\par}
+\vspace{3pt}
+{\rmfamily\ReportInstitution\par}
+\vspace{3pt}
+{\rmfamily\itshape\small\ReportAuthorNotes\par}
+\vspace{3pt}
+{\rmfamily\small\textbf{Correspondence:} \ReportContact\par}
+\fi
+
+\end{document}
