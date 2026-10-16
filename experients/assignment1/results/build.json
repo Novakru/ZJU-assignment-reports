@@ -3,6 +3,6 @@
     "experiments_passed":  true,
     "xelatex_passes":  2,
     "latex_warnings_or_overflow":  false,
-    "report_pdf_sha256":  "9a47613f58e9426e53e5284e80588cca9011b5a418ae672adaee2ac7061d452f",
-    "manifest_sha256":  "8d96f70449b47602b971f83253e8f5496433c2eb78fee3493dbf74cbafb40a8e"
+    "report_pdf_sha256":  "bb7a11d0fe1b0fc2e7944b8a755efa3065a01e25bbfba2e7e9f99558cb35db4b",
+    "manifest_sha256":  "a7ded7dd681c47d588574e3008f6b45f33a27108ec8d1d899cee9a0aef827cdc"
 }

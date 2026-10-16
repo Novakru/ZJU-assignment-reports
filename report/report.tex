@@ -83,8 +83,7 @@ The requested normalization is
 \]
 This camera gives $x=180X+280$, $y=180Y+220$, independent of $Z$:
 it is an affine camera. In particular, the fifth point gives $(370,310)$
-and the sixth gives $(370,220)$. A finite pinhole intrinsic matrix is not
-an additional assumption of this computation. The matrices $P$ and $-P$
+and the sixth gives $(370,220)$. The matrices $P$ and $-P$
 have the same Frobenius norm and project to the same image points; the
 implementation fixes the sign by making the largest-magnitude entry positive.
 
@@ -93,7 +92,7 @@ implementation fixes the sign by making the largest-magnitude entry positive.
 The code centers and scales the 3D and 2D points, takes the last right singular
 vector of the normalized design matrix, and denormalizes with
 $P=T_{2D}^{-1}P_nT_{3D}$ before applying the Frobenius normalization.
-The following is captured from the script's actual \texttt{print} output.
+Printed results:
 \lstinputlisting[style=output]{../experients/assignment1/results/q5_camera.txt}
 
 \clearpage
@@ -112,12 +111,11 @@ $-15Z+6W=0$. Choosing $W=1$ yields
  \answer{\mathbf X=(0,\,0,\,0.4)^\top},\qquad
  \mathbf X_h=(0,\,0,\,0.4,\,1)^\top.
 \]
-The fourth column of $P^{(2)}$ is already expressed in projection-matrix
-units. Indeed, $P^{(2)}=K[I\mid\mathbf t]$ has
+Writing $P^{(2)}=K[I\mid\mathbf t]$ gives
 $\mathbf t=(-6/900,0,0)^\top$ and camera center
 $\mathbf C_2=(6/900,0,0)^\top$.
-Hence the physical baseline is $B=6/900=1/150$ in the given world units,
-and the disparity check is
+The baseline is $B=6/900=1/150$ in the given world units.
+The depth can also be checked from the disparity:
 \[
  Z=\frac{fB}{x_1-x_2}=\frac{900(6/900)}{400-385}=0.4.
 \]
@@ -131,7 +129,7 @@ Both camera depths are positive. Direct reprojection confirms
 \textbf{Implementation.}
 \codepath{experients/assignment1/q6_triangulation.py}, reproduced in Appendix B,
 solves the homogeneous system by SVD and divides by the last coordinate.
-Its captured \texttt{print} output is:
+Printed results:
 \lstinputlisting[style=output]{../experients/assignment1/results/q6_triangulation.txt}
 
 \clearpage
@@ -169,8 +167,7 @@ First multiply and then divide by the homogeneous image coordinate:
  \quad\Longrightarrow\quad
  \widehat{\mathbf x}=(1.5,\,0.5)^\top.
 \]
-Using the supplied projection matrix and measurement directly, in the pixel
-units requested by the question, the Euclidean reprojection error is
+The Euclidean reprojection error is
 \begin{align*}
  e&=\|\widehat{\mathbf x}-\mathbf x_m\|_2
    =\sqrt{(1.5-280)^2+(0.5-200)^2}\\
@@ -178,7 +175,6 @@ units requested by the question, the Euclidean reprojection error is
    =\sqrt{117362.5}
    \approx\answer{342.5821\ \text{px}}.
 \end{align*}
-No extra intrinsic matrix or coordinate conversion is specified.
 
 \question{10}
 Unit-scale orthographic projection along $+Z$ discards the depth coordinate:
@@ -191,42 +187,32 @@ Unit-scale orthographic projection along $+Z$ discards the depth coordinate:
 \clearpage
 \section{Appendix A: complete Python code for Question 5}
 File: \codepath{experients/assignment1/q5_camera.py}.
-This is the same source file that generated the output in Question 5.
 \lstinputlisting[style=python]{../experients/assignment1/q5_camera.py}
 
 \section{Appendix B: complete Python code for Question 6}
 File: \codepath{experients/assignment1/q6_triangulation.py}.
-This is the same source file that generated the output in Question 6.
 \lstinputlisting[style=python]{../experients/assignment1/q6_triangulation.py}
 
-\clearpage
 \section{Appendix C: verification and reproducibility}
-The experiments require Python, NumPy and SymPy. From the repository root:
+To rerun the calculations and build the report from the repository root:
 \begin{lstlisting}[style=output]
 python -m pip install -r experients/assignment1/requirements.txt
-python experients/assignment1/run.py
 powershell -NoProfile -File report/build.ps1
 \end{lstlisting}
-The build script reruns the experiments and compiles this PDF with XeLaTeX.
-The source for the independent checks is
-\codepath{experients/assignment1/verify.py}.
-It uses exact rational arithmetic for the camera's rank and null vector,
-exact reprojection for triangulation, and independent projected points to
-check the epipolar convention. Random checks use seed 1050; the numerical
-checks supplement the proofs above. Its actual printed results are:
-\lstinputlisting[style=output]{../experients/assignment1/results/verify.txt}
+The checks in \codepath{experients/assignment1/verify.py} confirm the exact
+rank and null vector in Question 5, the two-view reprojection in Question 6,
+and the epipolar relation $\mathbf p_2^\top E\mathbf p_1=0$ for the convention
+in Question 7. All checks passed. The complete log is saved in
+\codepath{experients/assignment1/results/verify.txt}.
 
 \subsection{Recorded execution environment}
 \input{../experients/assignment1/results/provenance.tex}
 
-The complete SHA-256 hashes of the assignment inputs, code, report sources
-and printed outputs are in
+The source files and printed outputs are linked by SHA-256 hashes in
 \codepath{experients/assignment1/results/manifest.json}.
-The file \codepath{experients/assignment1/inputs.md} transcribes the numerical
-inputs and records the submission requirements. Original task sources are
-\texttt{assignment1\_CS1050.pdf} and the accompanying submission notice.
-Rounded matrix displays may contain signed zeros; validation uses the
-unrounded arrays. The final PDF includes both complete question-specific
-Python files and their printed results, so it can be submitted as one file.
+The input data are recorded in \codepath{experients/assignment1/inputs.md}.
+The code and printed results above are included directly from these files.
+Numerical checks use the unrounded arrays; displayed negative zeros are
+rounding artifacts.
 
 \end{document}
