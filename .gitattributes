@@ -1,0 +1,5 @@
+# Keep traced source bytes stable across Windows/Linux checkouts.
+/.gitattributes text eol=lf
+/report/** text eol=lf
+/experients/** text eol=lf
+/report/*.pdf binary

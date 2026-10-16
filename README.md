@@ -19,4 +19,12 @@
 
 各目录 README 介绍对应模板的使用方法、字体和注意事项。不同模板适用场景与编译方式不同，请按目录说明配置。
 
+## CS1050 课程作业（`assignment1-cs1050` 分支）
+
+- [Assignment 1 报告与构建说明](report/README.md) · [PDF](report/report.pdf)
+- [实验代码、验证与追溯记录](experients/assignment1/README.md)
+
+使用 `report/build.ps1` 一次完成实验、验证和 PDF 编译。提交前请在
+`report/student-info.tex` 填写姓名和学号，再重新构建。
+
 欢迎通过 Issue 和 Pull Request 提交问题、建议与改进。

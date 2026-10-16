@@ -1,0 +1,16 @@
+PASS: Q1: parallel line has vanishing point (4/5, 2/5)
+PASS: Q1: parallel line has vanishing point (4/5, 2/5)
+PASS: Q2: independent plane directions give line (6, 3, 2)
+PASS: Q3: the plane normal equals four times the given vector
+PASS: Q4: 100 rigid motions preserve distance; max error 8.882e-16
+PASS: Q5: exact rational DLT has rank 11 and the stated null vector
+PASS: Q5: computed unit-norm camera agrees with exact solution and all six pixels
+PASS: Q6: triangulation agrees with disparity depth and reprojects in both views
+PASS: Q6: exact reprojection gives [400, 250]
+PASS: Q6: exact reprojection gives [385, 250]
+PASS: Q7: E is the rank-two skew matrix of translation (3, 0, 0)
+PASS: Q8: epipolar line is (0, -3, 600), or y = 200
+PASS: Q7/Q8: p2.T E p1 = 0 for 20 independently projected 3D points
+PASS: Q9: squared error = 117362.5; error = 342.5821069466 px
+PASS: Q10: unit-scale orthographic image is (5, 4)
+All checks passed. Numerical checks supplement the written proofs.

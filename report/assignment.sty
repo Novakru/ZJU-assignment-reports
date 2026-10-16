@@ -1,0 +1,73 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{assignment}[2026/10/16 ZJU coursework layout]
+
+% Adapted from zju-tech-report/zju-tech-report.tex: retain the university
+% identity, serif typography and Qiushi Blue; use a coursework title block.
+\RequirePackage[left=23mm,right=23mm,top=19mm,bottom=20mm,
+  includehead,headheight=14pt,headsep=6mm,footskip=10mm]{geometry}
+\RequirePackage{fontspec}
+\setmainfont{TeX Gyre Termes}
+\setsansfont{Latin Modern Sans}
+\setmonofont{Latin Modern Mono}[
+  BoldFont=lmmonolt10-bold.otf,
+  BoldItalicFont=lmmonolt10-boldoblique.otf]
+\RequirePackage{amsmath,amssymb,booktabs,enumitem,fancyhdr,graphicx}
+\RequirePackage{titlesec,xcolor,listings,hyperref,lastpage,microtype}
+\definecolor{QiushiBlue}{RGB}{0,63,136}
+\definecolor{TextGray}{HTML}{555B66}
+\definecolor{CodeBackground}{HTML}{F5F7FA}
+\hypersetup{colorlinks=true,linkcolor=QiushiBlue,urlcolor=QiushiBlue,
+  pdftitle={CS1050 Assignment 1},pdfauthor={\StudentName}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{2em}
+\setlist{nosep,leftmargin=*}
+\titleformat{\section}{\large\bfseries\color{QiushiBlue}}{}{0pt}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{QiushiBlue}}{}{0pt}{}
+\titlespacing*{\section}{0pt}{12pt}{5pt}
+\titlespacing*{\subsection}{0pt}{8pt}{4pt}
+\newcommand{\question}[1]{\section{Question #1}}
+\newcommand{\answer}[1]{\boxed{#1}}
+\newcommand{\codepath}[1]{{\small\texttt{\detokenize{#1}}}}
+\newcommand{\makeassignmenttitle}{%
+  \includegraphics[height=10mm]{../zju-tech-report/assets/zju-horizontal-blue.png}%
+  \hfill{\small\sffamily\color{TextGray}ZJU--UIUC INSTITUTE}\par
+  \vspace{3pt}{\color{QiushiBlue}\hrule height 0.8pt}\vspace{9pt}
+  {\centering\LARGE\bfseries Assignment \#1\par}
+  {\centering\large Embodied Artificial Intelligence (CS1050)\par}
+  \vspace{5pt}
+  \textbf{Name:} \StudentName\hfill\textbf{Student ID:} \StudentID\par
+  \textbf{Instructor:} Professor Gaoang Wang\hfill\textbf{Term:} Fall 2026\par
+  {\small\color{TextGray}Due: October 30, 2026, 23:59 (China Standard Time)}\par
+  \vspace{5pt}{\color{QiushiBlue}\hrule height 0.5pt}\vspace{3pt}
+  \thispagestyle{plain}
+}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{TextGray}CS1050\enspace /\enspace Fall 2026}
+\fancyhead[R]{\small\color{TextGray}Assignment \#1}
+\fancyfoot[C]{\small\color{TextGray}\thepage\ /\ \pageref*{LastPage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\small\color{TextGray}\thepage\ /\ \pageref*{LastPage}}
+  \renewcommand{\headrulewidth}{0pt}
+}
+\lstdefinestyle{python}{
+  language=Python,basicstyle=\ttfamily\fontsize{8.3}{10}\selectfont,
+  keywordstyle=\bfseries\color{QiushiBlue},
+  commentstyle=\itshape\color{TextGray},stringstyle=\color{TextGray},
+  backgroundcolor=\color{CodeBackground},frame=single,
+  rulecolor=\color{QiushiBlue!25},framerule=0.3pt,
+  numbers=left,numberstyle=\tiny\color{TextGray},numbersep=6pt,
+  xleftmargin=13pt,framexleftmargin=3pt,showstringspaces=false,
+  keepspaces=true,columns=fullflexible,breaklines=true,
+  breakatwhitespace=false,tabsize=4,aboveskip=7pt,belowskip=7pt
+}
+\lstdefinestyle{output}{
+  basicstyle=\ttfamily\fontsize{8.3}{10}\selectfont,
+  backgroundcolor=\color{CodeBackground},frame=single,
+  rulecolor=\color{QiushiBlue!25},framerule=0.3pt,
+  numbers=none,showstringspaces=false,keepspaces=true,
+  columns=fullflexible,breaklines=true,aboveskip=7pt,belowskip=7pt
+}

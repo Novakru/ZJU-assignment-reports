@@ -1,0 +1,31 @@
+{
+  "command": "python experients/assignment1/run.py",
+  "environment": {
+    "python": "3.10.16",
+    "numpy": "2.2.6",
+    "sympy": "1.13.3",
+    "platform": "Windows-10-10.0.26200-SP0"
+  },
+  "external_inputs_sha256": {
+    "assignment1_CS1050.pdf": "e0a5d1d23be38214d5dd3fe85ee6c9f59bbfad72785099557aeb0d81c0302772",
+    "任务要求.md": "bdeab85d929548aeb164b3f5cf99b7ce982f8d3a6e844567783734d21da55e28"
+  },
+  "files_sha256": {
+    "experients/assignment1/q5_camera.py": "c628e8d5c31a1858e345436b0fc8ab9ba8fa3f980a1300c569e301a2c61a2c5f",
+    "experients/assignment1/q6_triangulation.py": "702b2de0150eeeb68693de21ec1cc3c80a9f033f594cda9082b14b36ee9cfd35",
+    "experients/assignment1/run.py": "7447fc2e6652073ca8a7cd8fa0484a78778e30e68676d44ecc45e4f79be14c3a",
+    "experients/assignment1/verify.py": "7757add336bd0c5a82cbd1e53dd96c083cbb8f13930176860e27a3104e9a354e",
+    "experients/assignment1/requirements.txt": "6510b52c9064dff1e20273024f83658ff0dbb9cff21716e84d62752c5adf759f",
+    "experients/assignment1/inputs.md": "8e30c732ce2a2187b6a8779b122f6041f33fa8d5f3b68ff38f6ca6d4993a7238",
+    ".gitattributes": "8cdeb4e51c05b7ee0cfd41f29ff8b64c92fe3e378e36b2a6110e6f349201d8df",
+    "zju-tech-report/assets/zju-horizontal-blue.png": "28e2a47fafc2e6cd654de70f63b1642c966e607ec1e093cea593ff6f04456c82",
+    "report/report.tex": "43efdf6da5d56971db04347bcb78f8e7badefcc52a10586d1982db29c06e0eed",
+    "report/student-info.tex": "6fd134b4980616a2b0cfd104378052085a44ded5706689e0190a3694b6b544f2",
+    "report/assignment.sty": "b02fd8654979b68ab2e43eb041323fec52f824f8c1c8c20a408447e14867eda0",
+    "report/build.ps1": "e9cc4c4fb1e9a22a1a4a34b028e1c4690906e2dd846478d7ebdcd6680ddf03ae",
+    "experients/assignment1/results/q5_camera.txt": "04069ea14d1a5c758dd37ca8e720fad509443d9f6176164ecc62dca10df1bf00",
+    "experients/assignment1/results/q6_triangulation.txt": "46f5511c576a2ba2fa3446a72941b30f803328198143d709be1db2a7f5a59017",
+    "experients/assignment1/results/verify.txt": "078ba11695a9553b76279f16f4047598b524092e33a0b3d81c2a5ed30dafd493"
+  },
+  "note": "SHA-256 binds these results to source files; it does not assert authorship."
+}
