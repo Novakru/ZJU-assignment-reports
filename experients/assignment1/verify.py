@@ -5,6 +5,14 @@ import sympy as sp
 
 from q5_camera import IMAGE, WORLD, estimate_camera
 from q6_triangulation import P1, P2, triangulate
+from q1_vanishing_point import vanishing_points
+from q2_vanishing_line import vanishing_line
+from q3_plane_normal import perpendicular_check
+from q4_rigid_distance import distance_check
+from q7_essential_matrix import essential_matrix
+from q8_epipolar_line import epipolar_line
+from q9_reprojection_error import reprojection_error
+from q10_orthographic import orthographic_projection
 
 
 def check(condition, message):
@@ -14,6 +22,9 @@ def check(condition, message):
 
 
 def main():
+    expected_v = (sp.Rational(4, 5), sp.Rational(2, 5))
+    check(vanishing_points() == [expected_v, expected_v],
+          "Q1: standalone script returns the exact common vanishing point")
     lam = sp.symbols("lambda", positive=True)
     direction = sp.Matrix([4, 2, 5])
     for origin in (sp.Matrix([3, 1, 6]), sp.Matrix([7, 4, 2])):
@@ -23,12 +34,23 @@ def main():
               "Q1: parallel line has vanishing point (4/5, 2/5)")
 
     normal = sp.Matrix([6, 3, 2])
+    computed_normal, line = vanishing_line()
+    x, y = sp.symbols("x y")
+    check(computed_normal == normal and line.lhs == 6 * x + 3 * y + 2,
+          "Q2: standalone script gives 6*x + 3*y + 2 = 0")
     tangent1, tangent2 = sp.Matrix([1, -2, 0]), sp.Matrix([0, 2, -3])
     check(normal.dot(tangent1) == normal.dot(tangent2) == 0
           and tangent1.cross(tangent2) == normal,
           "Q2: independent plane directions give line (6, 3, 2)")
     check(sp.Matrix([12, 8, 28]) == 4 * sp.Matrix([3, 2, 7]),
           "Q3: the plane normal equals four times the given vector")
+    n3, scale3, dots3, perpendicular = perpendicular_check()
+    check(n3 == sp.Matrix([12, 8, 28]) and scale3 == 4
+          and dots3 == [0, 0] and perpendicular,
+          "Q3: standalone script confirms normal proportionality and both tangent directions")
+    cancels, gram, change = distance_check()
+    check(cancels and gram == sp.Identity(3) and change == 0,
+          "Q4: symbolic script proves zero squared-distance change for any orthogonal R")
 
     # Fixed seed; proper rotations constructed independently by QR.
     rng = np.random.default_rng(1050)
@@ -78,9 +100,14 @@ def main():
         check([q[0] / q[2], q[1] / q[2]] == pixel,
               f"Q6: exact reprojection gives {pixel}")
 
-    essential = sp.Matrix([[0, 0, 0], [0, 0, -3], [0, 3, 0]])
-    check(essential.rank() == 2 and essential.T == -essential,
+    essential = essential_matrix()
+    check(essential.rank() == 2 and essential.T == -essential
+          and essential * sp.Matrix([2, -1, 4])
+          == sp.Matrix([3, 0, 0]).cross(sp.Matrix([2, -1, 4])),
           "Q7: E is the rank-two skew matrix of translation (3, 0, 0)")
+    essential8, line8 = epipolar_line()
+    check(essential8 == essential and line8 == sp.Matrix([0, -3, 600]),
+          "Q8: standalone script gives the image-2 line from the same camera convention")
     check(essential * sp.Matrix([280, 200, 1]) == sp.Matrix([0, -3, 600]),
           "Q8: epipolar line is (0, -3, 600), or y = 200")
     # Verify the chosen E convention on independent 3D points.
@@ -95,9 +122,16 @@ def main():
     squared_error = sp.Rational(557, 2) ** 2 + sp.Rational(399, 2) ** 2
     check(squared_error == sp.Rational(234725, 2),
           f"Q9: squared error = 117362.5; error = {float(sp.sqrt(squared_error)):.10f} px")
+    projected9, residual9, squared9, error9 = reprojection_error()
+    check(projected9 == sp.Matrix([sp.Rational(3, 2), sp.Rational(1, 2)])
+          and residual9 == sp.Matrix([-sp.Rational(557, 2), -sp.Rational(399, 2)])
+          and squared9 == squared_error and error9 ** 2 == squared_error,
+          "Q9: standalone script uses homogeneous division and Euclidean error")
     orthographic = sp.Matrix([[1, 0, 0], [0, 1, 0]])
     check(orthographic * sp.Matrix([5, 4, 8]) == sp.Matrix([5, 4]),
           "Q10: unit-scale orthographic image is (5, 4)")
+    check(orthographic_projection() == sp.Matrix([5, 4]),
+          "Q10: standalone script returns the unit-scale orthographic image")
     print("All checks passed. Numerical checks supplement the written proofs.")
 
 

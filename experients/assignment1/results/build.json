@@ -1,8 +1,9 @@
 {
     "command":  "powershell -NoProfile -File report/build.ps1",
     "experiments_passed":  true,
+    "questions_executed":  10,
     "xelatex_passes":  2,
     "latex_warnings_or_overflow":  false,
-    "report_pdf_sha256":  "bb7a11d0fe1b0fc2e7944b8a755efa3065a01e25bbfba2e7e9f99558cb35db4b",
-    "manifest_sha256":  "a7ded7dd681c47d588574e3008f6b45f33a27108ec8d1d899cee9a0aef827cdc"
+    "report_pdf_sha256":  "7b078fce9cee571e4c16c0d056bd45b24054d38c3ccb6ecbceda106a0b69d4cf",
+    "manifest_sha256":  "5942206ffeb814017d361fe80ffb04bb5fb5446d17a84aa20cd366f7e603f0d6"
 }

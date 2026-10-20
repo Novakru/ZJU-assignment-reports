@@ -1,0 +1,4 @@
+Plane normal: (12, 8, 28)
+Normal / given vector scale: 4
+Dot products with two independent plane directions: [0, 0]
+Given vector is perpendicular to the plane: True

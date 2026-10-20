@@ -6,26 +6,94 @@
     "sympy": "1.13.3",
     "platform": "Windows-10-10.0.26200-SP0"
   },
+  "question_runs": [
+    {
+      "question": 1,
+      "source": "q1_vanishing_point.py",
+      "stdout": "results/q1_vanishing_point.txt"
+    },
+    {
+      "question": 2,
+      "source": "q2_vanishing_line.py",
+      "stdout": "results/q2_vanishing_line.txt"
+    },
+    {
+      "question": 3,
+      "source": "q3_plane_normal.py",
+      "stdout": "results/q3_plane_normal.txt"
+    },
+    {
+      "question": 4,
+      "source": "q4_rigid_distance.py",
+      "stdout": "results/q4_rigid_distance.txt"
+    },
+    {
+      "question": 5,
+      "source": "q5_camera.py",
+      "stdout": "results/q5_camera.txt"
+    },
+    {
+      "question": 6,
+      "source": "q6_triangulation.py",
+      "stdout": "results/q6_triangulation.txt"
+    },
+    {
+      "question": 7,
+      "source": "q7_essential_matrix.py",
+      "stdout": "results/q7_essential_matrix.txt"
+    },
+    {
+      "question": 8,
+      "source": "q8_epipolar_line.py",
+      "stdout": "results/q8_epipolar_line.txt"
+    },
+    {
+      "question": 9,
+      "source": "q9_reprojection_error.py",
+      "stdout": "results/q9_reprojection_error.txt"
+    },
+    {
+      "question": 10,
+      "source": "q10_orthographic.py",
+      "stdout": "results/q10_orthographic.txt"
+    }
+  ],
   "external_inputs_sha256": {
     "assignment1_CS1050.pdf": "e0a5d1d23be38214d5dd3fe85ee6c9f59bbfad72785099557aeb0d81c0302772",
     "任务要求.md": "bdeab85d929548aeb164b3f5cf99b7ce982f8d3a6e844567783734d21da55e28"
   },
   "files_sha256": {
-    "experients/assignment1/q5_camera.py": "c628e8d5c31a1858e345436b0fc8ab9ba8fa3f980a1300c569e301a2c61a2c5f",
-    "experients/assignment1/q6_triangulation.py": "702b2de0150eeeb68693de21ec1cc3c80a9f033f594cda9082b14b36ee9cfd35",
-    "experients/assignment1/run.py": "7447fc2e6652073ca8a7cd8fa0484a78778e30e68676d44ecc45e4f79be14c3a",
-    "experients/assignment1/verify.py": "7757add336bd0c5a82cbd1e53dd96c083cbb8f13930176860e27a3104e9a354e",
+    "experients/assignment1/q10_orthographic.py": "076970dfbbfc38878531f2aab89bb289a4110744e5003e7e96fdac3b56aa0703",
+    "experients/assignment1/q1_vanishing_point.py": "ad139a09c755fbde1d481f4f4a440ecdad5d21f15c94a97456adaacb56a287f1",
+    "experients/assignment1/q2_vanishing_line.py": "881829f0bce4946b5c10b84e96abf10abe619b254a442c8c05f829237b41a125",
+    "experients/assignment1/q3_plane_normal.py": "6e1ab58e8f96debb9e38c8a68a7e21109534d992c6f2db97a5a27aeaed324ac4",
+    "experients/assignment1/q4_rigid_distance.py": "780fbdc2dd49c2358282cd2d2660be1546c859ed9c3d5bb9c8b5a6579eac3cb0",
+    "experients/assignment1/q5_camera.py": "a3f6d08fa61c253fabf673febd0d8c1e83da101e9bb00fd09723709ec4282323",
+    "experients/assignment1/q6_triangulation.py": "a7ad131f412384ded71b043e11d00759572e8f8127759e7f6130d8cac120a01d",
+    "experients/assignment1/q7_essential_matrix.py": "07217dd703baa653f27c6bd2e582c68bf1f47f7f2db2b2a2deab627ab81889bb",
+    "experients/assignment1/q8_epipolar_line.py": "20dad7e67faf49b9e5758a7b3af4884978e9558336bf480f7b88f7ed19bba3f0",
+    "experients/assignment1/q9_reprojection_error.py": "87ae4b7839380ffa2f83f7c9cca4adce979f0543cc1e14408bf701b4376f1fe5",
+    "experients/assignment1/run.py": "858ad55b527dfa039174c782ab7f3f43534bf47e66116a1892299ada5f1d267b",
+    "experients/assignment1/verify.py": "679189372e7c707a49dbb3e6d19f7dd8b1782292c82723d70eb0b1a5117a0dc2",
     "experients/assignment1/requirements.txt": "6510b52c9064dff1e20273024f83658ff0dbb9cff21716e84d62752c5adf759f",
     "experients/assignment1/inputs.md": "8e30c732ce2a2187b6a8779b122f6041f33fa8d5f3b68ff38f6ca6d4993a7238",
     ".gitattributes": "8cdeb4e51c05b7ee0cfd41f29ff8b64c92fe3e378e36b2a6110e6f349201d8df",
     "zju-tech-report/assets/zju-horizontal-blue.png": "28e2a47fafc2e6cd654de70f63b1642c966e607ec1e093cea593ff6f04456c82",
-    "report/report.tex": "b75b9d94baebd1c8927b7de45b7b70f8b73bb716963bfad894802863bb6fe907",
+    "report/report.tex": "c6b53a4abe5d49e055c62d7df5362862c65b5e6acb62e78d54d17d63c9e0814b",
     "report/student-info.tex": "549f14145e4a36261dc8509f7385722519ba9cffe1a9a83eb2000d8b4d398726",
-    "report/assignment.sty": "ddbe2cfe1453c4d37291dcdc51cb0b17edf65b83c017d86fceb8ad36814fdab9",
-    "report/build.ps1": "e9cc4c4fb1e9a22a1a4a34b028e1c4690906e2dd846478d7ebdcd6680ddf03ae",
-    "experients/assignment1/results/q5_camera.txt": "04069ea14d1a5c758dd37ca8e720fad509443d9f6176164ecc62dca10df1bf00",
-    "experients/assignment1/results/q6_triangulation.txt": "46f5511c576a2ba2fa3446a72941b30f803328198143d709be1db2a7f5a59017",
-    "experients/assignment1/results/verify.txt": "078ba11695a9553b76279f16f4047598b524092e33a0b3d81c2a5ed30dafd493"
+    "report/assignment.sty": "35a39c91d073a578215e8ce0ff25e8a6ae5d164a0d8b59f3bfecd926e56ff91d",
+    "report/build.ps1": "654b54b9f40da9264fa35affe17157e244cf51dd7f31a12b61859ccd765fb043",
+    "experients/assignment1/results/q10_orthographic.txt": "f67ea458f2b5e5d3faadd3f47bd270f6e29f821e9af631fc4f56a2db7ca31002",
+    "experients/assignment1/results/q1_vanishing_point.txt": "930f22b3dc3f456c81cff7a86b9261ab0a9361fc4c25f942e5baaa98d17bd574",
+    "experients/assignment1/results/q2_vanishing_line.txt": "fdaa21e79a68650c48ad9406ab4f7e41b9b9fa67e2e94eb682f51a9e2222db56",
+    "experients/assignment1/results/q3_plane_normal.txt": "2d14fdeb381ccf7e3fe01c3c696471477f925fc073b268331d9f4dc15b5af486",
+    "experients/assignment1/results/q4_rigid_distance.txt": "f58df5baeca06f9ab6ddf3bb2947997379752355260edb4ce2b48ef96749fce3",
+    "experients/assignment1/results/q5_camera.txt": "b3609d9522b3d4272e89bc15d919184ba1e8c61b7409bc1554b72c7d8716b22e",
+    "experients/assignment1/results/q6_triangulation.txt": "5a2da551be5114d90690abd2fb0b7788f9663c8db58cca91b9fe28cd2d678e47",
+    "experients/assignment1/results/q7_essential_matrix.txt": "e35727fdf07cbde50135b0810757cfb8ad4dc796ee142ede18b648266d266d32",
+    "experients/assignment1/results/q8_epipolar_line.txt": "b88cab9baa43aff8e64b4ce8710270a8a02cc510ba8c4ee984827ed6eee85041",
+    "experients/assignment1/results/q9_reprojection_error.txt": "072ccf4af03a4a23ae1fd3812d76967fe9a60f4731452d21b493cdf82daaaee8",
+    "experients/assignment1/results/verify.txt": "f2a6f9df6f7eabe3c71c7ec6541cdcbdc6d7ecaa9c97911594fb7e10a041ca0a"
   },
   "note": "SHA-256 binds these results to source files; it does not assert authorship."
 }

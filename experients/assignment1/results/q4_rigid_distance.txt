@@ -1,0 +1,4 @@
+The common translation cancels: True
+R.T * R for a rotation matrix: I
+Change in squared distance: 0
+Euclidean distances are equal: True

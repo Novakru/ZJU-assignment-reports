@@ -61,19 +61,14 @@ def estimate_camera(world=WORLD, image=IMAGE):
 
 def main():
     np.set_printoptions(precision=10, suppress=True, linewidth=90)
-    camera, projected, errors, singular_values, rank = estimate_camera()
-    print("Q5: normalized DLT from the six given correspondences")
-    print("P (Frobenius norm = 1; largest coefficient positive):")
+    camera, projected, errors, _, rank = estimate_camera()
+    print("P (Frobenius norm = 1):")
     print(camera)
     print(f"Frobenius norm: {np.linalg.norm(camera, 'fro'):.12f}")
     print(f"Normalized design matrix rank: {rank} / 12")
-    print("Normalized design singular values:")
-    print(singular_values)
     print("Reprojected pixels (columns match the assignment):")
     print(projected)
     print(f"Maximum reprojection error (px): {errors.max():.3e}")
-    print("P / P[2, 3] (a readable representative):")
-    print(camera / camera[2, 3])
 
 
 if __name__ == "__main__":

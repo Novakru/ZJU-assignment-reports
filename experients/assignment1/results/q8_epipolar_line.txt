@@ -1,0 +1,3 @@
+Line coefficients E * p1: (0, -3, 600)
+Equivalent coefficients: (0, 1, -200)
+Line equation: Eq(y2, 200)

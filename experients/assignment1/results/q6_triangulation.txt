@@ -1,10 +1,5 @@
-Q6: homogeneous linear triangulation
 3D point [X, Y, Z]:
 [0.  0.  0.4]
-Homogeneous point [X, Y, Z, 1]:
-[0.  0.  0.4 1. ]
-Design singular values:
-[1272.8434744746 1272.7922061358   11.4231995299    0.          ]
 Reprojected pixels (rows: view 1, view 2):
 [[400. 250.]
  [385. 250.]]

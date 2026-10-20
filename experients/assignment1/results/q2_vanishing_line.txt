@@ -1,0 +1,3 @@
+Plane normal: (6, 3, 2)
+Vanishing line: Eq(6*x + 3*y + 2, 0)
+Homogeneous line coefficients: (6, 3, 2)

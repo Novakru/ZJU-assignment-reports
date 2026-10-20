@@ -1,0 +1,3 @@
+Q vanishing point: (4/5, 2/5)
+R vanishing point: (4/5, 2/5)
+Same vanishing point: True

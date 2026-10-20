@@ -1,0 +1,4 @@
+Projected image point: (3/2, 1/2)
+Residual (predicted - measured): (-557/2, -399/2)
+Squared error (px^2): 234725/2
+Euclidean reprojection error (px): 342.5821069466

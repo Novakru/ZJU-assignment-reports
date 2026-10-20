@@ -42,14 +42,9 @@ def triangulate(p1=P1, p2=P2, pixel1=PIXEL1, pixel2=PIXEL2):
 
 def main():
     np.set_printoptions(precision=10, suppress=True, linewidth=90)
-    point_h, projected, errors, singular_values = triangulate()
-    print("Q6: homogeneous linear triangulation")
+    point_h, projected, errors, _ = triangulate()
     print("3D point [X, Y, Z]:")
     print(point_h[:3])
-    print("Homogeneous point [X, Y, Z, 1]:")
-    print(point_h)
-    print("Design singular values:")
-    print(singular_values)
     print("Reprojected pixels (rows: view 1, view 2):")
     print(projected)
     print(f"Maximum reprojection error (px): {errors.max():.3e}")

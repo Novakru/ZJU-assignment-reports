@@ -18,7 +18,10 @@ Thus both lines have the same vanishing point
 $\answer{\mathbf v=(4/5,\,2/5)^\top=(0.8,\,0.4)^\top}$.
 Its homogeneous image coordinates are $(4,2,5)^\top$; the different line origins
 do not affect this limit.
+\questioncode{q1_vanishing_point}
+\questionoutput{q1_vanishing_point}
 
+\clearpage
 \question{2}
 The plane has normal $\mathbf n=(6,3,2)^\top$.
 Every direction $\mathbf d$ parallel to it satisfies $\mathbf n^\top\mathbf d=0$.
@@ -33,7 +36,10 @@ $\mathbf v\sim(d_X,d_Y,d_Z)^\top$. Therefore all these points satisfy
 The offset $17$ determines the plane's position, whereas its vanishing line
 depends only on its orientation. Directions with $d_Z=0$ are included as
 homogeneous points at infinity.
+\questioncode{q2_vanishing_line}
+\questionoutput{q2_vanishing_line}
 
+\clearpage
 \question{3}
 For $12X+8Y+28Z=23$, a normal is
 \[
@@ -43,7 +49,10 @@ If $\mathbf u$ and $\mathbf v$ lie on the plane, subtracting their plane
 equations gives $\mathbf n^\top(\mathbf u-\mathbf v)=0$.
 Consequently $(3,2,7)^\top$ is orthogonal to every direction in the plane,
 so it is perpendicular to the plane.
+\questioncode{q3_plane_normal}
+\questionoutput{q3_plane_normal}
 
+\clearpage
 \question{4}
 The shared translation $\mathbf t=(-3,2,1)^\top$ cancels:
 $\mathbf x_2-\mathbf y_2=R(\mathbf x_1-\mathbf y_1)$.
@@ -56,6 +65,10 @@ Writing $\mathbf d=\mathbf x_1-\mathbf y_1$ and using $R^\top R=I$,
 \]
 Both norms are nonnegative; taking square roots proves
 $\answer{\|\mathbf x_2-\mathbf y_2\|_2=\|\mathbf x_1-\mathbf y_1\|_2}$.
+The code verifies the identity symbolically under the same orthogonality
+assumption; it does not rely on selecting a particular rotation.
+\questioncode{q4_rigid_distance}
+\questionoutput{q4_rigid_distance}
 
 \clearpage
 \question{5}
@@ -67,33 +80,27 @@ Each correspondence imposes the two linear constraints
  \qquad
  (\mathbf p_2^\top-y_i\mathbf p_3^\top)\mathbf X_i=0.
 \]
-Stacking the six pairs produces $A\mathbf p=0$, where $A$ is $12\times12$
-and $\mathbf p$ contains the rows of $P$ in order. Its rank is $11$, so the
-solution is unique up to a nonzero scale. The exact solution has representative
+Stacking the six pairs gives $A\mathbf p=0$, where $\mathbf p$ contains the
+rows of $P$ in order. The $12\times12$ matrix $A$ has rank $11$, so the solution
+is unique up to scale. Its exact representative and norm are
 \[
  P_0=\begin{bmatrix}
  180&0&0&280\\0&180&0&220\\0&0&0&1
  \end{bmatrix},\qquad
- \|P_0\|_F=\sqrt{180^2+280^2+180^2+220^2+1}=\sqrt{191601}.
+ \|P_0\|_F=\sqrt{191601}.
 \]
 The requested normalization is
 \[
  \answer{P=\frac{1}{\sqrt{191601}}
  \begin{bmatrix}180&0&0&280\\0&180&0&220\\0&0&0&1\end{bmatrix}}.
 \]
-This camera gives $x=180X+280$, $y=180Y+220$, independent of $Z$:
-it is an affine camera. In particular, the fifth point gives $(370,310)$
-and the sixth gives $(370,220)$. The matrices $P$ and $-P$
-have the same Frobenius norm and project to the same image points; the
-implementation fixes the sign by making the largest-magnitude entry positive.
-
-\textbf{Implementation.}
-\codepath{experients/assignment1/q5_camera.py}, reproduced in Appendix A.
-The code centers and scales the 3D and 2D points, takes the last right singular
-vector of the normalized design matrix, and denormalizes with
-$P=T_{2D}^{-1}P_nT_{3D}$ before applying the Frobenius normalization.
-Printed results:
-\lstinputlisting[style=output]{../experients/assignment1/results/q5_camera.txt}
+This is an affine camera: $x=180X+280$ and $y=180Y+220$ do not depend on $Z$.
+The code uses normalized DLT: it centers and scales both point sets, takes
+the last right singular vector, and denormalizes by
+$P=T_{2D}^{-1}P_nT_{3D}$. It then enforces $\|P\|_F=1$ and fixes the global
+sign by making the largest-magnitude entry positive.
+\questioncode{q5_camera}
+\questionoutput{q5_camera}
 
 \clearpage
 \question{6}
@@ -119,18 +126,10 @@ The depth can also be checked from the disparity:
 \[
  Z=\frac{fB}{x_1-x_2}=\frac{900(6/900)}{400-385}=0.4.
 \]
-Both camera depths are positive. Direct reprojection confirms
-\[
- \pi(P^{(1)}\mathbf X_h)=(400,250),\qquad
- \pi(P^{(2)}\mathbf X_h)=(385,250),
- \quad \pi(a,b,c)=(a/c,b/c).
-\]
-
-\textbf{Implementation.}
-\codepath{experients/assignment1/q6_triangulation.py}, reproduced in Appendix B,
-solves the homogeneous system by SVD and divides by the last coordinate.
-Printed results:
-\lstinputlisting[style=output]{../experients/assignment1/results/q6_triangulation.txt}
+The code solves the homogeneous system by SVD and divides by the last
+coordinate. Reprojection checks both image measurements; both depths are positive.
+\questioncode{q6_triangulation}
+\questionoutput{q6_triangulation}
 
 \clearpage
 \question{7}
@@ -148,7 +147,10 @@ For $R=I$ and $\mathbf t=(3,0,0)^\top$,
 \]
 It is defined up to nonzero scale. Since $K_1=K_2=I$, the fundamental
 matrix $F=K_2^{-\top}EK_1^{-1}$ is also $E$.
+\questioncode{q7_essential_matrix}
+\questionoutput{q7_essential_matrix}
 
+\clearpage
 \question{8}
 The epipolar line in image 2 is $\boldsymbol\ell_2=E\mathbf p_1$:
 \[
@@ -159,7 +161,10 @@ The epipolar line in image 2 is $\boldsymbol\ell_2=E\mathbf p_1$:
 \]
 Thus $\answer{\boldsymbol\ell_2\sim(0,1,-200)^\top}$, or equivalently
 $\answer{y_2=200}$, since $0x_2-3y_2+600=0$.
+\questioncode{q8_epipolar_line}
+\questionoutput{q8_epipolar_line}
 
+\clearpage
 \question{9}
 First multiply and then divide by the homogeneous image coordinate:
 \[
@@ -175,7 +180,10 @@ The Euclidean reprojection error is
    =\sqrt{117362.5}
    \approx\answer{342.5821\ \text{px}}.
 \end{align*}
+\questioncode{q9_reprojection_error}
+\questionoutput{q9_reprojection_error}
 
+\clearpage
 \question{10}
 Unit-scale orthographic projection along $+Z$ discards the depth coordinate:
 \[
@@ -183,26 +191,26 @@ Unit-scale orthographic projection along $+Z$ discards the depth coordinate:
  \begin{bmatrix}5\\4\\8\end{bmatrix}
  =\answer{\begin{bmatrix}5\\4\end{bmatrix}}.
 \]
+\questioncode{q10_orthographic}
+\questionoutput{q10_orthographic}
 
 \clearpage
-\section{Appendix A: complete Python code for Question 5}
-File: \codepath{experients/assignment1/q5_camera.py}.
-\lstinputlisting[style=python]{../experients/assignment1/q5_camera.py}
-
-\section{Appendix B: complete Python code for Question 6}
-File: \codepath{experients/assignment1/q6_triangulation.py}.
-\lstinputlisting[style=python]{../experients/assignment1/q6_triangulation.py}
-
-\section{Appendix C: verification and reproducibility}
+\renewcommand{\CurrentQuestion}{Reproducibility}
+\section{Reproducibility}
 To rerun the calculations and build the report from the repository root:
 \begin{lstlisting}[style=output]
 python -m pip install -r experients/assignment1/requirements.txt
 powershell -NoProfile -File report/build.ps1
 \end{lstlisting}
-The checks in \codepath{experients/assignment1/verify.py} confirm the exact
-rank and null vector in Question 5, the two-view reprojection in Question 6,
-and the epipolar relation $\mathbf p_2^\top E\mathbf p_1=0$ for the convention
-in Question 7. All checks passed. The complete log is saved in
+Each question has a standalone script using NumPy and/or SymPy. The build
+runs all ten scripts, captures their standard output, and includes the complete
+source and output directly under the corresponding question.
+
+The independent checks in \codepath{experients/assignment1/verify.py}
+cover all ten scripts. They also confirm the exact DLT rank and null vector,
+the two-view reprojection, distance preservation under 100 proper rotations,
+and the epipolar constraint for independently projected points. All checks
+passed. The complete verification log is saved in
 \codepath{experients/assignment1/results/verify.txt}.
 
 \subsection{Recorded execution environment}
@@ -211,7 +219,6 @@ in Question 7. All checks passed. The complete log is saved in
 The source files and printed outputs are linked by SHA-256 hashes in
 \codepath{experients/assignment1/results/manifest.json}.
 The input data are recorded in \codepath{experients/assignment1/inputs.md}.
-The code and printed results above are included directly from these files.
 Numerical checks use the unrounded arrays; displayed negative zeros are
 rounding artifacts.
 

@@ -19,16 +19,20 @@ try {
         & xelatex -interaction=nonstopmode -halt-on-error -file-line-error report.tex
         if ($LASTEXITCODE -ne 0) { throw "XeLaTeX pass $pass failed." }
     }
-    $layoutProblems = Select-String -LiteralPath 'report.log' -Pattern 'Overfull|Missing character|undefined references|LaTeX Font Warning|Package .+ Warning'
+    $layoutProblems = Select-String -LiteralPath 'report.log' -Pattern 'Overfull|Underfull|Missing character|undefined references|LaTeX Font Warning|Package .+ Warning'
     if ($layoutProblems) {
         $layoutProblems | ForEach-Object { Write-Warning $_.Line }
         throw 'Resolve the LaTeX layout/reference/font warnings before accepting the PDF.'
     }
 
     # Separate final artifact record avoids a circular hash in the PDF manifest.
+    $experimentManifest = Get-Content -Raw -Encoding UTF8 -LiteralPath '../experients/assignment1/results/manifest.json' | ConvertFrom-Json
+    $questionCount = @($experimentManifest.question_runs).Count
+    if ($questionCount -ne 10) { throw 'The report requires successful runs of all ten question scripts.' }
     $record = [ordered]@{
         command = 'powershell -NoProfile -File report/build.ps1'
         experiments_passed = $true
+        questions_executed = $questionCount
         xelatex_passes = 2
         latex_warnings_or_overflow = $false
         report_pdf_sha256 = (Get-FileHash -LiteralPath 'report.pdf' -Algorithm SHA256).Hash.ToLowerInvariant()

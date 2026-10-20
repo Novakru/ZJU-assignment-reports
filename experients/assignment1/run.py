@@ -13,6 +13,12 @@ import sympy as sp
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
+QUESTIONS = (
+    "q1_vanishing_point", "q2_vanishing_line", "q3_plane_normal",
+    "q4_rigid_distance", "q5_camera", "q6_triangulation",
+    "q7_essential_matrix", "q8_epipolar_line", "q9_reprojection_error",
+    "q10_orthographic",
+)
 
 
 def sha256(path):
@@ -22,11 +28,16 @@ def sha256(path):
 def main():
     output = HERE / "results"
     output.mkdir(exist_ok=True)
-    for script in ("q5_camera.py", "q6_triangulation.py", "verify.py"):
+    for name in (*QUESTIONS, "verify"):
+        script = name + ".py"
         completed = subprocess.run(
             [sys.executable, str(HERE / script)], cwd=HERE,
-            capture_output=True, text=True, encoding="utf-8", check=True,
+            capture_output=True, text=True, encoding="utf-8",
         )
+        if completed.returncode:
+            print(completed.stdout, end="")
+            print(completed.stderr, file=sys.stderr, end="")
+            completed.check_returncode()
         (output / (Path(script).stem + ".txt")).write_text(
             completed.stdout, encoding="utf-8", newline="\n"
         )
@@ -55,6 +66,10 @@ def main():
             "python": platform.python_version(), "numpy": np.__version__,
             "sympy": sp.__version__, "platform": platform.platform(),
         },
+        "question_runs": [
+            {"question": i, "source": name + ".py", "stdout": "results/" + name + ".txt"}
+            for i, name in enumerate(QUESTIONS, 1)
+        ],
         "external_inputs_sha256": external_inputs,
         "files_sha256": {p.relative_to(ROOT).as_posix(): sha256(p) for p in paths},
         "note": "SHA-256 binds these results to source files; it does not assert authorship.",

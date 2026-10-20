@@ -1,18 +1,10 @@
-Q5: normalized DLT from the six given correspondences
-P (Frobenius norm = 1; largest coefficient positive):
+P (Frobenius norm = 1):
 [[ 0.411219423  -0.           -0.            0.639674658 ]
  [ 0.            0.411219423  -0.            0.502601517 ]
  [ 0.           -0.           -0.            0.0022845524]]
 Frobenius norm: 1.000000000000
 Normalized design matrix rank: 11 / 12
-Normalized design singular values:
-[5.6880816074 4.0107738785 3.9540185873 3.4076114648 3.0157576053 1.8739225228
- 1.6608812177 1.6302286554 1.5086727349 1.4111622674 1.4049726386 0.          ]
 Reprojected pixels (columns match the assignment):
 [[280. 460. 280. 460. 370. 370.]
  [220. 220. 400. 400. 310. 220.]]
 Maximum reprojection error (px): 1.798e-13
-P / P[2, 3] (a readable representative):
-[[180.  -0.  -0. 280.]
- [  0. 180.  -0. 220.]
- [  0.  -0.  -0.   1.]]
