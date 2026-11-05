@@ -238,7 +238,7 @@ O胜\DesignedWins 局，X胜\DesignedLosses 局，平局\DesignedDraws 局，
 
 \begin{table}[htbp]
   \centering\small
-  \caption{真人对战记录；未完成局次保留待录入标记。}
+  \caption{真人对战记录；起点按0至8编号。}
   \input{generated/human-table.tex}
 \end{table}
 
@@ -259,10 +259,8 @@ O胜\DesignedWins 局，X胜\DesignedLosses 局，平局\DesignedDraws 局，
 
 \input{generated/human-observations.tex}
 
-深度3的搜索可能遗漏更长的强制导向；安全比例只检查下一步的即时危险，
-并不保证连续几步都安全。真人实验需要观察：能否通过多个棋盘上的提前布局，
-把智能体送入无法回避的威胁，以及固定角落与中心权重是否会干扰必要的防守。
-这些是待检验的问题，尚不能作为真人实验结论。
+这些对局记录来自同一真人玩家，样本量有限，不能据此估计一般人群的胜率。
+前述80\%要求针对预定义进攻智能体；真人实验单独报告，不混合计算。
 
 \clearpage
 \subsection{模拟对手补充实验（非真人）}

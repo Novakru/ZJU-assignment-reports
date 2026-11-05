@@ -178,15 +178,28 @@ def human_layout(humans):
                   'This section is a data-entry layout. The tables and reserved boards contain no measured games; '
                   'dashes do not mean draws or zero win rates.')
     else:
-        status=tr(f'已录入{n}局真实对战，其余位置待补充。',f'{n} real games are recorded; the remaining slots are pending.')
+        status=tr(f'已录入{n}局真人对战。',f'{n} human games are recorded.')
+        if n<10:
+            status+=tr(f'距离最低要求还需{10-n}局。',f'Another {10-n} games are needed to meet the minimum.')
         if n>=10:
             status+=tr('当前样本中真人全部获胜。','The human won every game in the sample.') if hwins==n else tr(
                       '当前样本中真人并非全部获胜。','The human did not win every game in the sample.')
     write('human-results.tex',status)
+    # Show both strengths and failures instead of silently omitting human wins.
+    selected=[]
+    for outcome in (-1,1,0):
+        selected.extend(i for i,g in enumerate(humans) if g['winner']==outcome and i not in selected)
+        if outcome==-1:
+            selected=selected[:2]
+        if len(selected)>=4:
+            selected=selected[:4]
+            break
+    selected += [i for i in range(n) if i not in selected][:4-len(selected)]
     panels=[r'\begin{figure}[htbp]',r'\centering']
     for i in range(4):
         filename=f'human-{i+1}.pdf'
-        board=humans[i]['boards'][-1] if i<n else [['_']*9 for _ in range(9)]
+        actual=selected[i] if i<len(selected) else None
+        board=humans[actual]['boards'][-1] if actual is not None else [['_']*9 for _ in range(9)]
         draw_board(filename,board)
         if i>=n:
             # A separate, unmistakably marked blank frame, not an empty played game.
@@ -202,8 +215,10 @@ def human_layout(humans):
             c.setFont('Times-Italic',10)
             c.drawCentredString(90,87,'Pending actual game data')
             c.showPage();c.save()
-        caption=tr(f'真人对战第{i+1}局' if i<n else f'预留局面{i+1}（待录入）',
-                   f'Human game {i+1}' if i<n else f'Reserved position {i+1} (pending)')
+        caption=tr(f'第{actual+1}局：'+{1:'真人胜',-1:'智能体胜',0:'平局'}[humans[actual]['winner']]
+                   if actual is not None else f'预留局面{i+1}（待录入）',
+                   f'Game {actual+1}: '+{1:'human wins',-1:'agent wins',0:'draw'}[humans[actual]['winner']]
+                   if actual is not None else f'Reserved position {i+1} (pending)')
         panels += [r'\begin{subfigure}[t]{.46\linewidth}',r'\centering',
                    r'\includegraphics[height=48mm]{figures/'+filename+'}',
                    r'\caption{'+caption+'}',r'\end{subfigure}']
@@ -211,8 +226,10 @@ def human_layout(humans):
             panels.append(r'\hfill')
         elif i<3:
             panels.append(r'\par\medskip')
-    panels += [r'\caption{'+tr('真人实验的代表终盘位置；未录入的框图不属于实验结果。',
-                               'Slots for representative human final boards. Pending frames are not experimental results.')+'}',
+    figure_caption=tr('真人对战的代表终盘，兼顾双方胜局。','Representative human-game boards, including wins by both sides.') if n>=4 else tr(
+        '真人实验的代表终盘位置；未录入的框图不属于实验结果。',
+        'Slots for representative human final boards. Pending frames are not experimental results.')
+    panels += [r'\caption{'+figure_caption+'}',
                r'\end{figure}']
     write('human-figures.tex','\n'.join(panels))
     notes_path=DATA/'human-notes.json'

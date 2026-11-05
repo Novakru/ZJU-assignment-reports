@@ -46,7 +46,11 @@ powershell -NoProfile -ExecutionPolicy Bypass -File report/build.ps1 -RunExperim
 python submission/uttt.py human --games 10 --output experients/assignment2/human_games.json
 ```
 
-完成后重新构建。运行方法与代码路径仅保留在文档中，不进入报告正文。
+完成后重新构建。`python -B experients/assignment2/check_human.py` 会逐步验证真人日志：
+落点、终盘、独立三连判定，以及智能体每一步的选择、估值和节点数。
+当前12局真人实验为真人2胜、智能体10胜、无平局；代表图包含第1、2、6、8局，
+观察文字依据记录与倒数第二手的合法选择枚举填写。
+运行方法与代码路径仅保留在文档中，不进入报告正文。
 
 单独复现扩展实验：
 

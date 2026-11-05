@@ -299,7 +299,7 @@ of win rates, representative final boards, and the agent's strengths and weaknes
 
 \begin{table}[htbp]
   \centering\small
-  \caption{Human-game records. Unplayed slots remain explicitly pending.}
+  \caption{Human-game records. Starting boards are numbered 0--8.}
   \input{generated/en/human-table.tex}
 \end{table}
 
@@ -321,12 +321,10 @@ interrupted games do not enter the denominator.
 
 \input{generated/en/human-observations.tex}
 
-Depth-three search can miss longer forced-routing sequences. The safety
-ratio checks immediate danger, not safety across several future turns.
-Human games should examine whether threats prepared on several boards can
-force the agent into an unavoidable loss, and whether fixed corner and
-center weights interfere with necessary defense. These are questions for
-the planned experiment, not empirical conclusions from human play.
+These games involve one human player and a small sample; they do not
+estimate the general population's win rate. The earlier 80\% requirement
+concerns the predefined offensive agent. Human results are reported
+separately and are not pooled with that experiment.
 
 \clearpage
 \subsection{Supplementary synthetic opponents (not human play)}
