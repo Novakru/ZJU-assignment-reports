@@ -10,12 +10,32 @@
 \makeassignmenttitle
 
 \section{Section I\quad Constraint Satisfaction}
-\subsection{Representation and search}
+\subsection{Exact-cover formulation}
 The tiling problem is represented as exact cover. Each available board cell
 and each tile identity contributes one constraint. A legal placement covers
 the cells it occupies and the identity of its tile. Selecting placements that
 satisfy every constraint exactly once therefore covers the board without
 overlap or omission and uses each tile once.
+
+Let $C$ be the available cells and $I$ the tile identities, giving the
+disjoint constraint set $U=C\sqcup I$. A legal placement $p$ covers a subset
+$R_p\subseteq U$, and the binary variable $x_p$ indicates whether it is selected.
+The tiling conditions become
+\begin{equation}
+ \sum_{p:\,u\in R_p}x_p=1\quad(\forall u\in U),
+ \qquad x_p\in\{0,1\}.
+ \label{eq:exact-cover}
+\end{equation}
+Cell constraints enforce coverage without overlap; identity constraints
+enforce single use. Identical shapes still need separate identities.
+For example, sixty cells and twelve pentominoes give seventy-two constraints;
+each placement covers six: five cells and one identity.
+
+\subsection{Algorithm X and minimum remaining values}
+Exact cover can be solved by Algorithm X, a depth-first backtracking
+procedure.\footnote{D. E. Knuth, \emph{Dancing Links}, 2000.
+\url{https://arxiv.org/abs/cs/0011047}. Our candidate sets use integer bitsets,
+not the paper's doubly linked list implementation.}
 
 We first generate distinct rotations and reflections and enumerate placements
 that remain inside the board and avoid holes. Search uses the minimum
@@ -26,10 +46,29 @@ bitsets reduce the cost of these set operations. Every candidate for the
 chosen constraint is considered, so the search is complete, although its
 worst-case complexity remains exponential.
 
+If $A$ denotes the available placements and $U'$ the uncovered constraints,
+the minimum remaining values rule selects
+\begin{equation}
+ c^*=\mathop{\arg\min}_{c\in U'}\bigl|\{p\in A:c\in R_p\}\bigr|.
+\end{equation}
+After choosing a placement $p$ covering $c^*$, remove the constraints in
+$R_p$ and all other placements that intersect $R_p$. Zero candidates means
+failure; no uncovered constraints means success. Choosing the tightest
+constraint exposes failure early and allows search to switch adaptively
+between placing a tile and covering a cell.
+
+Selected placements remain pairwise compatible, while uncovered constraints
+must remain coverable by subsequent candidates. Removing conflicts performs
+forward checking; backtracking restores the previous candidate state.
+The heuristic changes exploration order, not the solution set. Bitsets
+reduce per-node work without changing worst-case complexity.
+
+\clearpage
 \subsection{Results}
 Four boards were tested with dominoes, triominoes, and pentominoes. All twelve
 instances passed the supplied correctness checker. The single-run times in
 Table~\ref{tab:csp} include placement generation and search.
+
 \begin{table}[htbp]
   \centering\small
   \caption{Tiling results across boards and tile sets.}\label{tab:csp}
@@ -40,6 +79,7 @@ The number of placements alone does not predict search effort. For example,
 the $6\times10$ pentomino instance has fewer placements than its domino
 counterpart but requires more backtracking. The interactions between tile
 shapes matter more than the candidate count alone.
+
 \begin{figure}[htbp]
   \centering
   \begin{subfigure}[t]{.47\linewidth}
@@ -78,9 +118,44 @@ order, and the current best move is replaced only by a strict improvement.
 Thus ties retain the first move. Alpha--beta search prunes when
 $\alpha\geq\beta$.
 
+\subsection{Minimax recurrence and pruning}
+A state must include the global board $B$, the forced local board $k$, and
+the player $p$: $s=(B,k,p)$. Piece locations alone do not determine legal
+actions. A move at global coordinates $(r,c)$ sets
+$k'=3(r\bmod3)+(c\bmod3)$.
+
+Let $\mathcal A(s)$ be the legal actions, $T(s,a)$ the successor, and $d$ the
+remaining depth. For a fixed root evaluation $E$,
+\begin{equation}
+V_d(s)=\begin{cases}
+ u(s), & s\text{ is terminal},\\
+ E(s), & d=0\text{ and }s\text{ is nonterminal},\\
+ \max_{a\in\mathcal A(s)}V_{d-1}(T(s,a)), & p=X,\\
+ \min_{a\in\mathcal A(s)}V_{d-1}(T(s,a)), & p=O.
+\end{cases}
+\end{equation}
+Here $u(s)$ is $-10000$, zero, or $10000$ for an X loss, draw, or win.
+Minimax assumes the opponent chooses the action most adverse to this
+utility. The resulting conservative decision is optimal for the truncated
+tree, not necessarily for the full game, since nonterminal $E$ is approximate.
+
+Alpha and beta record existing MAX guarantees and MIN restrictions along
+the path. Suppose MAX already has an option worth 5. If another MIN branch
+finds a child worth 3, that branch's final value cannot exceed 3, so its
+remaining children cannot improve MAX's choice. Pruning preserves the
+minimax value for the same depth and evaluation.\footnote{D. E. Knuth and
+R. W. Moore, \emph{An Analysis of Alpha-Beta Pruning}, Artificial Intelligence
+6 (1975), 293--326. \url{https://doi.org/10.1016/0004-3702(75)90019-3}.}
+For uniform branching factor $b$ and depth $d$, ordinary search costs
+$O(b^d)$. With ideal move ordering, pruning can approach $O(b^{d/2})$;
+its worst case remains $O(b^d)$. The required row-major order does not
+justify assuming ideal ordering in these experiments.
+
+\clearpage
 \subsection{Outcomes and pruning}
 Node counts include visited roots and leaves and are summed over all turns.
 In Table~\ref{tab:predefined}, MM denotes minimax and AB denotes alpha--beta.
+
 \begin{table}[htbp]
   \centering\small
   \caption{Results of the four required matchups.}\label{tab:predefined}
@@ -98,12 +173,12 @@ The offensive heuristic emphasizes creating its own threats, whereas the
 defensive heuristic emphasizes completed blocks. The latter does not
 directly measure the danger of the board to which the next player is sent,
 which can leave it vulnerable to sequences of forced routing.
-\clearpage
-\subsection{Final boards}
+
 \input{generated/en/predefined-figures.tex}
-\noindent\small X is offensive and O is defensive. Thick lines separate local
+
+\noindent{\small X is offensive and O is defensive. Thick lines separate local
 boards; colored lines mark winning triples. The four boards correspond to
-the rows of Table~\ref{tab:predefined}.\normalsize
+the rows of Table~\ref{tab:predefined}.\par}
 
 \clearpage
 \section{Section III\quad Designed Evaluation}
@@ -138,12 +213,36 @@ cells. The feature $F$ distinguishes two independent winning cells from
 two lines sharing one blocking cell. Immediate threats take priority over
 general positional scores; centers and corners have smaller weights.
 
+\subsection{Feature interpretation and the search horizon}
+$T$ measures potential attacking lines; $W$ and $F$ distinguish threats
+that can be removed by a single block from independent winning cells.
+Two lines sharing one winning square can still be blocked together.
+Even independent threats depend on the forced board, so global line
+counts alone are insufficient.
+
+The safety term has the current player's sign. A larger $S/L$ increases
+X utility when X moves next and decreases it when O moves next. It converts
+the consequence of sending the opponent to a particular board into a
+comparable state feature. Separating actual outcomes, immediate tactical
+values, and ordinary heuristic values prevents distant line or corner
+scores from outweighing immediate wins and losses. These scores rank
+positions; they are not winning probabilities.
+
+Finite depth creates a horizon effect: longer forced returns can fall
+beyond the search boundary. The evaluation recognizes immediate wins
+and positions where every choice loses immediately, but it cannot prove
+the safety of longer sequences. Match results are therefore necessary,
+and success against the fixed opponent does not establish strength
+against arbitrary human strategies.
+
+\clearpage
 \subsection{Parameter comparison}
 Development covered all nine starting boards and both starting players,
 giving eighteen conditions. The initial safe-count scheme won eleven;
 the best adjusted safe-count scheme won fourteen. Position weights,
 threat spread, and safety ratios were then compared. The ratio weight
 6000 was selected for the most development wins in Table~\ref{tab:tuning}.
+
 \begin{table}[htbp]
   \centering\small
   \caption{Development comparison of mobility features.}\label{tab:tuning}
@@ -155,13 +254,13 @@ random games are not strictly independent. The results establish an
 improvement against this specified opponent, rather than a guarantee
 against arbitrary strategies.
 
-\clearpage
 \subsection{Randomized match results}
 With random seed 448, each game's starting board and player were sampled
 randomly. Across \DesignedGames{} games, O won \DesignedWins{}, X won
 \DesignedLosses{}, and \DesignedDraws{} were drawn. The designed agent's
 win rate was \DesignedWinRate{}, exceeding the required 80\%.
 The average total search count was \DesignedMeanNodes{} nodes per game.
+
 \begin{table}[htbp]
   \centering\small
   \caption{Per-game results; node counts sum both players' searches.}\label{tab:random}
@@ -179,7 +278,9 @@ tests of opponent strategy.
 
 \clearpage
 \subsection{Representative positions}
+
 \input{generated/en/designed-figures.tex}
+
 \input{generated/en/designed-analysis.tex}
 The predefined offensive agent emphasizes its own two-in-a-row score,
 whereas the designed evaluation also considers the destination of the next

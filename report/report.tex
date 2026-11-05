@@ -9,19 +9,49 @@
 \makeassignmenttitle
 
 \section{Section I\quad 约束满足问题}
-\subsection{问题表示与搜索方法}
+\subsection{精确覆盖模型}
 将铺砌表示为精确覆盖：每个可用棋盘格和每块骨牌各对应一个约束，
 每种合法放置同时覆盖其占据的格子与骨牌身份。选择使所有约束恰好满足一次的放置，
 即可保证无重叠、无遗漏，且每块骨牌只使用一次。
+
+设可用格集合为$C$，骨牌身份集合为$I$，二者组成不交约束集合$U=C\sqcup I$。
+合法放置$p$对应约束子集$R_p\subseteq U$，二元变量$x_p$表示是否选择该放置。
+铺砌条件可写为
+\begin{equation}
+  \sum_{p:\,u\in R_p}x_p=1\quad(\forall u\in U),
+  \qquad x_p\in\{0,1\}.
+  \label{eq:exact-cover}
+\end{equation}
+格子约束保证覆盖且不重叠，身份约束保证每块骨牌只用一次。
+即使两块骨牌形状相同，也不能合并其身份约束。
+例如，60个可用格和12块五格骨牌形成72个约束，每种放置满足其中6个：5个格子和1个身份。
+
+\subsection{Algorithm X与最小剩余值启发式}
+精确覆盖可用Algorithm X的深度优先回溯求解。\footnote{D. E. Knuth, \emph{Dancing Links}, 2000.
+\url{https://arxiv.org/abs/cs/0011047}。本文使用整数位集维护候选，不使用文中的双向链表实现。}
 
 首先生成去重后的旋转与镜像，枚举不越界、不覆盖空洞的放置。
 搜索采用最小剩余值启发式，优先处理候选最少的约束；选定放置后删除所有冲突候选，
 出现零候选时回溯。候选以整数位集保存，以降低集合运算开销。
 搜索遍历所选约束的全部候选，因而具有完整性，但最坏复杂度仍为指数级。
 
+记$A$为当前可用放置，$U'$为尚未满足的约束。最小剩余值策略选择
+\begin{equation}
+ c^*=\mathop{\arg\min}_{c\in U'}\bigl|\{p\in A:c\in R_p\}\bigr|.
+\end{equation}
+选择覆盖$c^*$的放置$p$后，移除$R_p$中的约束，以及与$R_p$相交的所有其他候选。
+零候选说明该分支不可能完成；全部约束移除说明已经找到解。
+这一策略优先暴露最受限制的部分，使失败尽早发生，同时允许在“选定一块骨牌”和“覆盖一个格子”之间自适应切换。
+
+搜索始终保持两个不变量：已选放置两两不冲突，尚未满足的约束仍有机会被后续候选覆盖。
+删除冲突候选相当于前向检查；回溯恢复分支前的候选状态。
+因此，启发式只改变探索顺序，不改变可行解集合；位集则减少每个节点的运算开销，而不改变最坏复杂度。
+
+\clearpage
 \subsection{实验结果}
 四种棋盘分别使用二格、三格和五格骨牌测试，共12组实例，均通过课程提供的正确性验证。
 表\ref{tab:csp}的耗时包含候选生成与搜索，为单次测量。
+
 \begin{table}[htbp]
   \centering\small
   \caption{各组铺砌实例的求解结果}\label{tab:csp}
@@ -30,6 +60,7 @@
 
 候选数量并不能直接预测搜索量。例如，$6\times10$五格骨牌的候选少于二格骨牌，
 却需要更多回溯。骨牌形状之间的约束关系，比候选总量更能影响搜索难度。
+
 \begin{figure}[htbp]
   \centering
   \begin{subfigure}[t]{.47\linewidth}
@@ -61,9 +92,38 @@ O的未阻塞双连和阻断X双连分别计$-100$、$-500$分。
 候选按行优先顺序枚举，仅当得分严格改善时替换最佳落子，因此同分时保留先出现的位置；
 $\alpha\geq\beta$时剪枝。
 
+\subsection{minimax与剪枝原理}
+博弈状态需包含全局棋盘$B$、被指定的局部棋盘$k$与当前玩家$p$，即$s=(B,k,p)$。
+只有棋子分布而没有$k$，不足以确定合法行动。
+全局坐标$(r,c)$落子后的指定棋盘为$k'=3(r\bmod3)+(c\bmod3)$。
+
+记$\mathcal A(s)$为合法行动，$T(s,a)$为后继状态，$d$为剩余搜索层数。
+固定根玩家的评估函数$E$后，递推关系为
+\begin{equation}
+V_d(s)=\begin{cases}
+ u(s), & s\text{为终局},\\
+ E(s), & d=0\text{且非终局},\\
+ \max_{a\in\mathcal A(s)}V_{d-1}(T(s,a)), & p=X,\\
+ \min_{a\in\mathcal A(s)}V_{d-1}(T(s,a)), & p=O.
+\end{cases}
+\end{equation}
+其中$u(s)$在X负、平、胜时依次取$-10000$、0、10000。
+它假设对手会选择对当前效用最不利的行动，因此是有限深度下的保守决策。
+非终局的$E$只近似未来价值，故深度3的最优选择不等同于完整对局的最优策略。
+
+$\alpha$和$\beta$分别记录沿搜索路径已有的MAX可保证值与MIN可限制值。
+例如，根MAX已有得分5的选择；另一MIN分支只要发现一个得分3的子节点，该分支最终值便不超过3，
+无需再查看其余子节点。剪枝改变访问量，不改变同一深度与评估函数下的minimax值。\footnote{
+D. E. Knuth and R. W. Moore, \emph{An Analysis of Alpha-Beta Pruning},
+Artificial Intelligence 6 (1975), 293--326. \url{https://doi.org/10.1016/0004-3702(75)90019-3}。}
+均匀分支数为$b$、深度为$d$时，普通搜索为$O(b^d)$；理想排序下剪枝可接近$O(b^{d/2})$，
+最坏情况仍为$O(b^d)$。本实验遵守行优先顺序，不能假定具备理想排序。
+
+\clearpage
 \subsection{结果与剪枝效果}
 节点数包含搜索访问的根节点与叶节点，每局总量为各回合之和。
 表\ref{tab:predefined}中MM表示minimax，AB表示$\alpha$--$\beta$剪枝。
+
 \begin{table}[htbp]
   \centering\small
   \caption{四组指定对局的结果}\label{tab:predefined}
@@ -77,11 +137,11 @@ $\alpha\geq\beta$时剪枝。
 
 进攻方更重视建立自己的双连，防守方更重视已经完成的阻断。
 后者的得分没有直接刻画下一手被送往的棋盘是否危险，可能无法及时防守连续导向形成的威胁。
-\clearpage
-\subsection{最终棋盘}
+
 \input{generated/predefined-figures.tex}
-\noindent\small 图中X为进攻方、O为防守方；粗线划分局部棋盘，连线标出获胜三连。
-四个终盘依次对应表\ref{tab:predefined}的四组对局。\normalsize
+
+\noindent{\small 图中X为进攻方、O为防守方；粗线划分局部棋盘，连线标出获胜三连。
+四个终盘依次对应表\ref{tab:predefined}的四组对局。\par}
 
 \clearpage
 \section{Section III\quad 自定义评估函数}
@@ -109,10 +169,26 @@ H={}&400(T_X-T_O)+35(W_X-W_O)+800(F_X-F_O)\\
 $F$区分了两个独立获胜点与两条线共用一个空格的情况，后者仍可能被一次落子同时阻断。
 即时威胁优先于一般位置得分，中心与角落仅作为较低权重的偏好。
 
+\subsection{特征含义与搜索视野}
+$T$描述潜在进攻线，$W$与$F$进一步描述能否通过一次防守同时消除威胁。
+两条线若共用同一个获胜空格，仍可能被一步阻断；两个不同获胜空格则可能形成双重威胁。
+但在本游戏中，威胁还受指定棋盘约束，因此不能只统计全局双连。
+
+安全比例项的符号与玩家一致：下一手为X时，较大的$S/L$增加X效用；下一手为O时则降低X效用。
+其作用是把“当前落子将对手送往哪里”转化为可比较的局面特征。
+终局值、即时战术值与一般启发式值分层，避免多个角落或远处双连抵消眼前的胜负。
+这些分值用于排序，并不表示获胜概率。
+
+有限深度带来视野效应：搜索边界之外的连续强制回送可能被遗漏。
+当前评估可识别即时获胜或所有选择均立即失利，却不能证明更长序列的安全性。
+因此，胜率需要通过实际对局验证，且不能从对固定对手的结果直接推广到真人策略。
+
+\clearpage
 \subsection{参数比较}
 开发实验覆盖9个起始棋盘与2种先手，共18种起始条件。
 原始安全数量指标的初始方案赢得11局，调整后最多赢得14局。
 后续比较位置权重、威胁分布与安全比例，最终选择表\ref{tab:tuning}中开发胜局最多的权重6000。
+
 \begin{table}[htbp]
   \centering\small
   \caption{行动指标的开发实验比较}\label{tab:tuning}
@@ -122,12 +198,12 @@ $F$区分了两个独立获胜点与两条线共用一个空格的情况，后�
 起始条件总共只有18种，开发实验与后续随机实验并非严格独立。
 结果适合说明对本作业预定义对手的改进，不能据此推断对任意策略都同样有效。
 
-\clearpage
 \subsection{随机对局结果}
 使用随机种子448，每局随机选择起始棋盘和先手，共进行\DesignedGames 局。
 O胜\DesignedWins 局，X胜\DesignedLosses 局，平局\DesignedDraws 局，
 自定义智能体胜率为\DesignedWinRate，达到80\%的要求。
 平均每局访问\DesignedMeanNodes 个节点。
+
 \begin{table}[htbp]
   \centering\small
   \caption{随机对局的逐局结果；节点数为双方搜索总量。}\label{tab:random}
@@ -144,7 +220,9 @@ O胜\DesignedWins 局，X胜\DesignedLosses 局，平局\DesignedDraws 局，
 
 \clearpage
 \subsection{代表局面与分析}
+
 \input{generated/designed-figures.tex}
+
 \input{generated/designed-analysis.tex}
 预定义进攻方重视累计自己的双连得分，而自定义评估还检查下一手进入的棋盘，
 使导向威胁在搜索中得到更高优先级。

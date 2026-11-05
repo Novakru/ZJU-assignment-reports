@@ -35,43 +35,42 @@
 \fi
 \newcommand{\makeassignmenttitle}{%
   \begin{titlepage}
-  \noindent\includegraphics[height=10mm]{../zju-tech-report/assets/zju-horizontal-blue.png}%
-  \hfill{\small\sffamily\color{TextGray}ZJU--UIUC INSTITUTE}\par
-  \vspace{5pt}{\color{QiushiBlue}\hrule height 0.8pt}
-  \vspace{25mm}
-  {\centering\LARGE\bfseries Assignment \#2\par}
-  \vspace{5mm}
-  {\centering\LARGE\bfseries
+  \noindent\begin{minipage}[c]{.55\linewidth}
+    \includegraphics[height=11mm]{../zju-tech-report/assets/zju-horizontal-blue.png}
+  \end{minipage}\hfill
+  \begin{minipage}[c]{.4\linewidth}
+    \raggedleft\rmfamily\itshape\fontsize{11}{14}\selectfont
+    \color{TextGray}ZJU--UIUC Institute
+  \end{minipage}\par
+  \vspace{34mm}
+  {\noindent\small\color{TextGray}\CourseCode\enspace /\enspace \CourseTerm\par}
+  \vspace{6mm}
+  {\noindent\fontsize{28}{36}\selectfont\bfseries
     \ifdefined\EnglishReport Planning and Games\else 规划与博弈实验报告\fi\par}
-  \vspace{3mm}
-  {\centering\large
+  \vspace{4mm}
+  {\noindent\large\color{TextGray}
     \ifdefined\EnglishReport Constraint Satisfaction and Adversarial Search\else Planning and Games\fi\par}
-  \vspace{8mm}{\color{QiushiBlue}\hrule height 0.5pt}
-  \vspace{14mm}
-  \begin{center}
-  \renewcommand{\arraystretch}{1.8}
+  \vspace{8mm}
+  {\noindent\normalsize\color{QiushiBlue}Assignment 2\enspace /\enspace Group \GroupNumber\par}
+  \vspace{24mm}
+  \begingroup
+  \renewcommand{\arraystretch}{1.5}
+  \noindent
   \ifdefined\EnglishReport
-    \begin{tabular}{rp{105mm}}
-      Course & \CourseCode\\
-      Term & \CourseTerm\\
-      Group & \GroupNumber\\
-      Members & Wang Libin, Jiang Jiahao,\\[-8pt]
-      & Wang Zizheng, Xue Xiaokang\\
-      Date & \ReportDate
+    \begin{tabular}{@{}p{23mm}p{117mm}@{}}
+      \textcolor{TextGray}{Course} & \CourseName\\
+      \textcolor{TextGray}{Members} & Wang Libin\qquad Jiang Jiahao\\
+      & Wang Zizheng\qquad Xue Xiaokang
     \end{tabular}
   \else
-    \begin{tabular}{rp{105mm}}
-      课程 & \CourseName\\
-      课程号 & \CourseCode\\
-      学期 & \CourseTerm\\
-      小组 & Group \GroupNumber\\
-      组员 & \GroupMembersZh\\
-      报告日期 & \ReportDate
+    \begin{tabular}{@{}p{23mm}p{117mm}@{}}
+      \textcolor{TextGray}{课程} & \CourseName\\
+      \textcolor{TextGray}{组员} & \GroupMembersZh
     \end{tabular}
   \fi
-  \end{center}
+  \par\endgroup
   \vfill
-  {\centering\small\color{TextGray}Zhejiang University\par}
+  {\noindent\small\color{TextGray}\ReportDate\hfill Zhejiang University\par}
   \end{titlepage}
 }
 \pagestyle{fancy}
