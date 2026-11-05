@@ -265,6 +265,53 @@ O胜\DesignedWins 局，X胜\DesignedLosses 局，平局\DesignedDraws 局，
 这些是待检验的问题，尚不能作为真人实验结论。
 
 \clearpage
+\subsection{模拟对手补充实验（非真人）}
+以下30局由程序产生，不计入真人实验，也不能代替至少10局真人对战的要求。
+策略未经人类行为数据校准，其胜率不能视为真人胜率。
+模拟X对战深度3的自定义O，均沿用局部首次三连获胜规则。
+随机策略等概率选择合法落点；一步攻防优先立即取胜，其次封堵合法范围内
+对手的即时三连，最后偏好中心、角落，每步有15\%概率改为随机落子；
+浅层策略使用深度2的预定义进攻评估与$\alpha$--$\beta$搜索，
+每步有10\%概率改为随机落子。战术同分随机选择，搜索同分保留首个落点。
+
+种子20261106生成10组起始棋盘与先手，三种策略共用这些开局。
+第$p$种策略第$i$局使用种子$20261106+1000p+i-1$（$p,i$从1开始）。
+策略与错误概率在运行前固定，全部结果保留，没有筛除失败或重选开局。
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{模拟策略对自定义O的结果；非人类表现统计。}
+  \input{generated/simulated-summary.tex}
+\end{table}
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{全部30局模拟对战，起点编号0至8。}
+  \begin{minipage}[t]{.48\linewidth}\centering
+    \input{generated/simulated-left.tex}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{.48\linewidth}\centering
+    \input{generated/simulated-right.tex}
+  \end{minipage}
+\end{table}
+
+\clearpage
+\subsection{模拟对局的代表棋盘与分析}
+\input{generated/simulated-figures.tex}
+
+图中选取每种策略首局，并补充全体中步数最多的一局。
+三种模拟策略各0胜10负，自定义O共30胜，胜率100\%。
+平均步数分别为15.9、9.1和29.5；浅层搜索在本组开局下延后了终局。
+一步攻防主要检查当前可落子的棋盘，位置偏好未考虑回送风险，
+因此即使封堵眼前三连，也可能把对手送到另一处已有威胁的棋盘。
+局部防守仍不足以处理跨棋盘导向，但平均步数本身不构成棋力排序。
+
+全部记录逐步回放核对合法落点、棋盘变化和胜方，并按相同种子重跑核对完整轨迹。
+每类只有10局，且使用相同开局，不能把30局视为独立抽取的人类样本。
+零败说明智能体在这组固定测试中占优，不能推出对任意对手必胜。
+真人对局仍需单独记录，尤其应检验更长的强制回送、主动设陷和对评估偏好的利用。
+
+\clearpage
 \section{Extra Credit\quad 扩展实验}
 \subsection{全局三连规则}
 扩展版采用全局三连获胜：局部棋盘三连后归胜方所有并立即封闭，后续不能在其中落子；

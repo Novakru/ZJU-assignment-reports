@@ -11,6 +11,12 @@ try {
         & $PythonCommand -B 'experients/assignment2/run_extra.py'
         if ($LASTEXITCODE -ne 0) { throw 'Global-rule experiment failed.' }
     }
+    if ($RunExperiments -or -not (Test-Path -LiteralPath 'experients/assignment2/simulated_results.json')) {
+        & $PythonCommand -B 'experients/assignment2/run_simulated.py'
+        if ($LASTEXITCODE -ne 0) { throw 'Synthetic-opponent experiment failed.' }
+    }
+    & $PythonCommand -B 'experients/assignment2/check_simulated.py'
+    if ($LASTEXITCODE -ne 0) { throw 'Synthetic-opponent verification failed.' }
     & $PythonCommand -B 'experients/assignment2/checks.py'
     if ($LASTEXITCODE -ne 0) { throw 'Behavioral verification failed.' }
     & $PythonCommand -B 'experients/assignment2/check_extra.py'
@@ -40,7 +46,9 @@ try {
                                 'report/generate.py', 'submission/solve.py', 'submission/uttt.py',
                                 'experients/assignment2/results.json', 'experients/assignment2/extra_results.json',
                                 'experients/assignment2/run_extra.py', 'experients/assignment2/check_extra.py',
-                                'experients/assignment2/human-notes.json')) {
+                                'experients/assignment2/human-notes.json',
+                                'experients/assignment2/run_simulated.py', 'experients/assignment2/check_simulated.py',
+                                'experients/assignment2/simulated_results.json')) {
         $sourceHashes[$relativePath] = (Get-FileHash -LiteralPath (Join-Path $repoRoot $relativePath) -Algorithm SHA256).Hash.ToLowerInvariant()
     }
     $humanLog = Join-Path $repoRoot 'experients/assignment2/human_games.json'
@@ -56,6 +64,9 @@ try {
         languages = @('zh', 'en')
         latex_layout_or_reference_issues = $false
         human_games = $humanGames
+        simulated_games = @((Get-Content -LiteralPath (Join-Path $repoRoot 'experients/assignment2/simulated_results.json') -Raw -Encoding UTF8 | ConvertFrom-Json).games).Count
+        simulated_games_are_human = $false
+        simulated_checks_passed = $true
         human_requirement_satisfied = ($humanGames -ge 10)
         global_rule_checks_passed = $true
         extra_games = @((Get-Content -LiteralPath (Join-Path $repoRoot 'experients/assignment2/extra_results.json') -Raw -Encoding UTF8 | ConvertFrom-Json).games).Count

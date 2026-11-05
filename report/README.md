@@ -53,4 +53,9 @@ python experients/assignment2/check_extra.py
 python submission/uttt.py extra --games 12 --seed 2013 --output extra_games.json
 ```
 
+模拟对手补充实验：`python -B experients/assignment2/run_simulated.py`，验证：
+`python -B experients/assignment2/check_simulated.py`。固定种子20261106，随机、一步攻防、
+深度2搜索各10局，对战深度3自定义O；O实测30胜。全部记录明确标记为非真人，
+保存在 `simulated_results.json`，不写入真人日志，也不满足真人对战要求。
+
 Blackboard 只上传 `submission` 内的 `solve.py`、`uttt.py`、`report.pdf`，不提交 LaTeX 源文件和实验日志。

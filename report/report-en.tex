@@ -329,6 +329,63 @@ center weights interfere with necessary defense. These are questions for
 the planned experiment, not empirical conclusions from human play.
 
 \clearpage
+\subsection{Supplementary synthetic opponents (not human play)}
+These thirty automated games are excluded from the human results and do
+not fulfill the requirement for at least ten human games. The policies
+were not calibrated against human behavior; their rates are not human
+win rates. Synthetic X faces depth-three designed O under the same
+first-local-win rules. Random X samples legal moves uniformly. Tactical
+X first takes an immediate win, then blocks an immediate opposing win
+in the legal area, then prefers centers and corners; with probability
+15\% it instead moves randomly. Shallow X uses depth-two alpha--beta
+with the predefined offensive evaluation, moving randomly with probability
+10\%. Tactical ties are random; search retains the first tie.
+
+Seed 20261106 generates ten starting boards and first-player choices,
+shared across policies. Game $i$ of policy $p$ uses seed
+$20261106+1000p+i-1$, both indices starting at one. Policies and error
+probabilities were fixed before execution. All outcomes were retained
+without screening losses or selecting new openings.
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{Synthetic opponents versus designed O; not human statistics.}
+  \input{generated/en/simulated-summary.tex}
+\end{table}
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{All thirty synthetic games. Starting boards are numbered 0--8.}
+  \begin{minipage}[t]{.48\linewidth}\centering
+    \input{generated/en/simulated-left.tex}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{.48\linewidth}\centering
+    \input{generated/en/simulated-right.tex}
+  \end{minipage}
+\end{table}
+
+\clearpage
+\subsection{Representative synthetic games and interpretation}
+\input{generated/en/simulated-figures.tex}
+
+The boards show the first game of each policy and the longest game overall.
+Each synthetic policy lost all ten games: designed O won 30/30, or 100\%.
+Mean lengths were 15.9, 9.1, and 29.5 plies, respectively. Shallow search
+delayed termination on these openings. Tactical X checks immediate threats
+in the legal area, while its positional preferences ignore routing risk.
+Even an immediate block can therefore send the opponent to another board
+with an existing threat. Local defense alone does not resolve cross-board
+routing; game length itself is not a ranking of playing strength.
+
+Every trace was replayed to check legal moves, board changes, and outcomes,
+then reproduced with the same seed to verify the full trajectory.
+There are only ten games per policy, with shared openings: these thirty
+games are not independent human samples. Zero losses establish an advantage
+on this fixed test, not a guarantee against arbitrary opponents. Human
+testing remains necessary, particularly for longer forced routes,
+deliberate traps, and exploitation of the heuristic's preferences.
+
+\clearpage
 \section{Extra Credit}
 \subsection{Global-line rules}
 A local three-in-a-row captures and closes that board; no further move

@@ -122,7 +122,8 @@ def figures(name, records, prefix, labels):
     captions = {'predefined':tr('预定义智能体的最终棋盘。','Final boards of the predefined agents.'),
                 'designed':tr('自定义智能体对局的代表终盘。','Representative final boards of the designed agent.'),
                 'human':tr('真人对战的代表终盘。','Representative final boards of the human games.'),
-                'extra':tr('全局三连规则的代表终盘。','Representative final boards under the global-line rule.')}
+                'extra':tr('全局三连规则的代表终盘。','Representative final boards under the global-line rule.'),
+                'simulated':tr('模拟对手实验的代表终盘（非真人）。','Representative synthetic-opponent boards (not human play).')}
     lines.extend([r'\caption{' + captions[prefix] + '}', r'\end{figure}'])
     write(name, '\n'.join(lines))
 
@@ -291,6 +292,31 @@ def extra_layout():
     write('extra-analysis.tex','\n\n'.join(paragraphs))
 
 
+def simulated_layout():
+    data = json.loads((DATA/'simulated_results.json').read_text(encoding='utf-8'))
+    games = data['games']
+    names = dict(random=tr('随机','Random'), tactical=tr('一步攻防','Tactical'), shallow=tr('浅层搜索','Shallow'))
+    rows = []
+    for policy, name in names.items():
+        selected = [g for g in games if g['policy'] == policy]
+        x, o, d = (sum(g['winner'] == w for g in selected) for w in (1,-1,0))
+        rows.append([name, len(selected), x, o, d, f'{100*o/len(selected):.0f}'+r'\%',
+                     f'{statistics.mean(len(g["moves"]) for g in selected):.1f}'])
+    tabular('simulated-summary.tex', tr(['模拟X策略','局数','X胜','O胜','平局','O胜率','平均步数'],
+            ['Synthetic X','Games','X wins','O wins','Draws','O win rate','Mean plies']), rows, 'lrrrrrr')
+    for begin, end, name in ((0,15,'simulated-left.tex'),(15,30,'simulated-right.tex')):
+        rows = [[i+1, names[g['policy']],g['start_board'],'X' if g['max_first'] else 'O',
+                 len(g['moves']), {1:'X',-1:'O',0:tr('平','D')}[g['winner']]]
+                for i,g in enumerate(games) if begin <= i < end]
+        tabular(name, tr(['局次','策略','起点','先手','步数','胜方'],
+                        ['Game','Policy','Start','First','Plies','Win']),rows,'rlccrc')
+    chosen = [(1,games[0]), (11,games[10]), (21,games[20]),
+              max(enumerate(games,1), key=lambda pair:len(pair[1]['moves']))]
+    figures('simulated-figures.tex', [g for _,g in chosen], 'simulated',
+            [tr(f'第{i}局，{names[g["policy"]]}，{len(g["moves"])}步',
+                f'Game {i}: {names[g["policy"]]}, {len(g["moves"])} plies') for i,g in chosen])
+
+
 def generate():
     GENERATED.mkdir(exist_ok=True, parents=True)
     FIGURES.mkdir(exist_ok=True)
@@ -374,6 +400,7 @@ def generate():
     human_file=DATA/'human_games.json'
     humans=json.loads(human_file.read_text(encoding='utf-8')) if human_file.exists() else []
     human_layout(humans)
+    simulated_layout()
     extra_layout()
     print('Generated tables and vector figures from measured results.')
 
