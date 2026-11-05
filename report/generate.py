@@ -123,7 +123,8 @@ def figures(name, records, prefix, labels):
                 'designed':tr('自定义智能体对局的代表终盘。','Representative final boards of the designed agent.'),
                 'human':tr('真人对战的代表终盘。','Representative final boards of the human games.'),
                 'extra':tr('全局三连规则的代表终盘。','Representative final boards under the global-line rule.'),
-                'simulated':tr('模拟对手实验的代表终盘（非真人）。','Representative synthetic-opponent boards (not human play).')}
+                'simulated':tr('模拟对手实验的代表终盘（非真人）。','Representative synthetic-opponent boards (not human play).'),
+                'depthpredefined':tr('更深搜索的预定义智能体代表终盘。','Predefined-agent final boards with deeper search.')}
     lines.extend([r'\caption{' + captions[prefix] + '}', r'\end{figure}'])
     write(name, '\n'.join(lines))
 
@@ -334,6 +335,68 @@ def simulated_layout():
                 f'Game {i}: {names[g["policy"]]}, {len(g["moves"])} plies') for i,g in chosen])
 
 
+def depth_layout():
+    predefined=json.loads((DATA/'depth_predefined_results.json').read_text())['games']
+    assert len(predefined)==8
+    rows=[]
+    for g in predefined:
+        rows.append([g['depth'],'MM' if g['minimax_x'] else 'AB', 'MM' if g['minimax_o'] else 'AB',
+                     'X' if g['max_first'] else 'O',len(g['moves']),f'{g["total_nodes"]:,}',
+                     {1:'X',-1:'O',0:'D'}[g['winner']]])
+    tabular('depth-predefined-table.tex',tr(['层数','X算法','O算法','先手','步数','合计节点','胜方'],
+            ['Depth','X','O','First','Plies','Total nodes','Winner']),rows,'rcccrrc')
+    chosen=[predefined[i] for i in (0,3,4,7)]
+    figures('depth-predefined-figures.tex',chosen,'depthpredefined',
+            [tr(f'{g["depth"]}层，'+('X' if g['max_first'] else 'O')+'先手',
+                f'Depth {g["depth"]}, '+('X' if g['max_first'] else 'O')+' first') for g in chosen])
+    for rule in ('local','global'):
+        data=json.loads((DATA/f'depth_{rule}_results.json').read_text(encoding='utf-8'))
+        games=data['games']
+        assert len(games)==90 and len(data['timing_reference'])==5
+        rows=[]
+        summaries=[]
+        for dx,do in data['configs']:
+            subset=[g for g in games if (g['depth_x'],g['depth_o'])==(dx,do)]
+            x,o,d=(sum(g['winner']==w for g in subset) for w in (1,-1,0))
+            nodes=statistics.mean(g['total_nodes'] for g in subset)
+            ref=next(r for r in data['timing_reference'] if (r['depth_x'],r['depth_o'])==(dx,do))
+            rows.append([dx,do,x,o,d,f'{100*o/18:.1f}'+r'\%',f'{nodes:,.0f}',f'{ref["seconds"]:.2f}'])
+            summaries.append((o/18,nodes))
+        tabular(f'depth-{rule}-summary.tex',
+                tr([r'$d_X$',r'$d_O$','X胜','O胜','平局','O胜率','平均节点','参考耗时/s'],
+                   [r'$d_X$',r'$d_O$','X wins','O wins','Draws','O win rate','Mean nodes','Ref. time/s']),rows,'rrrrrrrr')
+        rows=[]
+        for start,first in data['openings']:
+            winners=[]
+            for dx,do in data['configs']:
+                g=next(g for g in games if (g['depth_x'],g['depth_o'],g['start_board'],g['max_first'])==(dx,do,start,first))
+                winners.append({1:'X',-1:'O',0:'D'}[g['winner']])
+            rows.append([start,'X' if first else 'O']+winners)
+        tabular(f'depth-{rule}-games.tex',tr(['起点','先手'],['Start','First'])+
+                [f'$({dx},{do})$' for dx,do in data['configs']],rows,'ccccccc')
+        fixed=tr('、',', ').join(f'{100*summaries[i][0]:.1f}'+r'\%' for i in range(3))
+        ratios=tr('、',', ').join(f'{summaries[i][1]/summaries[0][1]:.1f}' for i in range(1,5))
+        equal=tr('、',', ').join(f'{100*summaries[i][0]:.1f}'+r'\%' for i in (3,4))
+        text=tr(f'固定X为三层时，O在三、四、五层的胜率依次为{fixed}。'
+                f'双方同时使用四层、五层时，O胜率分别为{equal}。'
+                f'其余四种配置的平均节点数相对三层基线分别为{ratios}倍。',
+                f'Against depth-three X, O win rates at depths three, four, and five were {fixed}, respectively. '
+                f'With both sides at depth four and at depth five, O won {equal}, respectively. '
+                f'The other four configurations used {ratios} times the baseline mean node count, respectively.')
+        if rule=='global':
+            last=[g for g in games if (g['depth_x'],g['depth_o'])==(5,5)]
+            draws=sum(g['winner']==0 for g in last)/18
+            nonloss=sum(g['winner']!=1 for g in last)/18
+            text+=tr(f'双方五层时，平局率为{100*draws:.1f}'+r'\%'+
+                     f'，O的不败率为{100*nonloss:.1f}'+r'\%'+
+                     '；其胜率虽低于三层对照，但败局也更少，不能仅凭胜率判定退步。',
+                     f' At equal depth five, draws accounted for {100*draws:.1f}'+r'\%'+
+                     f' and O avoided defeat in {100*nonloss:.1f}'+r'\%'+
+                     ' of games. O won less often than in the depth-three control but also lost less often; '
+                     'win rate alone does not establish deterioration.')
+        write(f'depth-{rule}-analysis.tex',text)
+
+
 def generate():
     GENERATED.mkdir(exist_ok=True, parents=True)
     FIGURES.mkdir(exist_ok=True)
@@ -419,6 +482,7 @@ def generate():
     human_layout(humans)
     simulated_layout()
     extra_layout()
+    depth_layout()
     print('Generated tables and vector figures from measured results.')
 
 

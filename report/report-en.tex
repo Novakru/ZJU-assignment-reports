@@ -181,9 +181,30 @@ boards; colored lines mark winning triples. The four boards correspond to
 the rows of Table~\ref{tab:predefined}.\par}
 
 \clearpage
+\subsection{Deeper predefined-agent controls}
+The four required depth-three games remain the baseline. Supplementary
+games change both players to depth four or five, retaining the evaluations,
+row-major order, tie rule, and central starting board. Each depth repeats
+the four prescribed algorithm combinations: X starts the first two and O
+the last two. Outcomes describe these specific policies and openings,
+not a population win rate against random opponents.
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{Four predefined matchups at depths four and five; MM is minimax, AB is alpha--beta.}
+  \input{generated/en/depth-predefined-table.tex}
+\end{table}
+
+\input{generated/en/depth-predefined-figures.tex}
+
+At the same depth and first player, both searches should produce the
+same trace; only visited node counts differ. Stepwise replay and paired
+trace comparisons check this property.
+
+\clearpage
 \section{Section III\quad Designed Evaluation}
 \subsection{Formulation}
-The designed agent plays O against predefined offensive X. Both use
+In the baseline, the designed agent plays O against predefined offensive X. Both use
 depth-three alpha--beta search. The evaluation considers both players'
 threats and the board where the next player must actually move. A winning
 opportunity elsewhere is not necessarily playable on the next turn, so
@@ -289,11 +310,50 @@ isolate the causal effect of an individual weight. These findings remain
 specific to the tested opponent and opening conditions.
 
 \clearpage
+\subsection{Additional automatic depth controls}
+Let $(d_X,d_O)$ denote the two search depths. X retains the predefined
+offensive evaluation and O retains the designed evaluation; both use
+alpha--beta. Fix X at depth three and test O at three, four, and five,
+then test both players at four and at five. Each configuration covers
+all nine starting boards and both first players: eighteen games per
+configuration, ninety in total, without filtering or retuning. These
+supplementary runs remain separate from the original depth-three experiment.
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{First-local-win depth controls; eighteen games per row. Nodes sum both players.}
+  \input{generated/en/depth-local-summary.tex}
+\end{table}
+
+\input{generated/en/depth-local-analysis.tex}
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{Winners on the same eighteen openings; columns give $(d_X,d_O)$, D means draw.}
+  \input{generated/en/depth-local-games.tex}
+\end{table}
+
+Reference times use starting board zero with X first, rerun once per
+configuration sequentially after all batch games finished. They are not
+eighteen-game means and depend on system load and caching; they indicate
+cost magnitude. Node means cover all eighteen games and are reproducible.
+Deeper search still relies on heuristic leaves and changes whose turn
+falls at the horizon; its win rate need not improve monotonically.
+Deepening both sides changes the opponent's search too, so outcomes cannot
+be attributed to O alone.
+None of these deeper configurations improved on the baseline win rate,
+so the basic game's default remains depth three.
+
+\clearpage
 \section{Section IV\quad Human Games}
 \subsection{Protocol and game records}
 The human plays X and the designed agent plays O, with randomized starting
 board and player. At least ten games are required, followed by a discussion
 of win rates, representative final boards, and the agent's strengths and weaknesses.
+The human experiment is fixed at the twelve completed games, all with
+depth-three O. No further human games will be collected. Depth-four and
+depth-five configurations are tested automatically only; their outcomes
+do not estimate human win rates.
 
 \input{generated/en/human-results.tex}
 
@@ -380,8 +440,8 @@ then reproduced with the same seed to verify the full trajectory.
 There are only ten games per policy, with shared openings: these thirty
 games are not independent human samples. Zero losses establish an advantage
 on this fixed test, not a guarantee against arbitrary opponents. Human
-testing remains necessary, particularly for longer forced routes,
-deliberate traps, and exploitation of the heuristic's preferences.
+results are reported separately in this section; these synthetic games
+do not enlarge the human sample.
 
 \clearpage
 \section{Extra Credit}
@@ -399,7 +459,8 @@ board. The capture total alone is insufficient: two disconnected captures
 need not be as valuable as two that create an open global threat.
 
 \subsection{Custom offensive and defensive evaluations}
-Both offensive X and defensive O use depth-three alpha--beta search.
+In the original twelve-game baseline, both offensive X and defensive O
+use depth-three alpha--beta search.
 Let $G$ count captured boards, $P,Q$ count open global two-mark and
 one-mark lines, and $T,L$ count open two-mark and one-mark lines within
 open local boards. $K$ weights captured boards by 3 at the center,
@@ -452,6 +513,38 @@ drawn local boards and white marks open boards. A thick line across
 three local-board centers marks a global win.
 
 \input{generated/en/extra-analysis.tex}
+
+\clearpage
+\subsection{Depth controls under the extended rules}
+Keep the offensive X and defensive O weights unchanged and use the same
+five depth configurations as above. Each covers all nine starting boards
+and both first players, giving ninety games. Unlike the original twelve
+random games, every opening occurs once per configuration. Compare depths
+within these matched eighteen openings. Both players use custom policies;
+O win rate is neither an implementation correctness score nor subject to
+the basic experiment's 80\% target.
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{Global-line depth controls; eighteen games per row. Nodes sum both players.}
+  \input{generated/en/depth-global-summary.tex}
+\end{table}
+
+\input{generated/en/depth-global-analysis.tex}
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{All extended-game openings; columns give $(d_X,d_O)$, D means draw.}
+  \input{generated/en/depth-global-games.tex}
+\end{table}
+
+Reference times again use one sequential rerun of board zero with X first;
+node means cover eighteen games. Fixing X isolates changes to O's search
+configuration; equal-depth runs change both players' horizons. Interpret
+wins, losses, and draws together: additional draws can reduce win rate
+without adding losses. Results cover these fixed evaluations and eighteen
+deterministic openings, not arbitrary opposing strategies. These extended
+controls are entirely automatic; no human games were added.
 
 \clearpage
 \section{Statement of Contribution}

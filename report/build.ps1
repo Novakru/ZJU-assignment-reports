@@ -15,6 +15,20 @@ try {
         & $PythonCommand -B 'experients/assignment2/run_simulated.py'
         if ($LASTEXITCODE -ne 0) { throw 'Synthetic-opponent experiment failed.' }
     }
+    if ($RunExperiments -or -not (Test-Path -LiteralPath 'experients/assignment2/depth_local_results.json') -or -not (Test-Path -LiteralPath 'experients/assignment2/depth_global_results.json')) {
+        foreach ($rule in @('local','global')) {
+            & $PythonCommand -B 'experients/assignment2/run_depth.py' $rule
+            if ($LASTEXITCODE -ne 0) { throw "Depth experiment failed: $rule" }
+        }
+        & $PythonCommand -B 'experients/assignment2/time_depth.py'
+        if ($LASTEXITCODE -ne 0) { throw 'Sequential depth timing failed.' }
+    }
+    if ($RunExperiments -or -not (Test-Path -LiteralPath 'experients/assignment2/depth_predefined_results.json')) {
+        & $PythonCommand -B 'experients/assignment2/run_predefined_depth.py'
+        if ($LASTEXITCODE -ne 0) { throw 'Predefined-agent depth experiment failed.' }
+    }
+    & $PythonCommand -B 'experients/assignment2/check_depth.py'
+    if ($LASTEXITCODE -ne 0) { throw 'Depth experiment verification failed.' }
     & $PythonCommand -B 'experients/assignment2/check_simulated.py'
     if ($LASTEXITCODE -ne 0) { throw 'Synthetic-opponent verification failed.' }
     & $PythonCommand -B 'experients/assignment2/checks.py'
@@ -50,7 +64,11 @@ try {
                                 'experients/assignment2/run_extra.py', 'experients/assignment2/check_extra.py',
                                 'experients/assignment2/human-notes.json', 'experients/assignment2/check_human.py',
                                 'experients/assignment2/run_simulated.py', 'experients/assignment2/check_simulated.py',
-                                'experients/assignment2/simulated_results.json')) {
+                                'experients/assignment2/simulated_results.json',
+                                'experients/assignment2/run_depth.py', 'experients/assignment2/time_depth.py',
+                                'experients/assignment2/check_depth.py', 'experients/assignment2/depth_local_results.json',
+                                'experients/assignment2/depth_global_results.json',
+                                'experients/assignment2/run_predefined_depth.py', 'experients/assignment2/depth_predefined_results.json')) {
         $sourceHashes[$relativePath] = (Get-FileHash -LiteralPath (Join-Path $repoRoot $relativePath) -Algorithm SHA256).Hash.ToLowerInvariant()
     }
     $humanLog = Join-Path $repoRoot 'experients/assignment2/human_games.json'
@@ -68,6 +86,11 @@ try {
         latex_layout_or_reference_issues = $false
         human_games = $humanGames
         human_game_checks_passed = $true
+        human_experiment_depth = 3
+        additional_human_games_planned = $false
+        depth_control_checks_passed = $true
+        depth_control_games = 188
+        depth_reference_reruns = 10
         simulated_games = @((Get-Content -LiteralPath (Join-Path $repoRoot 'experients/assignment2/simulated_results.json') -Raw -Encoding UTF8 | ConvertFrom-Json).games).Count
         simulated_games_are_human = $false
         simulated_checks_passed = $true
