@@ -20,3 +20,20 @@
 各目录 README 介绍对应模板的使用方法、字体和注意事项。不同模板适用场景与编译方式不同，请按目录说明配置。
 
 欢迎通过 Issue 和 Pull Request 提交问题、建议与改进。
+
+## 高级人工智能算法与系统 · MP2（`assignment2-advanced-ai` 分支）
+
+- [报告、模板与构建说明](report/README.md) · [PDF](report/report.pdf)
+- [实验与验证](experients/assignment2/README.md)
+- [提交文件](submission)：仅 `solve.py`、`uttt.py`、`report.pdf`
+
+本分支从 `main` 创建，独立维护MP2，不包含 `assignment1-cs1050` 的作业内容。
+保留课程要求的全部报告章节；真人实验和课程号/班级尚待补充。
+
+| 分支 | 用途 |
+| --- | --- |
+| `main` | 通用报告模板 |
+| [`assignment1-cs1050`](https://github.com/Novakru/ZJU-assignment-reports/tree/assignment1-cs1050) | CS1050 Assignment 1 |
+| `assignment2-advanced-ai` | 高级人工智能算法与系统 MP2（当前作业） |
+
+新作业从 `main` 创建独立分支；作业内容与实验只在对应分支维护。

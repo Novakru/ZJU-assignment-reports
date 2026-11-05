@@ -1,0 +1,171 @@
+\documentclass[UTF8,fontset=fandol,11pt,a4paper]{ctexart}
+\input{student-info.tex}
+\newcommand{\CourseName}{高级人工智能算法与系统}
+\newcommand{\CourseSection}{待补充}
+\newcommand{\ReportDate}{2026年11月5日}
+\usepackage{assignment}
+\input{generated/summary.tex}
+
+\begin{document}
+\makeassignmenttitle
+
+\section{Section I\quad 约束满足问题}
+\subsection{问题表示与搜索方法}
+将铺砌表示为精确覆盖：每个可用棋盘格和每块骨牌各对应一个约束，
+每种合法放置同时覆盖其占据的格子与骨牌身份。选择使所有约束恰好满足一次的放置，
+即可保证无重叠、无遗漏，且每块骨牌只使用一次。
+
+首先生成去重后的旋转与镜像，枚举不越界、不覆盖空洞的放置。
+搜索采用最小剩余值启发式，优先处理候选最少的约束；选定放置后删除所有冲突候选，
+出现零候选时回溯。候选以整数位集保存，以降低集合运算开销。
+搜索遍历所选约束的全部候选，因而具有完整性，但最坏复杂度仍为指数级。
+
+\subsection{实验结果}
+四种棋盘分别使用二格、三格和五格骨牌测试，共12组实例，均通过课程提供的正确性验证。
+表\ref{tab:csp}的耗时包含候选生成与搜索，为单次测量。
+\begin{table}[htbp]
+  \centering\small
+  \caption{各组铺砌实例的求解结果}\label{tab:csp}
+  \input{generated/csp-table.tex}
+\end{table}
+
+候选数量并不能直接预测搜索量。例如，$6\times10$五格骨牌的候选少于二格骨牌，
+却需要更多回溯。骨牌形状之间的约束关系，比候选总量更能影响搜索难度。
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}[t]{.47\linewidth}
+    \centering\includegraphics[height=31mm]{figures/csp-6x10.pdf}
+    \caption{$6\times10$棋盘}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{.47\linewidth}
+    \centering\includegraphics[height=31mm]{figures/csp-hole.pdf}
+    \caption{中心挖空棋盘}
+  \end{subfigure}
+  \caption{五格骨牌铺砌示例；相同编号表示同一块骨牌。}
+\end{figure}
+
+\clearpage
+\section{Section II\quad 预定义智能体对局}
+\subsection{规则与搜索设置}
+实验采用任一局部棋盘率先三连即获胜的规则。局部编号按行优先顺序为0至8，
+下一棋盘由落子的局部位置决定；目标棋盘已满时，可以选择全局任意空格。
+四组对局均从中心棋盘4开始，前两组由进攻方X先手，后两组由防守方O先手。
+
+预定义评估严格分三级：首先判断终局，X胜为10000，O胜为$-10000$；
+否则，X的未阻塞双连和阻断O双连分别计500、100分，
+O的未阻塞双连和阻断X双连分别计$-100$、$-500$分。
+只有第二级没有计数时，才使用己方角落得分，X每格30分、O每格$-30$分。
+每条横、竖、斜线分别计数，同一格可以参与多条线。
+
+两种算法都向前搜索三次落子，终局提前返回。叶节点固定使用根节点所属智能体的评估函数，
+整棵树始终以X的效用表示，X最大化、O最小化。
+候选按行优先顺序枚举，仅当得分严格改善时替换最佳落子，因此同分时保留先出现的位置；
+$\alpha\geq\beta$时剪枝。
+
+\subsection{结果与剪枝效果}
+节点数包含搜索访问的根节点与叶节点，每局总量为各回合之和。
+表\ref{tab:predefined}中MM表示minimax，AB表示$\alpha$--$\beta$剪枝。
+\begin{table}[htbp]
+  \centering\small
+  \caption{四组指定对局的结果}\label{tab:predefined}
+  \input{generated/predefined-table.tex}
+\end{table}
+
+四局均由进攻方X获胜。第1、2局的走子轨迹相同，剪枝后节点数减少\PruningReductionA；
+第3、4局也有相同轨迹，节点数减少\PruningReductionB。
+在这些对局中，$\alpha$--$\beta$剪枝保留了minimax的决策，同时减少了搜索量。
+两组实验的先手不同，不能用第1局与第4局直接隔离剪枝的作用。
+
+进攻方更重视建立自己的双连，防守方更重视已经完成的阻断。
+后者的得分没有直接刻画下一手被送往的棋盘是否危险，可能无法及时防守连续导向形成的威胁。
+\clearpage
+\subsection{最终棋盘}
+\input{generated/predefined-figures.tex}
+\noindent\small 图中X为进攻方、O为防守方；粗线划分局部棋盘，连线标出获胜三连。
+四个终盘依次对应表\ref{tab:predefined}的四组对局。\normalsize
+
+\clearpage
+\section{Section III\quad 自定义评估函数}
+\subsection{设计思路}
+自定义智能体执O，与预定义进攻方X对局，双方均使用深度3的$\alpha$--$\beta$搜索。
+评估函数同时考虑双方威胁，并检查下一手实际进入的棋盘。
+某处存在获胜机会，并不代表下一手能够在那里落子，因此落子的导向需要单独评估。
+
+记$T$为未阻塞双连总数，$W$为各局部棋盘不同获胜空格数之和，
+$F$为拥有至少两个不同获胜空格的局部棋盘数，$C$为角落数，$M$为中心格数，
+下标X、O区分双方。下一手为X时$s=1$，为O时$s=-1$。
+$L$为下一手的合法落子总数，$S$为其中不会立即把对手送到可获胜棋盘的安全落子数。
+当落子回到同一局部棋盘时，先更新该格，再判断危险。
+\begin{align*}
+H={}&400(T_X-T_O)+35(W_X-W_O)+800(F_X-F_O)\\
+   &+15(C_X-C_O)+40(M_X-M_O)+6000s\frac{S}{L}.
+\end{align*}
+
+真实终局优先返回$\pm10000$；若下一手可立即获胜，返回$9500s$；
+若所有合法落子都会让对手立即获胜，返回$-9000s$。
+其余局面使用$H$，并截断到$[-8000,8000]$；全局无空格且无胜者返回0。
+这些静态检查不增加第三层之后的搜索深度。
+
+安全比例$S/L$避免仅因空格较少就偏好某个棋盘。
+$F$区分了两个独立获胜点与两条线共用一个空格的情况，后者仍可能被一次落子同时阻断。
+即时威胁优先于一般位置得分，中心与角落仅作为较低权重的偏好。
+
+\subsection{参数比较}
+开发实验覆盖9个起始棋盘与2种先手，共18种起始条件。
+原始安全数量指标的初始方案赢得11局，调整后最多赢得14局。
+后续比较位置权重、威胁分布与安全比例，最终选择表\ref{tab:tuning}中开发胜局最多的权重6000。
+\begin{table}[htbp]
+  \centering\small
+  \caption{行动指标的开发实验比较}\label{tab:tuning}
+  \input{generated/tuning-table.tex}
+\end{table}
+
+起始条件总共只有18种，开发实验与后续随机实验并非严格独立。
+结果适合说明对本作业预定义对手的改进，不能据此推断对任意策略都同样有效。
+
+\clearpage
+\subsection{随机对局结果}
+使用随机种子448，每局随机选择起始棋盘和先手，共进行\DesignedGames 局。
+O胜\DesignedWins 局，X胜\DesignedLosses 局，平局\DesignedDraws 局，
+自定义智能体胜率为\DesignedWinRate，达到80\%的要求。
+平均每局访问\DesignedMeanNodes 个节点。
+\begin{table}[htbp]
+  \centering\small
+  \caption{随机对局的逐局结果；节点数为双方搜索总量。}\label{tab:random}
+  \begin{minipage}[t]{.48\linewidth}\centering
+    \input{generated/random-left.tex}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{.48\linewidth}\centering
+    \input{generated/random-right.tex}
+  \end{minipage}
+\end{table}
+
+策略和同分规则均为确定性，相同起点与先手产生相同对局。
+表中的重复条件来自随机抽样，不能把40局视为40种不同的策略检验。
+
+\clearpage
+\subsection{代表局面与分析}
+\input{generated/designed-figures.tex}
+\input{generated/designed-analysis.tex}
+预定义进攻方重视累计自己的双连得分，而自定义评估还检查下一手进入的棋盘，
+使导向威胁在搜索中得到更高优先级。
+但最终棋盘不能单独证明某个权重的作用，结果仍限于所测试的对手和起始条件。
+
+\clearpage
+\section{Section IV\quad 真人对战}
+真人执X，自定义智能体执O，起始棋盘与先手随机。
+本部分要求至少10局，并根据胜率和代表终盘分析智能体的优点与不足。
+\input{generated/human-results.tex}
+
+深度3的搜索可能遗漏更长的强制导向；安全比例只检查下一步的即时危险，
+并不保证连续几步都安全。真人实验需要观察：能否通过多个棋盘上的提前布局，
+把智能体送入无法回避的威胁，以及固定角落与中心权重是否会干扰必要的防守。
+这些是待检验的问题，尚不能作为真人实验结论。
+
+\section{Extra Credit\quad 扩展实验}
+本次未开展全局三连规则的扩展实验。
+
+\section{Statement of Contribution\quad 成员分工}
+Jiang Jiahao（22671064）：独立作业，代码实现、自动实验和报告整理使用了Codex辅助。
+真人实验由实际参与者完成后补记。
+\end{document}

@@ -1,0 +1,68 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{assignment}[2026/11/05 ZJU coursework report]
+% Adapted from the repository's technical-report template and Assignment 1.
+\RequirePackage[left=23mm,right=23mm,top=19mm,bottom=20mm,
+  includehead,headheight=15pt,headsep=6mm,footskip=10mm]{geometry}
+\RequirePackage{fontspec}
+\setmainfont{TeX Gyre Termes}
+\setsansfont{Latin Modern Sans}
+\setmonofont{Latin Modern Mono}
+\RequirePackage{amsmath,amssymb,booktabs,enumitem,fancyhdr,graphicx}
+\RequirePackage{titlesec,xcolor,hyperref,lastpage,microtype,needspace,caption,subcaption}
+\definecolor{QiushiBlue}{RGB}{0,63,136}
+\definecolor{TextGray}{HTML}{555B66}
+\hypersetup{colorlinks=true,linkcolor=QiushiBlue,urlcolor=QiushiBlue,
+  pdftitle={Assignment 2: Planning and Games},pdfauthor={\StudentName}}
+\pdfstringdefDisableCommands{\def\quad{ }}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{4pt}
+\setlength{\emergencystretch}{2em}
+\linespread{1.1}
+\raggedbottom
+\setlist{nosep,leftmargin=*}
+\titleformat{\section}{\large\bfseries\color{QiushiBlue}}{}{0pt}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{QiushiBlue}}{}{0pt}{}
+\titlespacing*{\section}{0pt}{12pt}{6pt}
+\titlespacing*{\subsection}{0pt}{8pt}{4pt}
+\captionsetup{font=small,labelfont=bf,skip=6pt}
+\captionsetup[subfigure]{font=small,justification=centering}
+\renewcommand{\tablename}{表}
+\renewcommand{\figurename}{图}
+\newcommand{\makeassignmenttitle}{%
+  \begin{titlepage}
+  \noindent\includegraphics[height=10mm]{../zju-tech-report/assets/zju-horizontal-blue.png}%
+  \hfill{\small\sffamily\color{TextGray}ZJU--UIUC INSTITUTE}\par
+  \vspace{5pt}{\color{QiushiBlue}\hrule height 0.8pt}
+  \vspace{25mm}
+  {\centering\LARGE\bfseries Assignment \#2\par}
+  \vspace{5mm}
+  {\centering\LARGE\bfseries 规划与博弈实验报告\par}
+  \vspace{3mm}
+  {\centering\large Planning and Games\par}
+  \vspace{8mm}{\color{QiushiBlue}\hrule height 0.5pt}
+  \vspace{14mm}
+  \begin{center}
+  \renewcommand{\arraystretch}{1.8}
+  \begin{tabular}{rl}
+    姓名 & \StudentName\\
+    学号 & \StudentID\\
+    课程 & \CourseName\\
+    课程号 / 班级 & \CourseSection\\
+    报告日期 & \ReportDate
+  \end{tabular}
+  \end{center}
+  \vfill
+  {\centering\small\color{TextGray}Zhejiang University\par}
+  \end{titlepage}
+}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{TextGray}\CourseName}
+\fancyhead[R]{\small\color{TextGray}Assignment \#2}
+\fancyfoot[C]{\small\color{TextGray}\thepage\ /\ \pageref*{LastPage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\small\color{TextGray}\thepage\ /\ \pageref*{LastPage}}
+  \renewcommand{\headrulewidth}{0pt}
+}
