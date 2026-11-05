@@ -23,12 +23,13 @@
 
 ## 高级人工智能算法与系统 · MP2（`assignment2-advanced-ai` 分支）
 
-- [报告、模板与构建说明](report/README.md) · [PDF](report/report.pdf)
+- [报告、模板与构建说明](report/README.md) · [中文版](report/report.pdf) · [English](report/report-en.pdf)
 - [实验与验证](experients/assignment2/README.md)
 - [提交文件](submission)：仅 `solve.py`、`uttt.py`、`report.pdf`
 
 本分支从 `main` 创建，独立维护MP2，不包含 `assignment1-cs1050` 的作业内容。
-保留课程要求的全部报告章节；真人实验和课程号/班级尚待补充。
+课程为 **ECE2013 · Fall 2026 · Group 6**，组员为王骊斌、蒋佳豪、王子征、薛晓康，不列学号。
+保留课程要求的全部报告章节；分工暂拟，真人实验仍待补充。
 
 | 分支 | 用途 |
 | --- | --- |

@@ -12,7 +12,7 @@
 \definecolor{QiushiBlue}{RGB}{0,63,136}
 \definecolor{TextGray}{HTML}{555B66}
 \hypersetup{colorlinks=true,linkcolor=QiushiBlue,urlcolor=QiushiBlue,
-  pdftitle={Assignment 2: Planning and Games},pdfauthor={\StudentName}}
+  pdftitle={ECE2013 Group 6: Planning and Games},pdfauthor={\GroupMembersEn}}
 \pdfstringdefDisableCommands{\def\quad{ }}
 \setlength{\parindent}{2em}
 \setlength{\parskip}{4pt}
@@ -26,8 +26,13 @@
 \titlespacing*{\subsection}{0pt}{8pt}{4pt}
 \captionsetup{font=small,labelfont=bf,skip=6pt}
 \captionsetup[subfigure]{font=small,justification=centering}
-\renewcommand{\tablename}{表}
-\renewcommand{\figurename}{图}
+\ifdefined\EnglishReport
+  \renewcommand{\tablename}{Table}
+  \renewcommand{\figurename}{Figure}
+\else
+  \renewcommand{\tablename}{表}
+  \renewcommand{\figurename}{图}
+\fi
 \newcommand{\makeassignmenttitle}{%
   \begin{titlepage}
   \noindent\includegraphics[height=10mm]{../zju-tech-report/assets/zju-horizontal-blue.png}%
@@ -36,20 +41,34 @@
   \vspace{25mm}
   {\centering\LARGE\bfseries Assignment \#2\par}
   \vspace{5mm}
-  {\centering\LARGE\bfseries 规划与博弈实验报告\par}
+  {\centering\LARGE\bfseries
+    \ifdefined\EnglishReport Planning and Games\else 规划与博弈实验报告\fi\par}
   \vspace{3mm}
-  {\centering\large Planning and Games\par}
+  {\centering\large
+    \ifdefined\EnglishReport Constraint Satisfaction and Adversarial Search\else Planning and Games\fi\par}
   \vspace{8mm}{\color{QiushiBlue}\hrule height 0.5pt}
   \vspace{14mm}
   \begin{center}
   \renewcommand{\arraystretch}{1.8}
-  \begin{tabular}{rl}
-    姓名 & \StudentName\\
-    学号 & \StudentID\\
-    课程 & \CourseName\\
-    课程号 / 班级 & \CourseSection\\
-    报告日期 & \ReportDate
-  \end{tabular}
+  \ifdefined\EnglishReport
+    \begin{tabular}{rp{105mm}}
+      Course & \CourseCode\\
+      Term & \CourseTerm\\
+      Group & \GroupNumber\\
+      Members & Wang Libin, Jiang Jiahao,\\[-8pt]
+      & Wang Zizheng, Xue Xiaokang\\
+      Date & \ReportDate
+    \end{tabular}
+  \else
+    \begin{tabular}{rp{105mm}}
+      课程 & \CourseName\\
+      课程号 & \CourseCode\\
+      学期 & \CourseTerm\\
+      小组 & Group \GroupNumber\\
+      组员 & \GroupMembersZh\\
+      报告日期 & \ReportDate
+    \end{tabular}
+  \fi
   \end{center}
   \vfill
   {\centering\small\color{TextGray}Zhejiang University\par}
@@ -57,8 +76,8 @@
 }
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\small\color{TextGray}\CourseName}
-\fancyhead[R]{\small\color{TextGray}Assignment \#2}
+\fancyhead[L]{\small\color{TextGray}\CourseCode\enspace /\enspace \CourseTerm}
+\fancyhead[R]{\small\color{TextGray}Group \GroupNumber\enspace /\enspace Assignment \#2}
 \fancyfoot[C]{\small\color{TextGray}\thepage\ /\ \pageref*{LastPage}}
 \renewcommand{\headrulewidth}{0.3pt}
 \fancypagestyle{plain}{%

@@ -1,16 +1,26 @@
 {
     "template_base":  "main@cc1fa9c and assignment1-cs1050 coursework layout",
     "behavioral_checks_passed":  true,
-    "xelatex_passes":  2,
+    "xelatex_passes_per_language":  2,
+    "languages":  [
+                      "zh",
+                      "en"
+                  ],
     "latex_layout_or_reference_issues":  false,
     "human_games":  0,
     "human_requirement_satisfied":  false,
-    "report_pdf_sha256":  "05787b0da78fa4f10cc799dc61bd9e7ff1bccdcac4e31ced6190aeb2653fbddd",
+    "report_pdf_sha256":  "1a6a31af8b31993cd48813daa3203dacc4ff8563488cf818c0744a4397486294",
+    "english_pdf_sha256":  "66d0fb61d12e0a0ab5dd58731f97f804aa52d022f1e3c56e95021e79c029a82d",
+    "course":  "ECE2013",
+    "term":  "Fall 2026",
+    "group":  6,
+    "contribution_allocation":  "proposed; pending group confirmation",
     "source_sha256":  {
-                          "report/report.tex":  "e880c5b5fb15ac46799d4ae8c2a5aa0cfc173095abe1c43cc8c5a32153109b7d",
-                          "report/assignment.sty":  "48b09e5eaba6807733189424c3cdfc95ef4b8a678b191185b0298b33852394c7",
-                          "report/student-info.tex":  "95acbfa9974f6d977add3e3cc961d9022fe1047824ba1084941e6f64ac0a9a7f",
-                          "report/generate.py":  "e707ce1ae6a6ee6d6d1e941313970f9a6adbd73fa0e6e5ed8122f31dbd5997b5",
+                          "report/report.tex":  "5aed633493f69dda0cd53a6debdf16ac96c5766a5eeaeb2f0e1b9a8358bb8d7b",
+                          "report/report-en.tex":  "7ca4ff8e67cc0c4f40fc3a1feb1430518de6427272912ccfc2e6ba7d2313f319",
+                          "report/assignment.sty":  "64d68411fe098f57bc0337e619a9592aea883bf8af2458c5f7fb3c1993ed8d46",
+                          "report/student-info.tex":  "3184b7737c9e52337342f5e27bbd395778ad91f3cfa589e47ca7f9dfdef82f2f",
+                          "report/generate.py":  "3409bdf885dff0a05d1ac6b8e711093d721ec8c4a3ca987146c34a8aadc603a4",
                           "submission/solve.py":  "83f602b3cc036dddf4d1d3a21da828148ebb1f7ec6a324520e1bfad5f4dbb2fc",
                           "submission/uttt.py":  "465e7a20c8eea8cfeac43d02203f445f245c1584425bdaf97974408afbe26fcd",
                           "experients/assignment2/results.json":  "58df0c309ef9a1bc23c3f83302040ef26bc470f256a094267255c9ba47944f79"
