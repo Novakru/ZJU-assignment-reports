@@ -32,7 +32,15 @@ powershell -NoProfile -ExecutionPolicy Bypass -File report/build.ps1
 powershell -NoProfile -ExecutionPolicy Bypass -File report/build.ps1 -RunExperiments
 ```
 
-真人实验：
+真人实验（图形界面）：双击仓库根目录的 `play_human.cmd`，或运行
+`python -B tools/play_gui.py`。点击高亮空格落子，真人执X，深度3自定义智能体执O。
+完整对局立即保存至真人日志，可分次累计；退出时未完成的当前局不计入结果。
+可继续完成超过10局。点击“更新中英文报告”重新构建；若在当前课程目录使用，
+还会同步外层 `submission` 与 `review`。图形程序仅使用标准库Tkinter，
+不加入仅允许三个文件的提交目录。验证命令：`python -B tools/check_gui.py`，
+自动点击测试只写临时文件，不会录入正式真人数据。
+
+也可保留使用命令行真人实验：
 
 ```powershell
 python submission/uttt.py human --games 10 --output experients/assignment2/human_games.json
