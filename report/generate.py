@@ -14,7 +14,7 @@ GENERATED = ROOT / 'report' / 'generated'
 LANGUAGE = 'zh'
 FIGURES = ROOT / 'report' / 'figures'
 sys.path.insert(0, str(ROOT / 'submission'))
-from uttt import ultimateTicTacToe, LINES
+from uttt import ultimateTicTacToe, globalTicTacToe, LINES
 
 
 def write(name, text):
@@ -25,6 +25,13 @@ def tr(zh, en):
     return en if LANGUAGE == 'en' else zh
 
 
+def tex_text(value):
+    replacements={'\\':r'\textbackslash{}','&':r'\&','%':r'\%','$':r'\$',
+                  '#':r'\#','_':r'\_','{':r'\{','}':r'\}',
+                  '~':r'\textasciitilde{}','^':r'\textasciicircum{}'}
+    return ''.join(replacements.get(char,char) for char in value).replace('\n',r'\par ')
+
+
 def tabular(name, columns, rows, alignment):
     lines = [r'\begin{tabular}{' + alignment + '}', r'\toprule',
              ' & '.join(map(str, columns)) + r' \\', r'\midrule']
@@ -33,16 +40,23 @@ def tabular(name, columns, rows, alignment):
     write(name, '\n'.join(lines))
 
 
-def draw_board(name, board, tiling=False):
+def draw_board(name, board, tiling=False, global_rule=False):
     size = 20
     nr, nc = len(board), len(board[0])
     c = canvas.Canvas(str(FIGURES / name), pagesize=(nc*size, nr*size), invariant=1)
     palette = ['#ffffff','#d8e4ed','#ecdbcf','#dce7d7','#eae3c8','#e1dcee',
                '#e9d8de','#d3e5e3','#e7ded0','#d9dff0','#e5e7cc','#eddbd7','#d5e3ec']
+    statuses = None
+    if global_rule:
+        game = globalTicTacToe()
+        game.board = board
+        statuses = game.localStatus()
     for r, row in enumerate(board):
         for col, cell in enumerate(row):
             x, y = col*size, (nr-r-1)*size
             shade = palette[int(cell) % len(palette)] if tiling else '#ffffff'
+            if statuses:
+                shade = {'X':'#f4e5e3','O':'#e2ecf7','D':'#ececec','_':'#ffffff'}[statuses[(r//3)*3+col//3]]
             if tiling and not cell:
                 shade = '#5c626b'
             c.setFillColor(colors.HexColor(shade))
@@ -80,6 +94,15 @@ def draw_board(name, board, tiling=False):
                         c.setLineWidth(1.8)
                         (r0,c0),_,(r1,c1)=coords
                         c.line((c0+.5)*size,(8.5-r0)*size,(c1+.5)*size,(8.5-r1)*size)
+        if statuses:
+            for line in LINES:
+                values = [statuses[i] for i in line]
+                if values[0] in ('X','O') and len(set(values)) == 1:
+                    c.setStrokeColor(colors.HexColor('#a43c38' if values[0]=='X' else '#003f88'))
+                    c.setLineWidth(3.5)
+                    a,b = line[0],line[-1]
+                    c.line((3*(a%3)+1.5)*size,(7.5-3*(a//3))*size,
+                           (3*(b%3)+1.5)*size,(7.5-3*(b//3))*size)
     c.showPage()
     c.save()
 
@@ -88,7 +111,7 @@ def figures(name, records, prefix, labels):
     lines = [r'\begin{figure}[htbp]', r'\centering']
     for i, (record, label) in enumerate(zip(records, labels)):
         filename = f'{prefix}-{i+1}.pdf'
-        draw_board(filename, record['boards'][-1])
+        draw_board(filename, record['boards'][-1], global_rule=prefix=='extra')
         lines.extend([r'\begin{subfigure}[t]{.46\linewidth}', r'\centering',
                       r'\includegraphics[height=48mm]{figures/' + filename + '}',
                       r'\caption{' + label + '}', r'\end{subfigure}'])
@@ -98,7 +121,8 @@ def figures(name, records, prefix, labels):
             lines.append(r'\par\medskip')
     captions = {'predefined':tr('预定义智能体的最终棋盘。','Final boards of the predefined agents.'),
                 'designed':tr('自定义智能体对局的代表终盘。','Representative final boards of the designed agent.'),
-                'human':tr('真人对战的代表终盘。','Representative final boards of the human games.')}
+                'human':tr('真人对战的代表终盘。','Representative final boards of the human games.'),
+                'extra':tr('全局三连规则的代表终盘。','Representative final boards under the global-line rule.')}
     lines.extend([r'\caption{' + captions[prefix] + '}', r'\end{figure}'])
     write(name, '\n'.join(lines))
 
@@ -122,6 +146,149 @@ def ending(record):
         safe += own_win or not allows
         game.board[r][c] = '_'
     return len(choices), safe
+
+
+def human_layout(humans):
+    """Render a complete data-entry layout; placeholders are never results."""
+    rows=[]
+    count=max(10,len(humans))
+    for i in range(count):
+        if i<len(humans):
+            g=humans[i]
+            rows.append([i+1,g['start_board'],'X' if g['max_first'] else 'O',len(g['moves']),
+                         {1:tr('真人','Human'),-1:tr('智能体','Agent'),0:tr('平局','Draw')}[g['winner']],
+                         f"{g['total_nodes']:,}",tr('已记录','Recorded')])
+        else:
+            rows.append([i+1,'---','---','---','---','---',tr('待录入','Pending')])
+    tabular('human-table.tex',tr(['局次','起点','先手','步数','胜方','智能体节点','状态'],
+                                ['Game','Start','First','Plies','Winner','Agent nodes','Status']),rows,'cccccrc')
+    hwins=sum(g['winner']==1 for g in humans)
+    owins=sum(g['winner']==-1 for g in humans)
+    n=len(humans)
+    stats=[
+        [tr('已完成局数','Completed games'),f'{n} / 10'],
+        [tr('真人胜 / 智能体胜 / 平局','Human wins / agent wins / draws'),f'{hwins} / {owins} / {n-hwins-owins}' if n else '---'],
+        [tr('真人胜率','Human win rate'),f'{hwins/n:.1%}'.replace('%',r'\%') if n else '---'],
+        [tr('智能体胜率','Agent win rate'),f'{owins/n:.1%}'.replace('%',r'\%') if n else '---'],
+    ]
+    tabular('human-summary.tex',tr(['统计项','结果'],['Measure','Result']),stats,'lr')
+    if not humans:
+        status=tr('本节为待录入版式。下表与预留棋盘尚无实测数据，破折号不表示平局或零胜率。',
+                  'This section is a data-entry layout. The tables and reserved boards contain no measured games; '
+                  'dashes do not mean draws or zero win rates.')
+    else:
+        status=tr(f'已录入{n}局真实对战，其余位置待补充。',f'{n} real games are recorded; the remaining slots are pending.')
+        if n>=10:
+            status+=tr('当前样本中真人全部获胜。','The human won every game in the sample.') if hwins==n else tr(
+                      '当前样本中真人并非全部获胜。','The human did not win every game in the sample.')
+    write('human-results.tex',status)
+    panels=[r'\begin{figure}[htbp]',r'\centering']
+    for i in range(4):
+        filename=f'human-{i+1}.pdf'
+        board=humans[i]['boards'][-1] if i<n else [['_']*9 for _ in range(9)]
+        draw_board(filename,board)
+        if i>=n:
+            # A separate, unmistakably marked blank frame, not an empty played game.
+            c=canvas.Canvas(str(FIGURES/filename),pagesize=(180,180),invariant=1)
+            c.setStrokeColor(colors.HexColor('#c6ccd4'))
+            for j in range(10):
+                c.setLineWidth(1 if j%3==0 else .3)
+                c.line(j*20,0,j*20,180)
+                c.line(0,j*20,180,j*20)
+            c.setFillColor(colors.white)
+            c.rect(12,77,156,26,fill=1,stroke=0)
+            c.setFillColor(colors.HexColor('#777777'))
+            c.setFont('Times-Italic',10)
+            c.drawCentredString(90,87,'Pending actual game data')
+            c.showPage();c.save()
+        caption=tr(f'真人对战第{i+1}局' if i<n else f'预留局面{i+1}（待录入）',
+                   f'Human game {i+1}' if i<n else f'Reserved position {i+1} (pending)')
+        panels += [r'\begin{subfigure}[t]{.46\linewidth}',r'\centering',
+                   r'\includegraphics[height=48mm]{figures/'+filename+'}',
+                   r'\caption{'+caption+'}',r'\end{subfigure}']
+        if i%2==0:
+            panels.append(r'\hfill')
+        elif i<3:
+            panels.append(r'\par\medskip')
+    panels += [r'\caption{'+tr('真人实验的代表终盘位置；未录入的框图不属于实验结果。',
+                               'Slots for representative human final boards. Pending frames are not experimental results.')+'}',
+               r'\end{figure}']
+    write('human-figures.tex','\n'.join(panels))
+    notes_path=DATA/'human-notes.json'
+    notes=json.loads(notes_path.read_text(encoding='utf-8')).get(LANGUAGE,{}) if notes_path.exists() else {}
+    labels=[('outcomes',tr('胜负表现与是否所有真人局均获胜','Outcome distribution and whether humans always won')),
+            ('representative_positions',tr('代表局面的关键落子、优势与失误','Critical moves, strengths, and mistakes')),
+            ('weaknesses',tr('评估函数的不足及改进方向','Evaluation weaknesses and improvements'))]
+    blocks=[]
+    for key,label in labels:
+        value=notes.get(key,'').strip()
+        body=tex_text(value) if value else r'\textit{'+tr('待根据实际对局记录填写。','Pending actual game observations.')+'}'
+        blocks.append(r'\noindent\textbf{'+label+r'}\par\noindent '+body+r'\par\medskip')
+    write('human-observations.tex','\n\n'.join(blocks))
+
+
+def extra_layout():
+    path=DATA/'extra_results.json'
+    if not path.exists():
+        raise RuntimeError('Run experients/assignment2/run_extra.py first.')
+    data=json.loads(path.read_text(encoding='utf-8'))
+    games=data['games']
+    assert len(games)>=10
+    rows=[]
+    for i,g in enumerate(games,1):
+        status=g['local_status']
+        rows.append([i,g['start_board'],'X' if g['max_first'] else 'O',len(g['moves']),
+                     status.count('X'),status.count('O'),f"{g['total_nodes']:,}",
+                     {1:'X',-1:'O',0:tr('平局','Draw')}[g['winner']]])
+    tabular('extra-table.tex',tr(['局次','起点','先手','步数','X占盘','O占盘','节点数','胜方'],
+                                ['Game','Start','First','Plies','X boards','O boards','Nodes','Win']),rows,'ccccrrrc')
+    x=sum(g['winner']==1 for g in games)
+    o=sum(g['winner']==-1 for g in games)
+    d=len(games)-x-o
+    text=tr(f'使用随机种子{data["seed"]}，共进行{len(games)}局，X胜{x}局（{x/len(games):.1%}），'
+            f'O胜{o}局（{o/len(games):.1%}），平局{d}局（{d/len(games):.1%}）。'
+            f'平均每局{statistics.mean(len(g["moves"]) for g in games):.1f}步，'
+            f'访问{statistics.mean(g["total_nodes"] for g in games):,.1f}个节点。',
+            f'With random seed {data["seed"]}, {len(games)} games gave {x} X wins ({x/len(games):.1%}), '
+            f'{o} O wins ({o/len(games):.1%}), and {d} draws ({d/len(games):.1%}). '
+            f'The mean game lasted {statistics.mean(len(g["moves"]) for g in games):.1f} plies '
+            f'and visited {statistics.mean(g["total_nodes"] for g in games):,.1f} nodes.')
+    write('extra-results.tex',text.replace('%',r'\%'))
+    selected=[]
+    keys=set()
+    for outcome in (1,-1,0):
+        candidate=next(((i,g) for i,g in enumerate(games,1) if g['winner']==outcome),None)
+        if candidate:
+            selected.append(candidate)
+            keys.add((candidate[1]['start_board'],candidate[1]['max_first']))
+    for i,g in enumerate(games,1):
+        key=(g['start_board'],g['max_first'])
+        if len(selected)<4 and key not in keys:
+            selected.append((i,g));keys.add(key)
+    figures('extra-figures.tex',[g for _,g in selected],'extra',
+            [tr(f'第{i}局：'+{1:'X胜',-1:'O胜',0:'平局'}[g['winner']]+
+                f'，占盘{g["local_status"].count("X")}:{g["local_status"].count("O")}',
+                f'Game {i}: '+{1:'X wins',-1:'O wins',0:'draw'}[g['winner']]+
+                f'; boards {g["local_status"].count("X")}:{g["local_status"].count("O")}')
+             for i,g in selected])
+    paragraphs=[]
+    for j,(i,g) in enumerate(selected):
+        status=g['local_status']
+        if g['winner']:
+            symbol='X' if g['winner']==1 else 'O'
+            line=next(line for line in LINES if all(status[k]==symbol for k in line))
+            indices=','.join(map(str,line))
+            paragraphs.append(tr(f'图中第{i}局由{symbol}在局部棋盘{indices}组成全局三连。'
+                f'双方占盘数为{status.count("X")}比{status.count("O")}；胜负由棋盘排列决定，而不由占盘总数单独决定。',
+                f'In game {i}, {symbol} won through local boards {indices}. '
+                f'The capture count was {status.count("X")}:{status.count("O")}; '
+                'the arrangement of captured boards, not their total alone, determines victory.'))
+        else:
+            paragraphs.append(tr(f'第{i}局以平局结束：全部局部棋盘已封闭，但没有任何一方形成全局三连。'
+                f'其中{status.count("D")}个局部棋盘为平局。',
+                f'Game {i} ended in a draw: every local board was closed, but neither side formed a global line. '
+                f'{status.count("D")} local boards were drawn.'))
+    write('extra-analysis.tex','\n\n'.join(paragraphs))
 
 
 def generate():
@@ -206,28 +373,8 @@ def generate():
               for (i,_),(n,safe) in zip(chosen,ends)))
     human_file=DATA/'human_games.json'
     humans=json.loads(human_file.read_text(encoding='utf-8')) if human_file.exists() else []
-    if not humans:
-        write('human-results.tex',tr('真人对战实验尚未完成，胜率、代表棋盘与实测讨论待补充。',
-                                    'The human experiment has not yet been completed. '
-                                    'Its win rate, representative boards, and empirical discussion remain to be added.'))
-    else:
-        hwins=sum(g['winner']==1 for g in humans)
-        owins=sum(g['winner']==-1 for g in humans)
-        draws=len(humans)-hwins-owins
-        text=tr(f'目前完成{len(humans)}局，真人获胜{hwins}局，智能体获胜{owins}局，平局{draws}局，'
-                f'真人胜率为{hwins/len(humans):.1%}。',
-                f'In {len(humans)} completed games, the human won {hwins}, the agent won {owins}, '
-                f'and {draws} were drawn. The human win rate was {hwins/len(humans):.1%}.').replace('%',r'\%')
-        if len(humans)<10:
-            text+=tr('对局数不足10局，仍需补充。','Fewer than ten games have been completed; more are required.')
-        else:
-            text+=tr('当前样本中真人全部获胜。','The human won every game in this sample.') if hwins==len(humans) else tr(
-                     '当前样本中真人并非总能获胜。','The human did not win every game in this sample.')
-        figures('human-figures.tex',humans[:4],'human',[tr(f'真人对战第{i+1}局',f'Human game {i+1}')
-                                                     for i in range(min(4,len(humans)))])
-        # English and Chinese entry points resolve their own generated data.
-        human_input='generated/en/human-figures.tex' if LANGUAGE=='en' else 'generated/human-figures.tex'
-        write('human-results.tex',text+'\n'+r'\input{'+human_input+'}')
+    human_layout(humans)
+    extra_layout()
     print('Generated tables and vector figures from measured results.')
 
 

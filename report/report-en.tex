@@ -290,10 +290,36 @@ specific to the tested opponent and opening conditions.
 
 \clearpage
 \section{Section IV\quad Human Games}
+\subsection{Protocol and game records}
 The human plays X and the designed agent plays O, with randomized starting
 board and player. At least ten games are required, followed by a discussion
 of win rates, representative final boards, and the agent's strengths and weaknesses.
+
 \input{generated/en/human-results.tex}
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{Human-game records. Unplayed slots remain explicitly pending.}
+  \input{generated/en/human-table.tex}
+\end{table}
+
+\subsection{Win-rate summary}
+\begin{table}[htbp]
+  \centering\small
+  \caption{Summary statistics for the human experiment.}
+  \input{generated/en/human-summary.tex}
+\end{table}
+
+For each completed game, record the starting board, first player, number
+of plies, winner, agent node count, and final board. Human win rate is
+human wins divided by completed games; a draw is not a win. Unstarted or
+interrupted games do not enter the denominator.
+
+\clearpage
+\subsection{Representative boards and observations}
+\input{generated/en/human-figures.tex}
+
+\input{generated/en/human-observations.tex}
 
 Depth-three search can miss longer forced-routing sequences. The safety
 ratio checks immediate danger, not safety across several future turns.
@@ -302,9 +328,77 @@ force the agent into an unavoidable loss, and whether fixed corner and
 center weights interfere with necessary defense. These are questions for
 the planned experiment, not empirical conclusions from human play.
 
+\clearpage
 \section{Extra Credit}
-The global three-board-in-a-row extension was not implemented.
+\subsection{Global-line rules}
+A local three-in-a-row captures and closes that board; no further move
+is allowed inside it. A full local board without a winner is marked D
+and also closed. A move routes the opponent as before, but a closed
+destination permits free choice among all open local boards. Victory
+requires three captured boards in a global row, column, or diagonal.
+The game is drawn when all local boards are closed without a global winner.
 
+The state must track local ownership as well as pieces. Let
+$z_i\in\{X,O,D,\_\}$ denote an X capture, O capture, closed draw, or open
+board. The capture total alone is insufficient: two disconnected captures
+need not be as valuable as two that create an open global threat.
+
+\subsection{Custom offensive and defensive evaluations}
+Both offensive X and defensive O use depth-three alpha--beta search.
+Let $G$ count captured boards, $P,Q$ count open global two-mark and
+one-mark lines, and $T,L$ count open two-mark and one-mark lines within
+open local boards. $K$ weights captured boards by 3 at the center,
+2 at corners, and 1 at edges. $A$ counts two-mark lines on local boards
+available to the next player. $J$ equals that player's sign $s$ if an
+immediate local capture is possible, and zero otherwise. In X utility,
+\begin{align*}
+H_g={}&aG_X-450G_O+bP_X-1400P_O+150Q_X-120Q_O\\
+ &+dT_X-35T_O+4(L_X-L_O)+25(K_X-K_O)\\
+ &+80(A_X-A_O)+200J.
+\end{align*}
+The offensive root uses $(a,b,d)=(500,1600,45)$; the defensive root
+uses $(550,1800,55)$. By weighting X captures and threats more heavily,
+the defensive agent prioritizes limiting X while minimizing the score.
+Actual global outcomes return $\pm10000$. An immediate global win for
+the next player returns $9500s$; otherwise $H_g$ is clipped to
+$[-8000,8000]$, with zero for a global draw. Closed boards contribute
+no local potential, and D blocks global attacking lines.
+
+\clearpage
+\subsection{Experimental results}
+\input{generated/en/extra-results.tex}
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{Global-line results. Capture counts refer to won local boards at termination.}
+  \input{generated/en/extra-table.tex}
+\end{table}
+
+All games were replayed step by step: every move followed the forced-board
+rule, closed boards remained unchanged, and the recorded outcome matched
+the global-line test. Search used row-major order and retained the first
+move on ties. Both agents won and lost in the twelve games, with draws
+also occurring. Local success therefore did not always convert into a
+global win. Repeated opening conditions produced repeated traces, so
+these rates describe this deterministic pair of policies.
+
+The global heuristic must balance local captures against their arrangement.
+Larger global-threat weights prioritize boards needed to complete a global
+line, but fixed depth can still miss longer routing sequences. This
+experiment demonstrates the implemented rules and runnable strategies;
+it does not establish that either weighting is superior against broader opponents.
+
+\clearpage
+\subsection{Representative extended-game boards}
+\input{generated/en/extra-figures.tex}
+
+Pale red and blue indicate captured, closed X and O boards; gray marks
+drawn local boards and white marks open boards. A thick line across
+three local-board centers marks a global win.
+
+\input{generated/en/extra-analysis.tex}
+
+\clearpage
 \section{Statement of Contribution}
 The following is a proposed allocation for distributing the remaining work,
 not a record of completed individual contributions. The group should
@@ -320,8 +414,8 @@ the assigned tasks.
     Member & Proposed responsibility\\
     \midrule
     Wang Libin & CSP formulation, tiling solver review, correctness checks, and Section I.\\
-    Jiang Jiahao & Minimax and alpha--beta review, four predefined matchups, node statistics, and Section II.\\
-    Wang Zizheng & Designed evaluation, parameter comparison, randomized game analysis, and Section III.\\
+    Jiang Jiahao & Search verification under both rules, predefined matchups, node statistics, and Section II.\\
+    Wang Zizheng & Designed evaluation, parameter comparison, randomized and global-rule experiments, Section III, and Extra Credit.\\
     Xue Xiaokang & Organizing at least ten human games, recording representative boards, Section IV, and coordinating proofreading.\\
     \bottomrule
   \end{tabular}

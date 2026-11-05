@@ -10,6 +10,10 @@
 
 当前12组铺砌通过、4组指定对局完成、自定义智能体40胜/40局。真人实验尚缺，不能用自动对局替代。
 
+扩展实验：`run_extra.py`运行全局三连规则的12局对战，固定随机种子2013，结果为X胜5、O胜5、平局2。`extra_results.json`保存全程棋盘、落子、节点与局部归属。`check_extra.py`独立检查终盘归属、局部封闭、平局、全局三连、搜索等价性，并回放全部落子。
+
+真人章节现为待录入版，自动日志位于 `human_games.json`（仅保存真正完成的局）。`human-notes.json`是观察文字的中英文空模板，不包含对局，也不会作为实验数据计数。
+
 ```powershell
 python experients/assignment2/checks.py
 python experients/assignment2/run_experiments.py

@@ -230,18 +230,99 @@ O胜\DesignedWins 局，X胜\DesignedLosses 局，平局\DesignedDraws 局，
 
 \clearpage
 \section{Section IV\quad 真人对战}
+\subsection{实验安排与对局记录}
 真人执X，自定义智能体执O，起始棋盘与先手随机。
 本部分要求至少10局，并根据胜率和代表终盘分析智能体的优点与不足。
+
 \input{generated/human-results.tex}
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{真人对战记录；未完成局次保留待录入标记。}
+  \input{generated/human-table.tex}
+\end{table}
+
+\subsection{胜率汇总}
+\begin{table}[htbp]
+  \centering\small
+  \caption{真人实验的统计汇总。}
+  \input{generated/human-summary.tex}
+\end{table}
+
+各局完成后记录起始棋盘、先手、总步数、胜方和智能体节点数，并保存最终棋盘。
+真人胜率按已完成对局中的真人胜局数除以已完成局数计算，平局不计为获胜。
+尚未开始或中途退出的对局不纳入分母。
+
+\clearpage
+\subsection{代表终盘与观察记录}
+\input{generated/human-figures.tex}
+
+\input{generated/human-observations.tex}
 
 深度3的搜索可能遗漏更长的强制导向；安全比例只检查下一步的即时危险，
 并不保证连续几步都安全。真人实验需要观察：能否通过多个棋盘上的提前布局，
 把智能体送入无法回避的威胁，以及固定角落与中心权重是否会干扰必要的防守。
 这些是待检验的问题，尚不能作为真人实验结论。
 
+\clearpage
 \section{Extra Credit\quad 扩展实验}
-本次未开展全局三连规则的扩展实验。
+\subsection{全局三连规则}
+扩展版采用全局三连获胜：局部棋盘三连后归胜方所有并立即封闭，后续不能在其中落子；
+填满但无人获胜的局部棋盘记为D，也封闭。玩家必须在落子位置指定的局部棋盘行动，
+若目标已封闭，则可在任意尚开放的局部棋盘落子。
+只有在全局$3\times3$棋盘上取得横、竖或斜三连才获胜；全部局部棋盘封闭且无全局胜者时为平局。
 
+因此，状态除棋子分布外还要区分各局部棋盘的归属。
+设$z_i\in\{X,O,D,\_\}$分别表示X占有、O占有、平局封闭与仍开放。
+只计局部胜盘总数不足以评估局势：两个不相连的占盘，未必比两个能组成全局威胁的占盘更有价值。
+
+\subsection{自定义进攻与防守评估}
+进攻方X和防守方O均采用深度3的$\alpha$--$\beta$搜索。
+记$G$为已占局部棋盘数，$P,Q$为全局未受阻的双连与单子线数，
+$T,L$为开放局部棋盘内的未受阻双连与单子线总数。
+$K$对已占棋盘按中心3、角落2、边缘1加权；$A$统计下一手可进入的局部棋盘中的双连。
+当下一手能直接赢得一个局部棋盘时，$J$取该玩家符号$s$，否则为0。
+评估以X效用表示：
+\begin{align*}
+H_g={}&aG_X-450G_O+bP_X-1400P_O+150Q_X-120Q_O\\
+ &+dT_X-35T_O+4(L_X-L_O)+25(K_X-K_O)\\
+ &+80(A_X-A_O)+200J.
+\end{align*}
+进攻方使用$(a,b,d)=(500,1600,45)$，防守方使用$(550,1800,55)$。
+防守方加大X已占盘与威胁的权重，使O在最小化效用时优先限制X。
+真实全局胜负返回$\pm10000$；下一手可以立即赢得全局时返回$9500s$；
+其余$H_g$截断为$[-8000,8000]$，全局平局返回0。
+已封闭棋盘不再产生局部潜力得分，D也会阻断全局进攻线。
+
+\clearpage
+\subsection{扩展对局结果}
+\input{generated/extra-results.tex}
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{全局三连扩展实验；占盘数为终盘时双方已赢得的局部棋盘数。}
+  \input{generated/extra-table.tex}
+\end{table}
+
+所有对局均逐步回放验证：每一步符合指定棋盘规则，封闭棋盘不再改变，
+终盘胜者与全局三连判定一致。每回合按行优先顺序搜索，同分保留先出现的行动。
+12局中两方均有胜有负，也出现平局，表明局部争夺并不总能转化为全局胜利。
+相同起点和先手产生重复轨迹，因此胜率只用于描述本组确定性策略的运行结果。
+
+全局评估必须在局部夺盘与全局连线之间取舍。较高的全局双连权重使即将形成全局威胁的局部棋盘更重要，
+但固定深度仍可能漏掉更长的回送序列。本实验验证了扩展规则与两种策略的可运行性，
+尚不足以证明某种权重在更广泛对手上更优。
+
+\clearpage
+\subsection{扩展实验的代表终盘}
+\input{generated/extra-figures.tex}
+
+浅红和浅蓝底分别表示X与O已赢得并封闭的局部棋盘，浅灰底表示局部平局；白底表示仍开放。
+跨越三个局部棋盘中心的粗线标出全局获胜连线。
+
+\input{generated/extra-analysis.tex}
+
+\clearpage
 \section{Statement of Contribution\quad 成员分工}
 以下为供组内分配任务使用的拟定分工，尚未确认为实际完成情况。
 各成员完成任务后共同复核结果，并据实更新本节。
@@ -255,8 +336,8 @@ O胜\DesignedWins 局，X胜\DesignedLosses 局，平局\DesignedDraws 局，
     组员 & 拟负责内容\\
     \midrule
     王骊斌 & CSP建模、铺砌求解与正确性核查；撰写Section I。\\
-    蒋佳豪 & minimax与$\alpha$--$\beta$搜索核查、四组预定义对局及节点统计；撰写Section II。\\
-    王子征 & 自定义评估函数、参数比较与随机对局分析；撰写Section III。\\
+    蒋佳豪 & 两种规则下的minimax与$\alpha$--$\beta$搜索核查、预定义对局及节点统计；撰写Section II。\\
+    王子征 & 自定义评估、参数比较、随机对局及全局三连扩展实验；撰写Section III与Extra Credit。\\
     薛晓康 & 组织至少10局真人对战、整理记录与代表终盘；撰写Section IV，并协调报告校对。\\
     \bottomrule
   \end{tabular}

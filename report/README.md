@@ -4,6 +4,10 @@
 
 封面统一为 **ECE2013 · Fall 2026 · Group 6**，组员为王骊斌、蒋佳豪、王子征、薛晓康，不列学号。信息集中在 `student-info.tex`。贡献表是供组内分派任务的暂拟方案，明确标为待确认，不能视为实际完成记录。真人实验仍待完成。
 
+真人章节已完整渲染10局记录表、胜率汇总、4幅预留终盘和观察填写项。未录入项用破折号与Pending标记，不能解释成平局或零胜率。真人记录保存到 `experients/assignment2/human_games.json` 后，构建会自动更新表格与棋盘；观察文字分别填入 `human-notes.json` 的 `zh`、`en` 下三个字段。
+
+全局三连扩展已完成12局真实自动实验，X胜5局、O胜5局、平局2局，并逐步回放验证。扩展代码包含在提交的 `uttt.py` 中，默认仍运行必做的首个局部棋盘获胜规则。
+
 ## 中英文复核版本
 
 - `report.tex` → `report.pdf`：中文版。
@@ -22,7 +26,7 @@ python -m pip install -r experients/assignment2/requirements.txt
 powershell -NoProfile -ExecutionPolicy Bypass -File report/build.ps1
 ```
 
-构建时验证已有对局，生成两种语言的数据表和图注，分别编译两次，并将中文版 PDF 同步到 `submission/report.pdf`。如需重新运行全部自动实验：
+构建时验证必做与扩展对局，生成两种语言的数据表和图注，分别编译两次，并将中文版 PDF 同步到 `submission/report.pdf`。如需重新运行全部自动实验：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File report/build.ps1 -RunExperiments
@@ -35,5 +39,18 @@ python submission/uttt.py human --games 10 --output experients/assignment2/human
 ```
 
 完成后重新构建。运行方法与代码路径仅保留在文档中，不进入报告正文。
+
+单独复现扩展实验：
+
+```powershell
+python experients/assignment2/run_extra.py
+python experients/assignment2/check_extra.py
+```
+
+提交文件也可独立运行扩展模式：
+
+```powershell
+python submission/uttt.py extra --games 12 --seed 2013 --output extra_games.json
+```
 
 Blackboard 只上传 `submission` 内的 `solve.py`、`uttt.py`、`report.pdf`，不提交 LaTeX 源文件和实验日志。
