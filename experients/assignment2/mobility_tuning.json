@@ -1,0 +1,826 @@
+[
+  {
+    "mode": "unsafe",
+    "weights": [
+      400,
+      400,
+      800,
+      800,
+      300
+    ],
+    "wins": 14,
+    "games": [
+      {
+        "start": 0,
+        "first": true,
+        "winner": 1
+      },
+      {
+        "start": 0,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 1,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 1,
+        "first": false,
+        "winner": 1
+      },
+      {
+        "start": 2,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 2,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 3,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 3,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 4,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 4,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 5,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 5,
+        "first": false,
+        "winner": 1
+      },
+      {
+        "start": 6,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 6,
+        "first": false,
+        "winner": 1
+      },
+      {
+        "start": 7,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 7,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 8,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 8,
+        "first": false,
+        "winner": -1
+      }
+    ]
+  },
+  {
+    "mode": "unsafe",
+    "weights": [
+      400,
+      400,
+      800,
+      800,
+      1000
+    ],
+    "wins": 11,
+    "games": [
+      {
+        "start": 0,
+        "first": true,
+        "winner": 1
+      },
+      {
+        "start": 0,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 1,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 1,
+        "first": false,
+        "winner": 1
+      },
+      {
+        "start": 2,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 2,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 3,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 3,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 4,
+        "first": true,
+        "winner": 1
+      },
+      {
+        "start": 4,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 5,
+        "first": true,
+        "winner": 1
+      },
+      {
+        "start": 5,
+        "first": false,
+        "winner": 1
+      },
+      {
+        "start": 6,
+        "first": true,
+        "winner": 1
+      },
+      {
+        "start": 6,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 7,
+        "first": true,
+        "winner": 1
+      },
+      {
+        "start": 7,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 8,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 8,
+        "first": false,
+        "winner": -1
+      }
+    ]
+  },
+  {
+    "mode": "ratio",
+    "weights": [
+      400,
+      400,
+      800,
+      800,
+      1000
+    ],
+    "wins": 16,
+    "games": [
+      {
+        "start": 0,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 0,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 1,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 1,
+        "first": false,
+        "winner": 1
+      },
+      {
+        "start": 2,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 2,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 3,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 3,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 4,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 4,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 5,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 5,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 6,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 6,
+        "first": false,
+        "winner": 1
+      },
+      {
+        "start": 7,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 7,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 8,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 8,
+        "first": false,
+        "winner": -1
+      }
+    ]
+  },
+  {
+    "mode": "ratio",
+    "weights": [
+      400,
+      400,
+      800,
+      800,
+      3000
+    ],
+    "wins": 16,
+    "games": [
+      {
+        "start": 0,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 0,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 1,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 1,
+        "first": false,
+        "winner": 1
+      },
+      {
+        "start": 2,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 2,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 3,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 3,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 4,
+        "first": true,
+        "winner": 1
+      },
+      {
+        "start": 4,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 5,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 5,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 6,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 6,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 7,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 7,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 8,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 8,
+        "first": false,
+        "winner": -1
+      }
+    ]
+  },
+  {
+    "mode": "unsafe",
+    "weights": [
+      400,
+      400,
+      800,
+      800,
+      100
+    ],
+    "wins": 13,
+    "games": [
+      {
+        "start": 0,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 0,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 1,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 1,
+        "first": false,
+        "winner": 1
+      },
+      {
+        "start": 2,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 2,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 3,
+        "first": true,
+        "winner": 1
+      },
+      {
+        "start": 3,
+        "first": false,
+        "winner": 1
+      },
+      {
+        "start": 4,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 4,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 5,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 5,
+        "first": false,
+        "winner": 1
+      },
+      {
+        "start": 6,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 6,
+        "first": false,
+        "winner": 1
+      },
+      {
+        "start": 7,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 7,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 8,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 8,
+        "first": false,
+        "winner": -1
+      }
+    ]
+  },
+  {
+    "mode": "unsafe",
+    "weights": [
+      400,
+      400,
+      800,
+      800,
+      600
+    ],
+    "wins": 12,
+    "games": [
+      {
+        "start": 0,
+        "first": true,
+        "winner": 1
+      },
+      {
+        "start": 0,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 1,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 1,
+        "first": false,
+        "winner": 1
+      },
+      {
+        "start": 2,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 2,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 3,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 3,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 4,
+        "first": true,
+        "winner": 1
+      },
+      {
+        "start": 4,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 5,
+        "first": true,
+        "winner": 1
+      },
+      {
+        "start": 5,
+        "first": false,
+        "winner": 1
+      },
+      {
+        "start": 6,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 6,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 7,
+        "first": true,
+        "winner": 1
+      },
+      {
+        "start": 7,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 8,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 8,
+        "first": false,
+        "winner": -1
+      }
+    ]
+  },
+  {
+    "mode": "ratio",
+    "weights": [
+      400,
+      400,
+      800,
+      800,
+      6000
+    ],
+    "wins": 18,
+    "games": [
+      {
+        "start": 0,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 0,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 1,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 1,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 2,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 2,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 3,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 3,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 4,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 4,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 5,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 5,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 6,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 6,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 7,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 7,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 8,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 8,
+        "first": false,
+        "winner": -1
+      }
+    ]
+  },
+  {
+    "mode": "ratio",
+    "weights": [
+      400,
+      400,
+      800,
+      800,
+      300
+    ],
+    "wins": 12,
+    "games": [
+      {
+        "start": 0,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 0,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 1,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 1,
+        "first": false,
+        "winner": 1
+      },
+      {
+        "start": 2,
+        "first": true,
+        "winner": 1
+      },
+      {
+        "start": 2,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 3,
+        "first": true,
+        "winner": 1
+      },
+      {
+        "start": 3,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 4,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 4,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 5,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 5,
+        "first": false,
+        "winner": 1
+      },
+      {
+        "start": 6,
+        "first": true,
+        "winner": 1
+      },
+      {
+        "start": 6,
+        "first": false,
+        "winner": 1
+      },
+      {
+        "start": 7,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 7,
+        "first": false,
+        "winner": -1
+      },
+      {
+        "start": 8,
+        "first": true,
+        "winner": -1
+      },
+      {
+        "start": 8,
+        "first": false,
+        "winner": -1
+      }
+    ]
+  }
+]
