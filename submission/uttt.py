@@ -1,6 +1,7 @@
 """First-local-board-wins Ultimate Tic-Tac-Toe. Standard library only.
 
 Run python uttt.py human --games 10 to collect real human experiment records.
+Run python uttt.py extra --games 12 for the global-board extension.
 Search depth includes the root move. Equal scores retain raster-order moves.
 """
 from math import inf
@@ -294,13 +295,133 @@ class ultimateTicTacToe:
         return result[0], result[1], result[4]
 
 
+@lru_cache(maxsize=65536)
+def _line_potential(cells):
+    """Open one/two-in-a-row lines, with D representing a closed draw."""
+    one_x = one_o = two_x = two_o = 0
+    win_x, win_o = set(), set()
+    winner = 0
+    for line in LINES:
+        values = [cells[i] for i in line]
+        if 'D' in values:
+            continue
+        x, o = values.count('X'), values.count('O')
+        if x == 3:
+            winner = 1
+        if o == 3:
+            winner = -1
+        if not o:
+            one_x += x == 1
+            two_x += x == 2
+            if x == 2:
+                win_x.update(i for i in line if cells[i] == '_')
+        if not x:
+            one_o += o == 1
+            two_o += o == 2
+            if o == 2:
+                win_o.update(i for i in line if cells[i] == '_')
+    return winner, one_x, one_o, two_x, two_o, tuple(win_x), tuple(win_o)
+
+
+class globalTicTacToe(ultimateTicTacToe):
+    """Extra-credit rules: win three local boards in a global line.
+
+    A won or drawn local board is closed. Routing to a closed board grants
+    free choice among all open local boards. Both custom agents use the
+    inherited depth-three alpha-beta search, with root-specific heuristics.
+    """
+    def localStatus(self):
+        status = []
+        for idx in range(9):
+            cells = self._local(idx)
+            winner = _features(cells)[0]
+            status.append('X' if winner == 1 else 'O' if winner == -1 else
+                          '_' if '_' in cells else 'D')
+        return tuple(status)
+
+    def checkWinner(self):
+        return _line_potential(self.localStatus())[0]
+
+    def checkMovesLeft(self):
+        return '_' in self.localStatus()
+
+    def legalMoves(self, currBoardIdx):
+        status = self.localStatus()
+        if _line_potential(status)[0]:
+            return []
+        if currBoardIdx is not None and 0 <= currBoardIdx < 9 and status[currBoardIdx] == '_':
+            r, c = self.globalIdx[currBoardIdx]
+            return [(r+dr, c+dc) for dr in range(3) for dc in range(3)
+                    if self.board[r+dr][c+dc] == '_']
+        return [(r, c) for r in range(9) for c in range(9)
+                if status[(r//3)*3+c//3] == '_' and self.board[r][c] == '_']
+
+    def evaluatePredifined(self, isMax):
+        """Own offensive (X root) / defensive (O root) global heuristics."""
+        status = self.localStatus()
+        macro = _line_potential(status)
+        if macro[0]:
+            return macro[0] * 10000
+        if '_' not in status:
+            return 0
+        local = [_features(self._local(i)) for i in range(9)]
+        if self._next_board is not None and status[self._next_board] == '_':
+            active = [self._next_board]
+        else:
+            active = [i for i in range(9) if status[i] == '_']
+        side = self._next_player
+        sign = 1 if side else -1
+        # A local capture is a global immediate win only on a required board.
+        needed = macro[5 if side else 6]
+        if any(i in needed and local[i][7 if side else 8] for i in active):
+            return sign * 9500
+        cap_x, threat_x, local_x = (500, 1600, 45) if isMax else (550, 1800, 55)
+        score = cap_x * status.count('X') - 450 * status.count('O')
+        score += threat_x * macro[3] - 1400 * macro[4]
+        score += 150 * macro[1] - 120 * macro[2]
+        positions = (2, 1, 2, 1, 3, 1, 2, 1, 2)
+        score += 25 * sum(w * ((s == 'X') - (s == 'O')) for w, s in zip(positions, status))
+        for i, state in enumerate(status):
+            if state == '_':
+                score += local_x * local[i][1] - 35 * local[i][2]
+                single = _line_potential(self._local(i))
+                score += 4 * (single[1] - single[2])
+        score += 80 * sum(local[i][1] - local[i][2] for i in active)
+        if any(local[i][7 if side else 8] for i in active):
+            score += 200 * sign
+        return max(-8000, min(8000, score))
+
+    def evaluateDesigned(self, isMax):
+        return self.evaluatePredifined(isMax)
+
+    def playGameGlobal(self, maxFirst=True, startBoardIdx=4):
+        result = self._play(maxFirst, startBoardIdx, (False, False))
+        self.last_game.update(rule='global', local_status=self.localStatus(),
+                              agent_x='custom_offensive', agent_o='custom_defensive')
+        return result
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('mode', choices=('demo', 'human'), nargs='?', default='demo')
+    parser.add_argument('mode', choices=('demo', 'human', 'extra'), nargs='?', default='demo')
     parser.add_argument('--games', type=int, default=10)
-    parser.add_argument('--output', default='human_games.json')
+    parser.add_argument('--output', default=None)
     parser.add_argument('--seed', type=int, default=448)
     args = parser.parse_args()
+    if args.output is None:
+        args.output = 'extra_games.json' if args.mode == 'extra' else 'human_games.json'
+    if args.mode == 'extra':
+        rng = Random(args.seed)
+        records = []
+        for i in range(args.games):
+            game = globalTicTacToe()
+            idx, first = rng.randrange(9), bool(rng.getrandbits(1))
+            game.playGameGlobal(first, idx)
+            records.append(game.last_game)
+            print('Global game', i+1, 'winner', game.last_game['winner'],
+                  'nodes', game.last_game['total_nodes'], flush=True)
+            Path(args.output).write_text(json.dumps(records, indent=2), encoding='utf-8')
+        return
     if args.mode == 'demo':
         game = ultimateTicTacToe()
         game.playGamePredifinedAgent(True, False, False)
