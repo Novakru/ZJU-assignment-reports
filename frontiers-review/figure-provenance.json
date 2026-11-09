@@ -1,32 +1,43 @@
 {
-  "type": "redrawn published tables; not new experiments",
-  "react": {
-    "source": "https://arxiv.org/abs/2210.03629v3",
-    "locator": "Table 1, PDF p.5",
-    "model": "PaLM-540B",
-    "metrics": [
-      "HotpotQA exact match (%)",
-      "FEVER accuracy (%)"
-    ],
-    "sampling_note": "CoT-SC uses 21 trajectories; tool access and inference cost differ across conditions",
-    "transformation": "Seven prompting rows copied verbatim; supervised SoTA excluded because not a prompting condition"
+  "scheme": "vector analytical schematics, two redrawn data figures, unchanged licensed source panels",
+  "data_sources": {
+    "review-sciencebench": {
+      "url": "https://arxiv.org/abs/2410.05080v3",
+      "locator": "Table 3, PDF p.8",
+      "selection": "all three framework conditions for GPT-4o and Claude-3.5-Sonnet, without expert knowledge",
+      "n_tasks": 102,
+      "attempts_per_task": 3,
+      "aggregation": "best of three independent runs per task; prioritized SR, VER, CBS, lower cost; average selected runs",
+      "uncertainty": "selected-run point estimates from Table 3; not three-run means or invented intervals"
+    },
+    "review-audit": {
+      "url": "https://arxiv.org/abs/2509.08713v2",
+      "locator": "Section 6.2 and Table 11, pp.16-18",
+      "n": 100,
+      "per_category": 20,
+      "positive_negative_ratio": "1:1; some defects injected by original authors"
+    }
   },
-  "audit": {
-    "source": "https://arxiv.org/abs/2509.08713v2",
-    "locator": "Section 6.2 and Table 11, PDF pp.16-18",
-    "n": 100,
-    "design": "20 examples per category, 10 positive and 10 negative; some problems injected by authors",
-    "auditor": "gemini-2.5-flash-preview-05-20",
-    "transformation": "Accuracy columns copied; no pooling or inferred confidence intervals"
+  "licensed_panels": {
+    "url": "https://doi.org/10.1038/s41586-023-06792-0",
+    "original": "Fig.5i and Fig.5j, PDF p.6",
+    "license": "CC BY 4.0 https://creativecommons.org/licenses/by/4.0/",
+    "processing": "PDF page clipping only, unchanged vector content; panel layout rearranged in the review"
   },
-  "uncertainty": "Original point estimates only; no invented error bars; no causal or cross-system ranking",
-  "matplotlib_version": "3.10.9",
+  "schematics": "Analytical illustrations; no positions, areas or arrow widths encode measured effect sizes",
   "data_sha256": {
     "audit.csv": "27327e380caed78670a6a1300673b4bda6a1746b294f8d3e747aa62313bdda52",
-    "react.csv": "5ffb0db7eb353cd5a737fc55be323a139f6394c799da8c6ac89a6724a8ba52ba"
+    "scienceagentbench.csv": "ffb1d63d52989f42a20c3c18bd2c95712cff0656e104e9ad5d1644fd30a1e43c"
   },
   "figure_sha256": {
-    "audit-with-artifacts.pdf": "e1f40353555bdbba31c7f5155cc716ec667530bb265df86ce299d869bbab18be",
-    "react-task-dependence.pdf": "3079fb248e28c637cf75658b97b3ee808067a1cc70f5b8df5482985e2aee2308"
+    "coscientist-sonogashira.pdf": "e2552f6a678202b33fe36c4eebd46531f059d375c55babb94faaf7d2af1d5003",
+    "coscientist-suzuki.pdf": "aa0533760e0391c8f4971bc6aacaf06ff772dbf62ef394e399924f21198dedd2",
+    "review-audit.pdf": "85cf77d15480248f29859bbc76fee7d6e5696246aa092f67d87d3b61e60cceb6",
+    "review-evidence-cycle.pdf": "8c89f3e5420bdbdfb57fefb97ea9a0dc33f93bcbca39b469dea9504eeb98c8de",
+    "review-framework.pdf": "5defcc81313bcb8c8f32ff733ca121c2a19e9907dc8021f4b8d61df5659f02f8",
+    "review-knowledge-memory.pdf": "902a0fdfb5dce08b6abc8f5ad1d2195ae1f4ac8b83676ee4a1755b0318ad202d",
+    "review-sciencebench.pdf": "37a47c1f849fa5760fe5734d9d1e159ff21e7d6ee9d84b49901eef8b27a7b7e0",
+    "review-timeline.pdf": "7428e512a43ec43c4cce492e500b028302dce3ced8c9209426358cf783fe356b",
+    "review-topologies.pdf": "14224cda1bb9d23e66ba95b10c521d5fc612d40366e8b296b80f8225ec3a97c0"
   }
 }

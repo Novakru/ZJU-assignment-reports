@@ -1,0 +1,7 @@
+model,framework,success_rate,valid_execution_rate,api_cost_usd,knowledge
+GPT-4o,Direct,11.8,52.9,0.011,without
+GPT-4o,OpenHands,19.6,78.4,0.803,without
+GPT-4o,Self-Debug,22.6,83.3,0.047,without
+Claude-3.5-Sonnet,Direct,17.7,51.0,0.017,without
+Claude-3.5-Sonnet,OpenHands,21.6,87.3,0.958,without
+Claude-3.5-Sonnet,Self-Debug,32.4,92.2,0.057,without

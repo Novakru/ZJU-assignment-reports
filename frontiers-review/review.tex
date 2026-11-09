@@ -4,256 +4,46 @@
 \begin{document}
 \twocolumn[{
 \articleheading
-\begin{minipage}{\textwidth}
-\fontsize{10}{14.8}\selectfont
+\begin{minipage}{\textwidth}\fontsize{10}{14.8}\selectfont
 \abstractlabel{摘\quad 要}
-大语言模型与检索、程序执行及实验平台的结合，使科研辅助由单轮问答扩展到跨阶段的研究流程。
-多智能体系统进一步通过角色分工与交互协调组织这些能力，但流程自动化程度与科学结论可信度并不等价。
-本文围绕知识获取、状态延续和协作检验，对15项代表性原始研究进行叙述性综述。
-首先从知识、状态和控制三个层面建立方法分类，解释图检索、分层记忆与工具反馈的作用及相互依赖；
-随后比较计算实验、假设生成和实体实验三类科研系统，并以原始论文表格重绘结果，
-分析任务差异与审计材料对评价结论的影响。
-比较表明，信息覆盖、过程连贯与角色一致分别对应不同目标，不能作为事实正确、实验有效或科学发现的替代指标。
-本文据此提出以断言及其证据关系组织科研状态，将独立观察、失败记录和条件化验收贯穿协作流程，
-并讨论固定资源预算下的对照设计、创新性与可检验性的张力及人工参与的合理位置。
-未来系统的关键进展应体现为可核验研究产出的改善，而不仅是代理规模或论文生成速度的提升。
+大语言模型正推动科研辅助由文献问答和代码生成，向涵盖假设提出、实验执行及结果论证的连续工作流发展。
+多智能体系统通过任务分解、角色协作和工具调用，为复杂研究过程提供了新的组织方式，
+其研究重点也逐渐从单项任务性能转向长期协作能力与科学产出的有效性。
+本文围绕知识增强、长期记忆、协作控制和可信评价，梳理科研多智能体系统的发展脉络与主要技术路线。
+首先建立研究流程与支撑机制相结合的分类框架，比较片段检索、层次检索、图组织、反思记忆及多种协作拓扑；
+继而分析文献综合、假设生成、计算实验和实体实验中的代表性系统，讨论其自动化范围、反馈来源与验证方式。
+结合科学任务基准和过程审计的公开结果，进一步辨析执行成功与任务完成、候选排序与科学验证之间的差异。
+在此基础上，本文认为知识结构与研究状态的协同维护、探索资源与验证资源的合理分配，
+以及人工判断在关键研究节点的参与，是提高系统实用性的重要方向。
+未来研究需要在可追溯证据、长期任务评价和可复现流程的基础上，检验多智能体协作带来的实际科研增益。
 \par\vspace{2mm}
-\abstractlabel{关键词}多智能体系统；自动科研；检索增强生成；长期记忆；证据核验
+\abstractlabel{关键词}科研智能体；多智能体协作；检索增强生成；长期记忆；科学发现；可信评价
 \par\vspace{3mm}
+\begin{center}\fontsize{12}{16}\selectfont\bfseries
+A Review of Multi-Agent Systems for Scientific Research:\\
+Technical Evolution, Core Methods and Trustworthy Evaluation
+\end{center}\vspace{1mm}
 \abstractlabel{Abstract}
-Large language models can connect literature retrieval, code execution and laboratory tools into extended research workflows.
-Multi-agent systems organize these capabilities through role assignment and communication, yet workflow completion alone does not establish scientific validity.
-This narrative review examines 15 representative primary studies through three functional layers: knowledge access, persistent research state and collaborative control.
-It compares computational research assistants, hypothesis-generation systems and experimentally grounded laboratories.
-Figures redrawn from published tables illustrate task-dependent performance and the value of process artifacts for auditing.
-The synthesis distinguishes information coverage from factual support, coherent memory from valid evidence, and agent agreement from independent verification.
-It argues for claim-level provenance, revisable research records and conditional acceptance criteria, with evaluation controlling computational resources and human assistance.
-Progress should be assessed by verifiable research outcomes rather than agent count or manuscript throughput.
+Large language models are extending research assistance from literature question answering and code generation to workflows that include hypothesis formulation, experimentation and scientific argumentation.
+Multi-agent systems organize these capabilities through task decomposition, role coordination and tool use.
+This review traces their development and synthesizes four technical dimensions: knowledge augmentation, long-term memory, collaborative control and trustworthy evaluation.
+It compares retrieval structures, reflective memory and communication topologies, then examines representative systems for literature synthesis, hypothesis generation, computational research and physical experimentation.
+Published benchmark and auditing results are used to distinguish executable programs from successful research tasks, and candidate ranking from empirical validation.
+The discussion identifies coordinated knowledge and state management, balanced allocation of exploration and verification resources, and human participation at critical decisions as priorities for practical research systems.
+Future progress requires evaluations grounded in traceable evidence, reproducible workflows and sustained research tasks.
 \par\vspace{2mm}
-\abstractlabel{Keywords}multi-agent systems; automated research; retrieval-augmented generation; long-term memory; evidence verification
-\end{minipage}\vspace{6mm}
-}]
+\abstractlabel{Keywords}scientific agents; multi-agent collaboration; retrieval-augmented generation; long-term memory; scientific discovery; trustworthy evaluation
+\end{minipage}\vspace{6mm}}]
 \thispagestyle{plain}
-
 % BODY-BEGIN
-\section{引言}
-科研工作的困难既在于提出有价值的问题，也在于使结论经受证据检验。
-以文献综述为例，找到相关论文只是起点，研究者还需要辨别实验条件、识别相互矛盾的结果，
-并判断局部发现能否支持一般命题；在计算实验中，程序顺利运行之后，
-仍要排除数据泄漏、不公平对照和选择性报告。
-因此，能够生成答案与能够参与研究之间，存在由一系列方法学约束构成的距离。
-
-大语言模型（large language model，LLM）提供了新的技术路径。
-检索增强生成（retrieval-augmented generation，RAG）将外部文档接入生成过程\cite{rag}，
-ReAct把推理与工具行动交替组织\cite{react}，AutoGen进一步将模型、工具和人的输入放入可编程的代理交互\cite{autogen}。
-在此基础上，The AI Scientist和Agent Laboratory将文献、代码、实验与论文撰写连接为较长的工作流\cite{scientist,lab}。
-人不再需要逐次发出每个细小指令，系统可以根据当前结果选择后续动作。
-不过，研究链条越长，错误也越可能跨阶段传播，最终以结构完整的报告形式出现。
-
-课堂关于知识增强、长期记忆和可信科研的讨论，恰好触及这一矛盾。
-知识组织决定系统接触什么材料，记忆机制决定后续阶段保留什么，
-协作规则决定不同主体怎样解释材料并接受彼此的交付。
-若仅按框架名称罗列方法，就容易忽略这些机制之间的依赖。
-本文因此将核心问题设为：\textbf{多智能体系统如何把可用的信息和协作过程，转化为可被第三方检验的科研结论？}
-
-本文讨论基于LLM、能够选择工具或后续动作的科研智能体。
-“多智能体”指其中存在可区分的任务主体与通信、协调关系，不要求各主体使用不同基础模型。
-范围不包括全部多智能体强化学习和群体机器人，也不把蛋白质预测等专用模型本身等同于科研代理。
-专用模型在本文中主要作为可以被代理调用、仍需独立评价的工具。
-
-\subsection{文献范围与组织方式}
-本文采用问题导向的叙述性综述。
-资料核对截至2026年11月9日，围绕检索增强、上下文利用、代理记忆、协作框架和自动科研评价，
-通过题名、关键词检索及参考文献追踪，选取2020至2025年形成的15项代表性原始研究。
-纳入依据是与上述问题直接相关、全文可获取，且具有可分析的机制、案例或评价过程。
-基础机制、科研应用与失败研究分别保留，避免只以成功案例构造结论。
-同一工作的预印本和期刊稿不作为两项独立研究重复计数：
-Virtual Lab与Coscientist采用期刊版本，其余按文末列出的固定版本讨论。
-本文没有进行全数据库穷尽检索、双人独立筛选或元分析，不能视为该领域的完整统计画像。
-
-全文依次讨论功能分类、知识与记忆机制、协作组织、科研案例及评价方法，最后给出本文理解。
-图表区分三种性质：机制图是对文献的分析归纳，数值图由原始论文表格重绘，设计建议属于本文讨论。
-这一区分有助于避免把综述中的解释性框架误当成新的实验发现。
-
-\section{分析框架：知识、状态与控制}
-\subsection{从角色名称转向功能约束}
-“规划者”“研究者”“审稿者”等身份可以帮助分工，却不足以说明系统如何工作。
-两个名称不同的代理，若接收相同材料、调用相同模型并按相同标准评分，
-可能只是对同一过程的重复采样；一个代理也可以分阶段完成检索、执行与检查。
-因此，分类的基本单位应当是功能及其约束，而非对话中的人物数量。
-
-本文将相关机制划分为三个相互耦合的层面，见图\ref{fig:framework}。
-\textbf{知识层}管理外部论文、数据和工具文档，关注检索与来源；
-\textbf{状态层}管理本项目的假设、观察、计划与失败，关注持续性和可修正性；
-\textbf{控制层}决定动作、通信、交接和停止，关注协调与验收。
-科研结论横跨三层：它既需要外部依据，也需要当前实验状态，还需要明确的接受规则。
-这一划分是分析视角，并非要求实际系统部署三个独立模块。
-
-\input{figure-framework.tex}
-
-\subsection{科研流程与科学证据的区别}
-科研代理同时面对两类成功条件。
-第一类是操作成功，例如找到论文、代码无报错、实验生成了指标；
-第二类是认识上的成功，例如引用支持论断、实验排除了主要替代解释、结果能够被独立重建。
-操作成功通常容易记录，认识上的成功则依赖问题本身。
-如果奖励只针对论文完整性、单次测试成绩或审稿模型评分，
-系统可能优化这些替代目标，却没有相应改善研究的可信性。
-
-因此，“闭环”需要具体说明。
-在仅由语言模型生成、评论、再修改文本的闭环中，反馈仍主要来自语言判断；
-加入代码测试后，能够检查的是某些程序行为；
-进一步引入合适的实验观察，才可能检验相应的经验命题。
-闭环是否有价值，取决于反馈测到了什么，而不是箭头是否返回起点。
-
-\section{知识增强与记忆：从可访问到可修正}
-\subsection{RAG的检索对象与证据支持}
-RAG将参数化生成与非参数化文档检索结合，原始工作比较了不同的文档条件化方式\cite{rag}。
-其基本思想可概括为对候选文档的条件生成进行加权：
-\begin{equation}
- p(y\mid x)\approx\sum_{z\in\mathcal R(x)}p(z\mid x)p(y\mid x,z),
-\end{equation}
-其中$x$为问题，$z$为检索文档，$y$为输出，$\mathcal R(x)$为候选集合。
-该式说明检索与生成的联系，不代表所有RAG实现都显式计算这一边缘概率。
-检索使外部资料能够影响输出，也使更新知识不必完全依赖重新训练模型。
-
-但相似性检索回答的是“这段材料是否相关”，科研引用要求的却是“材料是否支持当前断言”。
-例如，某方法在给定数据集上优于一个基线，不等于它在所有任务上都有效；
-讨论中提出的可能解释，也不等于实验确认的机制。
-如果生成阶段抹去限定，即使参考文献真实存在，仍会产生证据错配。
-科研用途的检索单元因而不宜仅有正文，还应保留实验对象、比较条件、证据类型与定位信息。
-
-实践中，可以把生成拆成“提出待支持断言”和“核对支持关系”两个动作。
-后者需要允许不支持、部分支持和证据冲突，不能迫使每次检索都为既定结论寻找背书。
-这种设计不保证理解一定正确，却使错误更容易暴露，也便于人工复核。
-关键变化是将出处看成可以检查的关系，而非文末增加的装饰。
-
-\subsection{GraphRAG与长上下文的适用条件}
-向量检索适于定位局部片段，但领域性问题往往要求组织分散的信息。
-GraphRAG抽取实体和关系，建立图社区及不同层次的社区摘要，再通过全局查询过程聚合回答\cite{graphrag}。
-它改变的是证据组织与访问方式：可以先看主题结构，再向原文追索细节，
-而不必把若干局部片段的拼接当成对整个领域的概括。
-
-然而，图结构并不天然忠实于原文。
-实体消歧决定哪些对象被合并，关系抽取决定哪些依赖得以保留，
-社区摘要又会压缩实验条件、否定信息和少数观点。
-任一环节的误差都可能在后续总结中放大。
-因此，图适合提供主题地图，却不宜成为无法回溯的唯一知识表示。
-关于数值、机制和争议的关键断言，仍应返回对应原文或数据。
-
-GraphRAG原文针对全局理解问题，比较答案全面性、多样性等维度，
-这些指标与逐条事实准确率并不相同\cite{graphrag}。
-全面的回答可以包含更多正确信息，也可能包含更多未经充分支持的信息。
-“图检索更好”必须附带查询类型和评价标准，不能直接转化为科研结论更可靠的普遍判断。
-
-另一条路线是扩大上下文窗口，直接把较多文献交给模型。
-Lost in the Middle通过改变相关信息的位置，说明所测模型对长输入的利用并不均匀\cite{middle}。
-其直接对象是特定时期的模型和任务，不能替代对新模型的测试；
-它揭示的设计问题仍值得保留：信息进入窗口、被注意到和被正确解释，是三个不同阶段。
-长上下文与检索因此并非互斥路线。前者减少部分切分损失，后者提供选择、定位与再次核查的能力，
-二者是否结合应由任务规模和证据密度决定。
-
-\subsection{长期记忆究竟保存什么}
-知识库描述外部研究，任务记忆描述当前项目的经历。
-Generative Agents将事件记录、检索、反思与规划结合，展示长期经历如何支持较连贯的代理行为\cite{generative}。
-记忆检索综合考虑相关性、时间和重要性，其启发是：过去的信息不必全部重复输入，
-系统可以按当前任务选择有用经历。
-但原工作主要研究社会行为的可信感，没有证明反思所得命题具有科学真实性。
-用于科研时，需要重新设计“重要性”和“有用性”的含义。
-
-MemGPT借鉴存储层级，区分有限的当前上下文与外部存储，通过显式操作调入或移出内容\cite{memgpt}。
-这一思路使记忆调度成为系统行为的一部分，适合延续长任务。
-不过，能够保存和调用记录，只能说明它没有丢失，不能说明它值得相信。
-科研记忆至少需要区别原始观察、推断、计划和已否定判断。
-否则，早期推测可能在反复摘要之后失去语气与来源，成为后续代理眼中的“已知事实”。
-
-本文据此把科研记忆理解为可修订的研究记录，状态示意见图\ref{fig:memory}。
-记录应关联来源、适用条件和当前状态；新证据可以改变状态，但不应抹去先前依据及修正过程。
-例如，实验未达到预期时，应保留配置、失败表现和可能原因，而非只记住最终成功的运行，
-因为失败有助于区分稳健规律与偶然调参结果。
-
-\input{figure-memory.tex}
-
-\subsection{知识与记忆的耦合及代价}
-知识和记忆都可能使用向量、图或文档存储，区别主要在来源与用途。
-若把外部论文、代理摘要、实验输出和旧假设存入无类型区分的库，
-系统可能把自身历史猜测误当成独立外部证据。
-由此产生循环支持：先生成判断，再写入记忆，后续检索又用它证明原判断。
-避免这一问题，需要读取时保留来源身份，并区分原始证据和派生摘要。
-
-来源追踪和版本记录也会增加管理负担。
-过细的记录挤占上下文与检索预算，过度压缩则会损失决定结论边界的条件。
-合理目标不是保存全部对话，而是保留足以重建关键判断的材料。
-常规工具说明可以缓存简短摘要，研究方向变更和异常结果则需更完整依据。
-按风险分配记忆精度，比单纯追求记忆条目数量更接近科研需求。
-
-\section{协作组织：从行动反馈到多主体协调}
-\subsection{ReAct说明了什么}
-ReAct根据当前信息产生推理或行动，通过环境返回的观察调整后续步骤\cite{react}。
-它通常属于单代理机制，却是理解多代理科研流程的基础：
-检索结果、执行报错和测试输出提供新的观察，使系统不必仅在内部文本中反复推测。
-反馈价值取决于观察与问题的关系。程序报错可以揭示实现问题，
-通过测试可以支持部分程序属性，但不能直接验证研究问题的价值。
-
-图\ref{fig:react}重绘原文的同一模型提示实验。
-在HotpotQA上，ReAct严格匹配率为27.4\%，低于CoT的29.4\%；
-在FEVER上，ReAct准确率为60.9\%，高于CoT的56.3\%。
-推理、检索与自一致性采样的组合在两任务中的表现也不同。
-外部行动的作用因而依赖任务：事实核查可以直接受益于证据查询，多跳问答还受检索路径与答案综合影响。
-这些结果不支持“有工具就一定优于纯推理”，也不能被当成多代理协作的效果证据。
-
-\begin{figure*}[t]
-\centering\includegraphics[width=166mm]{figures/react-task-dependence.pdf}
-\caption{ReAct收益的任务依赖性。数值重绘自文献\cite{react}表1（PDF第5页），基础模型为PaLM-540B。
-左为HotpotQA严格匹配率，右为FEVER准确率；跨面板指标不同。
-CoT-SC使用21条推理轨迹，组合方法涉及工具调用，各条件并非相同推理成本的对照。
-展示原文点估计，未补造误差条；不纳入原表的有监督最优方法行。}
-\label{fig:react}
-\end{figure*}
-
-\subsection{分工、通信结构与交接约束}
-AutoGen通过可对话代理与可编程交互，将LLM、工具和人纳入统一协作方式\cite{autogen}。
-科研分工可以体现为检索与核对、实现与测试、假设提出与反例搜索。
-其收益来源可能不同：并行处理缩短等待，工具专长降低操作难度，独立检查发现遗漏；
-这些收益不应全部归入抽象的“群体智能”。
-
-协作拓扑也会影响结果。
-串行流水线容易规定交付顺序，但早期错误可能逐层传递；
-中心调度便于整合，却依赖调度者正确理解任务；
-自由讨论可以扩大探索范围，也容易形成无效轮转和过早共识。
-若$n$个代理每轮均向其他所有代理发送一条消息，$T$轮的有向消息数为$Tn(n-1)$。
-这一计数仅适用于该通信假设，实际成本还取决于消息长度和工具执行内容。
-它提示：角色增加时，信息协调可能比子任务执行更快地消耗资源。
-
-代理应交付明确对象，而非只说“任务已完成”。
-检索者提供原文及限定，执行者提供配置与结果，核对者指出检查对象、标准和未解决问题。
-验收既可以通过，也应允许带条件通过、退回和中止。
-当后续代理不能重建前序判断时，继续对话很可能只增加文本长度，未增加研究信息。
-
-\subsection{多角色一致为何不是独立证据}
-同一模型设成不同角色，并不自动获得独立判断。
-共享训练偏差、相同上下文、相同检索错误及先发意见影响，都可能使多个代理重复同一错误。
-只有当角色带来新观察、约束或检验途径时，协作才具有实质核验增量。
-让执行者重新计算、让检查者获取原始数据，比让多个角色评价措辞是否可信更接近证据检查。
-
-一个简化统计关系可以说明相关判断的局限。
-假设$n$个判断的方差均为$\sigma^2$，两两相关系数相同且为$\rho$，则
-\begin{equation}
- \operatorname{Var}(\bar X)=\frac{\sigma^2}{n}\{1+(n-1)\rho\}.
-\end{equation}
-这是等相关假设下平均判断方差的数学说明，不是实际代理相关性的测量，也不直接给出投票正确率。
-当判断正相关时，增加主体的信息收益弱于独立情形。
-科研系统需要说明不同角色的证据来源，不能只报告投票人数或赞成比例。
-
-没有外部反馈的自我修正也面临类似问题。
-Huang等在所测推理任务上发现，内在自我纠错不能稳定改善结果，甚至可能改变原先正确的答案\cite{correct}。
-这不是对所有反思方法的否定，而是提醒：提示语中的“检查”不等于系统拥有可靠的错误判据。
-多代理审核若仍仅依赖同类语言判断，也需要接受相同追问。
-
-\input{table-mechanisms.tex}
+\input{review-introduction.tex}
+\input{review-foundations.tex}
+\input{review-knowledge.tex}
+\input{review-collaboration.tex}
 \input{review-cases.tex}
+\input{review-evaluation.tex}
 \input{review-discussion.tex}
 % BODY-END
-
 \FloatBarrier
 \input{review-references.tex}
 \end{document}

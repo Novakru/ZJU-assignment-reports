@@ -14,3 +14,20 @@ virtual,virtual-lab-2025,Computational pipeline and Fig.4; PDF pp.4-6,92 selecte
 chem,coscientist-2023,Hardware control and integrated experiment design,Tool documentation and physical observation,Manual plate movement and limited reagent space remain part of conditions
 mast,2503.13657v2,Taxonomy and failure analysis,Specification/interagent/verification failures,Fixed v2 taxonomy; do not mix counts from other versions
 pitfalls,2509.08713v2,Section 6.2 and Table 11 PDF pp.16-18,Audit with paper versus process artifacts,100 balanced audit cases; some defects injected; not natural prevalence
+surveyautonomy,2025.emnlp-main.895,Abstract and taxonomy Table 1,Positioning relative to prior surveys,Review framework rather than new experimental evidence
+surveyagentic,2508.14111v2,Sections 2-4 and domain synthesis,Capability-process-domain perspective,Do not infer exhaustive coverage for this course review
+surveytool,review-cn-tool,Sections on tool definitions and development,Chinese scholarly structure and tool-use background,Secondary synthesis; primary claims traced to original works
+toolformer,2302.04761v1,Abstract and methods,Learning API selection and incorporation,Model training differs from prompt-only orchestration
+reflexion,2303.11366v4,Architecture and feedback ablations,Textual reflection stored in episodic memory,No claim that all reflection signals are externally correct
+raptor,2401.18059v1,Tree construction and retrieval sections,Recursive clustering and summarization,Information abstraction differs from entity-relation graph indexing
+selfrag,2310.11511v1,Reflection token definitions and training,Adaptive retrieval and support evaluation,Trained mechanism is distinct from generic checking prompts
+metagpt,2308.00352v7,SOP and communication sections,Standardized role workflows and intermediate artifacts,Original application is broader software work rather than proof of scientific validity
+debate,2305.14325v1,Debate procedure and task evaluations,Multiple responses and iterative exchange,Task-specific benefits do not establish independent evidence
+researchagent,2025.naacl-long.342,Architecture and evaluation,Paper-linked ideation and reviewing agents,Idea evaluation does not replace execution or experiments
+sciagents,2409.05556v1,Knowledge graph and multi-agent method,Graph-supported interdisciplinary hypotheses,Proposal generation and cases have limited external validation
+paperqa,2409.13740v2,Architecture and literature task evaluations,Search synthesis and contradiction detection,Literature task capability is distinct from laboratory discovery
+sciencebench,2410.05080v3,Evaluation definitions pp.5-6 and Table 3 p.8,VER versus SR and cost in six selected configurations,102 tasks; best of three independent runs per task prioritized by SR then VER then CBS then lower cost; no expert knowledge; historical model and API costs
+rebench,2411.15114v2,Abstract and human-agent comparison,Task returns under different time budgets,7 engineering environments; not a universal human capability comparison
+scientistv2,2504.08066v1,Tree-search manager and workshop evaluation,Open-ended implementation and experiment management,Linked project report rather than independent replication
+scientistjournal,scientist-2026,Main text and evaluation figures,Focused and template-free modes with external review,Later report linked to earlier AI Scientist work
+chemcrow,chemcrow-2024,Tool architecture and application cases,18 expert-designed tools and domain execution,Specialist tools and expert work are part of the system conditions

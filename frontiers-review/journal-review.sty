@@ -6,6 +6,7 @@
 \setmainfont{TeX Gyre Termes}
 \setsansfont{TeX Gyre Heros}
 \RequirePackage{tabularx,xcolor,fancyhdr,tikz,microtype,placeins,xurl}
+\RequirePackage[super,sort,compress]{cite}
 \usetikzlibrary{arrows.meta,positioning,calc,fit,backgrounds}
 \definecolor{ZJUIBlue}{HTML}{003F88}
 \definecolor{EvidenceGreen}{HTML}{28786B}
@@ -16,6 +17,7 @@
 \renewcommand{\baselinestretch}{1.0}
 \makeatletter
 \renewcommand\normalsize{\@setfontsize\normalsize{11}{16.2}}
+\renewcommand{\@biblabel}[1]{[#1]}
 \makeatother
 \normalsize
 \setlength{\columnsep}{7.5mm}

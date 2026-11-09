@@ -33,14 +33,14 @@ def verify():
     assert r'\writingtask' not in tex and '作者待完成' not in tex
     figures=len(re.findall(r'\\begin\{figure\*?\}',tex))
     tables=len(re.findall(r'\\begin\{table\*?\}',tex))
-    assert (figures,tables)==(4,3),(figures,tables)
+    assert (figures,tables)==(8,4),(figures,tables)
     references=(ROOT/'review-references.tex').read_text(encoding='utf-8')
     keys=re.findall(r'\\bibitem\{([^}]+)\}',references)
     citations={key for group in re.findall(r'\\cite\{([^}]+)\}',tex+'\n'+references) for key in group.split(',')}
-    assert len(keys)==16 and citations==set(keys),(keys,citations)
+    assert len(keys)==33 and citations==set(keys),(keys,citations)
     manifest=json.loads((ROOT/'review-sources.json').read_text(encoding='utf-8'))
-    assert len(manifest['papers'])==15
-    assert len({p['id'] for p in manifest['papers']})==15
+    assert len(manifest['papers'])==32
+    assert len({p['id'] for p in manifest['papers']})==32
     for paper in manifest['papers']:
         identifier=paper.get('doi') or paper['id']
         assert identifier in references and paper['downloaded'],identifier
@@ -64,18 +64,23 @@ def verify():
                     if x0<-.5 or y0<-.5 or x1>page.rect.width+.5 or y1>page.rect.height+.5:
                         outside.append([i+1,span['text']])
     assert not outside,outside
-    for fig in ('react-task-dependence','audit-with-artifacts'):
+    for fig in ('review-timeline','review-framework','review-knowledge-memory','review-topologies',
+                'review-sciencebench','review-audit','review-evidence-cycle'):
         figure=fitz.open(ROOT/'figures'/f'{fig}.pdf')
         assert len(figure)==1 and len(figure[0].get_text())>80
     provenance=json.loads((ROOT/'figure-provenance.json').read_text(encoding='utf-8'))
     for name,digest in provenance['data_sha256'].items():assert sha(ROOT/'data'/name)==digest
     for name,digest in provenance['figure_sha256'].items():assert sha(ROOT/'figures'/name)==digest
-    record=dict(title='面向科研任务的多智能体系统综述：知识、记忆与协作的机制及证据边界',
+    for panel in ('coscientist-suzuki','coscientist-sonogashira'):
+        figure=fitz.open(ROOT/'figures'/f'{panel}.pdf')
+        assert len(figure)==1 and len(figure[0].get_drawings())>15,panel
+    record=dict(title='面向科研任务的多智能体系统综述：技术脉络、关键方法与可信评价',
       author='蒋佳豪',student_id='22671064',identity_supplied_by_user=True,
       language='zh',status='substantially revised AI-assisted narrative review; author review pending',
       pages=len(doc),body_chinese_characters_excluding_headings_figures_tables_equations_and_references=characters,
       minimum_body_characters=3000,body_length_requirement_satisfied=True,
-      figures=figures,tables=tables,primary_studies=15,tool_references=1,
+      figures=figures,tables=tables,scholarly_reports=32,review_reports=3,tool_references=1,
+      related_reports_not_counted_as_independent_replications=True,
       references=len(keys),all_references_cited=True,original_experiments_conducted=False,
       primary_fulltexts_retrieved=True,source_selection='purposeful narrative, not systematic or exhaustive',
       template='unmodified official AAS class with a separate ZJUI course adaptation package',
@@ -83,9 +88,9 @@ def verify():
       technical_packaging_complete=True,author_review_confirmed=False,submission_ready=False,
       pending=['author review and compliance with course rules on AI assistance'],
       source_sha256={p.name:sha(p) for p in list(ROOT.glob('review*.tex'))+
-         list(ROOT.glob('figure-*.tex'))+list(ROOT.glob('table-*.tex'))+
          [ROOT/'aas.cls',ROOT/'picins.sty',ROOT/'journal-review.sty',ROOT/'metadata.tex',
-          ROOT/'verify_review.py',ROOT/'figure-provenance.json',ROOT/'review-sources.json']},
+          ROOT/'verify_review.py',ROOT/'figure-provenance.json',ROOT/'review-sources.json',
+          ROOT/'make_review_diagrams.py',ROOT/'format_references.py',ROOT/'reference-records.tex']},
       pdf_sha256=sha(path))
     (ROOT/'review-verification.json').write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print(f'Review: {characters} Chinese body characters, {figures} figures, {tables} tables, {len(keys)} references; {len(doc)} pages.')

@@ -1,41 +1,41 @@
 {
   "reviewed": "2026-11-09",
   "artifact": "output/pdf/multi-agent-literature-review.pdf",
-  "pdf_sha256": "e59489ae3c569544c2e46ec36b7d0881e23090554b3b1255c9a5f4539fab3984",
-  "pages": 10,
-  "renderer": "Poppler pdftoppm -scale-to 1900 -png",
-  "contact_sheet": "tmp/pdfs/journal-final-contact.png",
+  "pdf_sha256": "7f046085d71de904bac75b7624cfdbcdf2c425dc7eea5abf1a61de51d5ed413f",
+  "pages": 14,
+  "renderer": "Poppler pdftoppm -scale-to 1800 -png",
+  "contact_sheet": "tmp/pdfs/scholarly-final-contact.png",
   "all_pages_contact_sheet_reviewed": true,
-  "final_detailed_pages": [
-    2,
-    8,
-    9,
-    10
-  ],
-  "previous_iteration_detailed_pages": [
+  "detailed_pages_across_final_iterations": [
     1,
-    3,
     4,
     5,
-    6,
-    8,
-    10
+    7,
+    10,
+    11,
+    12,
+    13,
+    14
   ],
   "checks": [
-    "ZJUI vector logo proportions and complete author identity",
-    "two-column reading order and section hierarchy",
-    "all four figures and three tables visible",
-    "plot labels and values legible",
-    "caption sources and limitations present",
-    "reference identifiers not clipped",
-    "no text or graphics overlap",
-    "no blank pages or unresolved citation markers",
-    "PDF and submission copy hashes identical"
+    "ZJUI logo proportions, author identity and bilingual front matter",
+    "Two-column text, section hierarchy and no nearly empty trailing page",
+    "All eight figures and four tables visible with captions and source attribution",
+    "Technical diagram labels, arrow directions and stated schematic scope",
+    "All original experimental panel axes, m/z units and final tick values preserved",
+    "Quantitative plot legends, axis scales, numerical labels and benchmark protocol",
+    "Bibliography labels and source identifiers legible without clipping",
+    "No visible overlapping text, unresolved citations or missing glyphs",
+    "Final conclusion has no isolated single-line continuation",
+    "All four delivery copies are byte-identical to the audited PDF"
   ],
-  "layout_changes_after_first_render": [
-    "left-aligned table text",
-    "caption label spacing",
-    "9.5pt references and no reference entry split across pages"
+  "changes_after_visual_review": [
+    "Widened timeline limits to retain first annotation",
+    "Separated ScienceAgentBench panel titles and legends and restored complete model labels",
+    "Expanded original panel crop to retain right ticks and bottom m/z labels",
+    "Moved graph arrowheads outside topology nodes",
+    "Reduced bibliography spacing and condensed the tool note to remove an almost-empty fifteenth page",
+    "Edited conclusion and explicitly documented best-of-three benchmark aggregation"
   ],
   "visual_defects_remaining": [],
   "author_review_confirmed": false

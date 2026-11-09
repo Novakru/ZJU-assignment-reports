@@ -1,66 +1,83 @@
-# 综述范围与证据记录
+# 文献范围、写作修订与图表依据
 
-核对日期：2026-11-09。类型：问题导向叙述性综述。
+核对日期：2026-11-09。综述类型：结构化叙述性综述。
+未宣称穷尽检索、双人筛选、PRISMA系统综述或元分析。
 
-目标是解释知识组织、持久状态和代理协作怎样影响科研结论的可核验性。
-15项研究采用目的性选择，覆盖基础机制、科研系统及负面证据；不是PRISMA系统综述，
-没有声称检索穷尽、双人筛选、数据库结果总数或进行了新实验。
+## 范围与版本
 
-## 本轮补充检索
+32篇学术报告，含3篇相关综述和不同版本的研究报告；另列1项写作工具来源。
+The AI Scientist的2024预印本、2025第二版与2026期刊报告在来源清单中关联，
+不作为三次独立复现。其余固定版本与全文校验值见 `review-sources.json`。
+在获取的原始PDF中针对性阅读了方法、评价及局限，未宣称逐页精读所有长附录。
 
-以下是实际使用的发现性网络查询。它们是补充检索，不能代替完整数据库检索。
+资料发现使用学术域名限制的网络查询、论文题名检索与引用追踪。
+本轮实际查询包括：
 
-- `Towards an AI co-scientist 2025 arxiv 2502.18864 scientific validation`
-- `site.nature.com "Virtual Lab" "nanobodies" 2025 Swanson`
-- `site.nature.com "Autonomous chemical research" Boiko MacKnight 2023`
-- `site.arxiv.org "The Virtual Lab" Swanson 2024`
-- `"The more you automate, the less you see" authors 2026`
-- `"The more you automate" "arxiv"`
+- `site.arxiv.org survey LLM agents scientific discovery multi agent science review 2025 taxonomy`
+- `site.aas.net.cn 大语言模型 智能体 综述 科学 发现`
+- `site.jos.org.cn 大语言模型 多智能体 综述`
+- `site.nature.com "Towards an AI co-scientist" 2026`
+- `site.arxiv.org "Language agents achieve superhuman synthesis"`
+- `site.arxiv.org "AI Scientist-v2"`
+- `site.arxiv.org "ResearchAgent" "2024"`
+- `site.nature.com "Augmenting large language models with chemistry tools"`
+- `site.aclanthology.org "ResearchAgent: Iterative"`
+- `site.nature.com "The AI Scientist" "2026" "651"`
 
-通过arXiv元数据、Nature原文和原文参考文献链补充五项研究；后续从原始站点获取完整PDF，
-在本地读取相关机制、评价和局限。没有使用新闻或商业论文摘要作为正文证据。
-GraphRAG等原有十项来源复用已下载的固定版本全文。
+检索命中不作为事实验证；结果用于定位arXiv、ACL Anthology及期刊原文。
+未使用新闻、商业摘要网站或其他综述的参考文献列表来代替原始结果核对。
 
-Virtual Lab和Coscientist采用Nature正式稿，避免与早期预印本混计。
-Luo等的结果图固定引用2025-12-20的arXiv v2；检索还发现2026年的后续出版记录，
-但没有将后续版本的数据、表号和样本设置混入本图。
-AI co-scientist固定v1，MAST固定v2。版本选择是为保证可核对，不表示这些一定是最新版本。
+## 真实综述的参考方式
 
-## 提取与核对
+已打开并参考以下综述的章节、表达与图表组织：
 
-`evidence-extraction.csv`记录研究、定位、本文用途与限制。
-`review-sources.json`记录全文下载链接、页数和SHA256。
-全文PDF及文字缓存仅用于本地阅读，不打入提交包，也不上传Git。
+1. 郑逸宁等，《大语言模型的工具使用综述》，自动化学报2025，
+   <https://doi.org/10.16383/j.aas.c240793>。
+   参考其从定义、发展路径到机制和应用的连续论述；已查看PDF排版页。
+2. Zheng等，From Automation to Autonomy，EMNLP 2025，
+   <https://aclanthology.org/2025.emnlp-main.895/>。
+   比较其自主层次与本文功能分层的不同。
+3. Wei等，From AI for Science to Agentic Science，固定v2，
+   <https://arxiv.org/abs/2508.14111v2>。
+   对照能力、研究过程与领域应用的关系，未照搬其整体分类或插图。
+4. 陈旭，《基于大语言模型的自主智能体概述》，CCL 2024前沿综述，
+   <https://aclanthology.org/2024.ccl-2.8.pdf>。
+   用于中文学术表达与功能分析的编辑参照，未据此转述实验数据。
 
-两组图表数值保存为 `data/react.csv` 与 `data/audit.csv`。
-已打开原PDF对应页面逐项核对，图由 `make_figures.py` 重绘。
-原表没有本图需要的重复运行区间，不补造误差条；不合并不同论文的性能分数。
+本稿由课内知识增强、记忆和自动科研问题出发形成独立论述，
+没有拼接上述综述的段落，也不将别人的分类直接写成本文原创贡献。
+“问题引入、方法总结、自己的理解”分别落实到引言、方法比较和综合讨论。
 
-关键防误读处理：
+## 图表数据和许可
 
-- ReAct不是多代理对照；CoT-SC有额外采样，图不能证明相同预算下的优势。
-- Agent Laboratory的6.1与3.8属于原文特定自动/人工评分比较。
-- Virtual Lab的92个候选、78个更高AF分数和60个更优Rosetta分数，不组成通用发现成功率。
-- 审计研究每类20例，其中一部分阳性为注入缺陷，不据此估计自然缺陷发生率。
-- 等相关方差公式是有明确假设的数学说明，不是测量得到的代理相关性或投票准确率。
-- 图1、图2与评价设计为分析建议，未冒充原文已验证架构或本项目新实验。
+图1、2、3、4、8为矢量机制与脉络归纳，没有用位置、面积或边宽表示测得效果。
+图5左侧是流程归纳，右侧是Coscientist原图5i、5j的未经曲线处理的矢量面板。
+来源：Boiko等，Nature 2023，<https://doi.org/10.1038/s41586-023-06792-0>；
+原文PDF许可段注明CC BY 4.0。提取页为PDF第6页，面板范围分别为
+`(395,376,477,528)`与`(478,376,561,528)`；保留坐标、刻度、单位、曲线及数值，仅调整排列。
+已检查m/z标签与最右刻度完整。
 
-## 科研技能与排版来源
+图6由ScienceAgentBench固定v3表3（PDF第8页）重绘，
+选取GPT-4o和Claude 3.5 Sonnet在无专家知识下的全部三种框架。
+两模型的执行率、任务成功率与费用保存于 `data/scienceagentbench.csv`。
+基准有102项任务，每项独立运行三次后，按SR、VER、CodeBERTScore、较低费用依次择优，
+再汇总入选运行的指标；不是三次运行均值。费用和模型版本均属原论文时期。
+不把执行率解释为科学发现成功率，也不把历史API费用当成现行价格。
 
-已安装并参考K-Dense的 `literature-review` 与 `scientific-visualization`：
+图7由Luo等固定v2第6.2节及表11（PDF第16—18页）重绘。
+100个审计案例，每类20例，正负均衡，部分缺陷由原作者受控注入。
+数据保存于 `data/audit.csv`，不用于估计自然缺陷发生率。
+数值图都只展示原表点估计，没有补造误差条或显著性。
 
-- <https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/literature-review>
-- <https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/scientific-visualization>
+## 来源与写作技能
 
-工具来源文献（正文参考文献第16项，单独说明，不计入15项研究）：
-Kassis T, Agarwal V, He Y, Patel D, Brueckner A M. Scientific Agent Skills: A Library of
-Procedural Knowledge for Research Agents. 2026. <https://doi.org/10.48550/arXiv.2609.00065>。
-作者、题名与年份已从arXiv记录核对；没有声称它是Nature官方工具。
+已安装并读取K-Dense的 `literature-review`、`scientific-writing` 和 `scientific-visualization`：
+<https://github.com/K-Dense-AI/scientific-agent-skills>。
+工具出处单独列为第33项，作者、题名及年份已对照arXiv当前记录。
+技能不是Nature官方模板，也不是科学质量认证。
 
-排版采用《自动化学报》官网当前可下载的2026-09-09版 `aas.cls`。
-已先编译原始模板，成功产生4页样稿；原类文件和picins保持原样。
-适配放在 `journal-review.sty`：加入ZJUI官方矢量标识和个人课程信息，移除期刊发表元数据，
-正文11pt、双栏、三线表及编号引文。来源、原始文件哈希与下载时间见 `template-source.json`。
-
-本稿使用AI辅助资料整理、写作和绘图，未声称已获得作者人工核阅或课程提交许可。
-技术检查与打包完成不等于作者已确认其科学判断及课程AI使用合规性。
+引用按首次出现排序，正文多篇引用排序并压缩；期刊、会议和电子报告标注类型。
+原始版本链接保留，文中数据优先对应固定全文，避免混合版本。
+`evidence-extraction.csv`记录来源的主要用途和定位，来源清单为每篇分配E编号。
+AI助手已访问原文并进行提取及一致性检查；作者人工核验状态未被虚构为完成。
+AI辅助说明与修订稿标识保留，未向教学平台或期刊投稿。

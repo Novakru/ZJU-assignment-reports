@@ -3,7 +3,9 @@ $ErrorActionPreference='Stop'
 Push-Location $PSScriptRoot
 try {
     New-Item -ItemType Directory -Force -Path 'tmp/pdfs','output/pdf' | Out-Null
-    & $PythonCommand -B make_figures.py
+    & $PythonCommand -B format_references.py
+    if ($LASTEXITCODE -ne 0) { throw 'Reference ordering failed.' }
+    & $PythonCommand -B make_review_diagrams.py
     if ($LASTEXITCODE -ne 0) { throw 'Published-data figure generation failed.' }
     foreach ($stem in @('report','materials','review')) {
         $passes=if ($stem -eq 'review') {3} else {2}
