@@ -1,0 +1,25 @@
+{
+  "publisher": "Acta Automatica Sinica / Chinese Journal of Automation",
+  "landing_page": "https://www.aas.net.cn/news/wjxz/37365181-f527-4227-8fa2-b4ce2efd0a3a.htm",
+  "download_url": "https://www.aas.net.cn/fileZDHXB/cms/news/info/2026/09/82389047ad484a0fad54da370a88cf2e/%E8%87%AA%E5%8A%A8%E5%8C%96%E5%AD%A6%E6%8A%A5LaTeX%E6%A8%A1%E6%9D%BF.zip",
+  "retrieved": "2026-11-09",
+  "zip_sha256": "0b4c5efd7ca5ece2617977475acee18a47ceb307788154b632974aa43a60b162",
+  "upstream_class": "aas.cls 2026/09/09 v1.0 by latexstudio-xmy",
+  "upstream_original_compile": "success with XeLaTeX / TeX Live 2025; 4 pages",
+  "upstream_files_unchanged": [
+    "aas.cls",
+    "picins.sty"
+  ],
+  "upstream_sha256": {
+    "aas.cls": "6806ea740616fa742f9c94eac598e94f6559186b964b5dbf23ebd272a3bece6b",
+    "picins.sty": "966be2d6697d350acc45763d06f503a80205c7f528f6eb580db004a8ae2939c0"
+  },
+  "local_adaptation": "journal-review.sty; original class unchanged; ZJUI identity and course front matter replace journal publication identifiers; 11pt body",
+  "not_official_zjui_template": true,
+  "not_a_journal_publication": true,
+  "upstream_rights": "Template files retain their original notices; no additional redistribution licence was included in the downloaded archive; no blanket relicensing claim.",
+  "skills": [
+    "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/literature-review",
+    "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/scientific-visualization"
+  ]
+}

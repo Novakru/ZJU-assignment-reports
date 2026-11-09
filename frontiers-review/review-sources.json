@@ -1,6 +1,6 @@
 {
   "retrieved": "2026-11-09",
-  "selection": "purposeful representative selection, not systematic or exhaustive",
+  "selection": "problem-oriented narrative review; 15 primary studies from 2020-2025, not systematic or exhaustive",
   "papers": [
     {
       "id": "2005.11401v4",
@@ -71,7 +71,53 @@
       "pages": 17,
       "sha256": "15e1731e255ec6b217792a1e077926807da77e8e46b69e6c57dda30d67794761",
       "downloaded": true
+    },
+    {
+      "id": "2408.06292v3",
+      "url": "https://arxiv.org/pdf/2408.06292v3",
+      "doi": null,
+      "pages": 186,
+      "sha256": "e911f90b0114d5e3fc23a0000177ea670fa9ed79d5f9a664efa2980fdb350507",
+      "downloaded": true
+    },
+    {
+      "id": "2502.18864v1",
+      "url": "https://arxiv.org/pdf/2502.18864v1",
+      "doi": null,
+      "pages": 81,
+      "sha256": "80730ea110ad450411aa8352a785e996cfcda06afd6e1c60277cb64a65cb676a",
+      "downloaded": true
+    },
+    {
+      "id": "virtual-lab-2025",
+      "url": "https://www.nature.com/articles/s41586-025-09442-9.pdf",
+      "doi": "10.1038/s41586-025-09442-9",
+      "pages": 22,
+      "sha256": "6f86d21e7e39a7c4c16aca0fe1dc21de65b4f07c8530df9e52f724a6b62a67c3",
+      "downloaded": true
+    },
+    {
+      "id": "coscientist-2023",
+      "url": "https://www.nature.com/articles/s41586-023-06792-0.pdf",
+      "doi": "10.1038/s41586-023-06792-0",
+      "pages": 13,
+      "sha256": "09cfaa1ccf4c951eebc347bab909e1e495d6701be38d3808c38016dff35dbd4e",
+      "downloaded": true
+    },
+    {
+      "id": "2509.08713v2",
+      "url": "https://arxiv.org/pdf/2509.08713v2",
+      "doi": null,
+      "pages": 26,
+      "sha256": "995682fdf8c764f904c325468d8b4c11e8b9afc52aa7fad19276165220faef78",
+      "downloaded": true
     }
   ],
-  "base_reading_sources": 8
+  "base_reading_sources": 8,
+  "tool_reference": {
+    "id": "2609.00065",
+    "url": "https://arxiv.org/abs/2609.00065",
+    "metadata_opened": "2026-11-09",
+    "counted_as_primary_study": false
+  }
 }

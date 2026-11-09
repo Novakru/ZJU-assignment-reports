@@ -1,0 +1,16 @@
+key,source_id,locators,review_role,boundary
+rag,2005.11401v4,Section 2 and experiments,Parametric and nonparametric knowledge,Retrieval relevance is not claim entailment
+react,2210.03629v3,Section 2 and Table 1 PDF p.5,Reason-action-observation and task contrast,Single-agent mechanism; sampling and tool budgets differ
+autogen,2308.08155v2,Sections 2 and 3,Programmable agent conversations,Framework organization does not prove scientific validity
+scientist,2408.06292v3,Abstract and Sections 3-5,End-to-end computational research,Automated reviewer threshold is not independent conference acceptance
+lab,2501.04227v2,Introduction p.2 and human evaluation sections,Research assistance and human involvement,Automatic overall 6.1/10 versus human 3.8/10 belongs to the reported comparison
+memgpt,2310.08560v2,Sections 2 and 3,Hierarchical context and external memory,Access and persistence do not establish truth
+graphrag,2404.16130v2,Sections 2-3 and evaluation/limitations,Entity-community summaries and global queries,Comprehensiveness and diversity are not factual accuracy
+middle,2307.03172v3,Multi-document QA and key-value experiments,Position-sensitive context utilization,Results are model/task-specific and cannot be assumed for all later systems
+generative,2304.03442v2,Architecture and evaluation sections,Memory-retrieval-reflection-planning,Behavioral believability is a different target from scientific truth
+correct,2310.01798v2,Definition of intrinsic self-correction and discussion,Limits of correction without external feedback,Does not rule out every externally grounded correction method
+cosci,2502.18864v1,Sections 3-5,Biomedical hypothesis generation and tournament evolution,Ranking is not truth probability; validation case types differ
+virtual,virtual-lab-2025,Computational pipeline and Fig.4; PDF pp.4-6,92 selected nanobodies and downstream experiments,78 improved AF scores and 60 improved Rosetta scores do not define a clinical or discovery success rate
+chem,coscientist-2023,Hardware control and integrated experiment design,Tool documentation and physical observation,Manual plate movement and limited reagent space remain part of conditions
+mast,2503.13657v2,Taxonomy and failure analysis,Specification/interagent/verification failures,Fixed v2 taxonomy; do not mix counts from other versions
+pitfalls,2509.08713v2,Section 6.2 and Table 11 PDF pp.16-18,Audit with paper versus process artifacts,100 balanced audit cases; some defects injected; not natural prevalence

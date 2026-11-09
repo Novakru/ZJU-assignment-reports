@@ -1,0 +1,25 @@
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}[x=1mm,y=1mm,
+ b/.style={draw=black!55,line width=.6pt,fill=white,align=left,text width=43mm,minimum height=19mm,font=\small,inner sep=3mm},
+ a/.style={-{Stealth[length=2mm]},line width=.8pt}]
+ \node[anchor=west,font=\bfseries\small] at (0,57) {a\quad 信息、状态与控制的分工};
+ \node[b] (k) at (25,40) {\textbf{知识层}\quad RAG / GraphRAG\\文献、原始片段、关系与出处};
+ \node[b] (m) at (84,40) {\textbf{状态层}\quad 长期记忆\\假设、观察、反证与版本};
+ \node[b] (c) at (143,40) {\textbf{控制层}\quad 多代理工作流\\规划、工具、交接与停止};
+ \draw[a] (k)--(m);\draw[a] (m)--(c);
+ \node[b,text width=151mm,minimum height=13mm,fill=PaperGray] (e) at (84,12)
+ {\textbf{证据关联}\quad 研究断言 $\leftrightarrow$ 原文 / 数据 / 执行记录 $\leftrightarrow$ 适用条件与检查结果};
+ \draw[a] (k.south)--(k.south|-e.north);\draw[a] (m.south)--(e.north);\draw[a] (c.south)--(c.south|-e.north);
+ \node[anchor=west,font=\bfseries\small] at (0,-10) {b\quad 工作流完成与结论接受需要分别判断};
+ \node[align=center,font=\small] (p1) at (20,-24) {提出假设\\\footnotesize 相关与可检验};
+ \node[align=center,font=\small] (p2) at (64,-24) {执行研究\\\footnotesize 对照与过程记录};
+ \node[align=center,font=\small] (p3) at (108,-24) {解释结果\\\footnotesize 反例与替代解释};
+ \node[align=center,font=\small] (p4) at (151,-24) {限定结论\\\footnotesize 支持范围与不确定性};
+ \draw[a] (p1)--(p2);\draw[a] (p2)--(p3);\draw[a] (p3)--(p4);
+ \draw[a,draw=EvidenceGreen] (p3.south) to[out=-90,in=-90] node[below,font=\footnotesize] {证据不足时返回} (p2.south);
+\end{tikzpicture}
+\caption{面向科研任务的功能分析框架。上部综合RAG、分层记忆与代理交互机制\cite{rag,autogen,memgpt}；
+下部为本文提出的解释与验收关系。箭头表示信息或控制联系，不表示测得的因果增益。}
+\label{fig:framework}
+\end{figure*}

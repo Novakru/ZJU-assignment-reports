@@ -22,7 +22,7 @@ def verify():
         doc=fitz.open(path)
         text='\n'.join(p.get_text() for p in doc)
         assert '工程技术前沿' in text
-        assert '作者姓名待填写' in text and '学号待填写' in text
+        assert '蒋佳豪' in text and '22671064' in text
         assert '非提交稿' in text
         for paper in source['papers']:
             assert paper['id'] in text,paper['id']
@@ -40,7 +40,7 @@ def verify():
                            submission_ready=False)
     report=dict(artifacts=records,course='工程技术前沿',language='zh',sources_verified=8,
                 original_body_requirement=3000,original_body_complete=False,
-                pending=['author name','student ID','author-written body','final word count'],
+                pending=['supporting artifacts are writing guides, not the completed review'],
                 course_prohibits_direct_ai_generated_submission=True,
                 template_base='MP2@9a46ef1 cover principles and official ZJUI vector identity; rewritten for personal review',
                 required_submit_deadline='2026-11-20 23:59 Asia/Shanghai',peer_review_deadline='2026-12-05',

@@ -1,86 +1,79 @@
-# 工程技术前沿：多智能体文献综述
+# 工程技术前沿：多智能体科研综述
 
-独立分支：`assignment-engineering-frontiers-review`，从仓库 `main` 建立。
-没有继承MP2分支的代码、实验、个人课程信息或小组贡献声明。
+分支 `assignment-engineering-frontiers-review` 从 `main` 建立。
+个人课程作业，作者蒋佳豪，学号22671064；不继承MP2的课程号、小组信息、代码或实验。
 
-## 完整综述初稿
+## 当前稿件
 
-按后续要求新增 `review.tex`，正文已写完，不再只有提纲。题目为
-“面向科研任务的多智能体系统：知识增强、记忆机制与可信性评估”，
-含中文摘要、问题引入、知识增强、记忆、协作、可信性评价、讨论与结论。
-有3幅原创矢量示意图、2张方法和评价比较表；另补充多智能体失败和内在自我纠错两篇原始论文，
-共10篇编号引文。正文汉字保守计数排除摘要、标题、图、表和参考文献后超过3000。
+题目：**面向科研任务的多智能体系统综述：知识、记忆与协作的机制及证据边界**。
 
-完整初稿：`output/pdf/multi-agent-literature-review.pdf`，同步至课程目录的
-`review/multi-agent-literature-review.pdf`；与原来的排版样稿、阅读材料分开保存。
-本稿为AI辅助生成和整理，没有声称是作者已独立完成的作业，也没有编造个人经历或系统实验。
-课程截图限制直接提交AI生成内容的规则仍有效，需要作者核阅、修改并确认允许的使用范围。
-姓名和学号未知，封面保留待填字段，尚未按个人正式文件名打包或上传。
-`review-verification.json` 记录正文字数、图表、引用、PDF哈希和待完成项。
+正文围绕知识、状态和控制建立分类，再比较计算研究、假设生成和实体实验，
+讨论失败机制、公平对照、证据核验及本文理解。
+含中文及英文摘要、4幅图、3张表，15项研究与1项单独标注的写作工具来源。
+保守正文汉字数排除摘要、标题、图表、公式及参考文献后超过8700，满足不少于3000字的长度要求。
+没有虚构新实验、论文录用、人工核阅或跨系统胜率排名。
 
-## 已完成的工作
+稳定预览：`output/pdf/multi-agent-literature-review.pdf`。
+个人命名文件：`output/pdf/蒋佳豪22671064.pdf`。
+构建后同步到课程目录 `review/`，并将个人命名PDF单独复制到课程目录 `submission/`。
+阅读指南与排版样稿保留在 `review/`，不混入 `submission/`。
 
-已阅读作业文字说明、课件截图，以及课内概括Markdown链接的长图。拟定主题为
-“面向科研任务的多智能体系统：知识增强、记忆机制与可信性评估”。
-范围围绕课内的知识增强、长上下文、记忆和科研验证，避免扩展成过于宽泛的AI技术盘点。
-基础阅读材料选取八篇论文，完整综述补充至十篇，均为目的性选择的原始文献，非穷尽式或系统综述。
+这是使用AI辅助整理、写作和绘图的课程修订稿；稿末保留资料与工具说明。
+技术完成不代表作者已确认科学判断或满足课程对AI使用的要求，未上传教学平台。
 
-MP2模板不宜直接提交：其实验章节、课程号、教学班、组员和英文提交设置不适用。
-本项目复用官方ZJUI矢量标识和封面字号原则，重写为中文个人综述版式，
-12pt正文、编号参考文献、方法比较表及原创概念关系图。
-封面原则参考 `assignment2-advanced-ai@9a46ef1`；没有复用其学术正文。
-官方标识来源：[ZJUI视觉规范](https://zjui.intl.zju.edu.cn/sites/default/files/2023-02/ZJUI%20VI.pdf)，
-第1页横向彩色组合，原PDF裁取范围 `(128,90,454,149)`，保持颜色、字形和比例。
-该标识权利归相应机构；本项目是个人课程排版，并非学校官方指定模板。
+## 期刊模板及ZJUI适配
 
-## 课程约束与当前状态
+采用[《自动化学报》官网LaTeX模板](https://www.aas.net.cn/news/wjxz/37365181-f527-4227-8fa2-b4ce2efd0a3a.htm)
+中的2026-09-09版 `aas.cls` 和 `picins.sty`，两个原文件保持原样。
+已先编译官方原始示例确认兼容，再由 `journal-review.sty` 单独适配。
 
-作业要求与课内内容相关、不少于3000字、图文并茂，包含问题引入、方法总结与本人理解，
-PDF文件按“姓名+学号.pdf”命名。截止时间2026年11月20日23:59，互评截止12月5日。
-课件截图还明确禁止直接提交AI生成内容。目前已按后续指令写完中文综述初稿，
-并验证正文字数、图表和引文，但这不等于作者已独立完成并符合AI使用规则。
-作者姓名、学号和本人核阅仍待完成。没有把AI初稿冒充为作者独立完成的作业，
-也没有建立正式submission目录或上传教学平台。
+保留双栏、学术标题层级、编号引用及三线表；正文调整到11pt，加入ZJUI矢量标识、课程及个人信息。
+期刊刊名、卷期、收录号、收稿日期和示例基金等发表元数据均不写入课程报告。
+这不是《自动化学报》发表文章，也不是学校官方指定课程模板。
+官方模板来源、下载时间和哈希见 `template-source.json`。
 
-如继续完善初稿，请修改 `review.tex` 并在 `metadata.tex` 填入真实作者信息。
-`report.tex` 保留为早期写作模板，不是当前完整正文。
-仅有标题、引文或字数统计通过，不意味着满足课程对独立完成的要求。
+标识来自[ZJUI视觉规范](https://zjui.intl.zju.edu.cn/sites/default/files/2023-02/ZJUI%20VI.pdf)，
+原PDF第1页横向彩色组合，裁切范围 `(128,90,454,149)`，保持比例与颜色。
+标识及上游模板的权利仍归各自权利人，不作额外授权声明。
 
-## 文件
+## 证据与图表
 
-- `report.tex`：中文学术综述排版样稿，含章节任务、图表位置和八篇编号引文。
-- `review.tex`、`review-references.tex`：完整综述正文及十篇编号参考文献。
-- `review-sources.json`、`review-verification.json`：完整综述的十篇来源与独立检查记录。
-- `materials.tex`：要求核对、模板判断、概念图、八篇阅读卡、比较维度与写作规划。
-- `metadata.tex`：个人作者信息，当前明确标为待填写。
-- `references.tex`：真实文献及固定arXiv版本。使用版本与首发年份分开标明。
-- `sources.json`：公开论文链接、下载时间、页数和SHA256；全文PDF只作本地阅读缓存，不提交到Git。
-- `inputs/`：用户给定作业资料及课堂概括长图的只读副本。课堂概括是二手材料，不能代替论文证据。
-- `output/pdf/`：完整综述初稿与两份准备PDF；构建后同步到课程目录下的 `review/`。
-- `verification.json`：来源、PDF与未完成项检查，不宣称已完成课程作业。
+- `review-sources.json`：15项研究的全文链接、版本、页数及SHA256。
+- `evidence-extraction.csv`：提取定位、在综述中的用途及边界。
+- `research-notes.md`：叙述综述范围、本轮实际查询和防误读记录。
+- `data/`：从原文表格逐项提取的数字，未将不同论文的分数合并排名。
+- `make_figures.py`、`figure-provenance.json`：数值图重绘及转换记录。
+- `figure-*.tex`：两幅概念矢量图，与两幅数值图的性质分别说明。
 
-全文核查范围是摘要、相关方法、评估与局限部分的针对性阅读，没有声称精读全部论文的所有附录。
-不报告本项目未运行的实验，不用跨论文不可比数值作排名。
+两个数值图分别来自ReAct表1和Luo等固定预印本v2表11；
+原PDF对应页面已打开核对，图注说明模型、指标、样本、预算差异和缺陷注入。
+未添加无法由原文支持的误差条。完整PDF只在忽略的 `cache/` 本地阅读，不打包提交、不上传Git。
 
-## 构建与复核
+已安装并参考K-Dense的 `literature-review` 和 `scientific-visualization`。
+工具论文单独列为第16项，不计入15项研究；它们不是Nature官方技能。
+详见 `research-notes.md` 的科研技能来源。
 
-需要Python（PyMuPDF）、XeLaTeX及中文字体。仓库根目录运行：
+## 构建与验证
+
+环境：Python 3.10或以上、PyMuPDF、Matplotlib、XeLaTeX；当前使用TeX Live 2025。
+Matplotlib重绘默认使用Windows的Microsoft YaHei字体，其他系统需选择可用的中文字体。
 
 ```powershell
 python -m pip install -r frontiers-review/requirements.txt
 powershell -NoProfile -ExecutionPolicy Bypass -File frontiers-review/build.ps1
 ```
 
-每个文件编译两遍，检查溢出、缺字和引用警告。`verify.py` 核对八篇来源、PDF中的
-非提交稿标签、作者待填提示、页面边界和哈希。统计的全部中文字符包括提示，
-不能作为最终3000字正文的通过证明。`verify_review.py` 则单独验证完整初稿：
-正文计数排除摘要、标题、图、表及参考文献，检查3图、2表、十篇引文与页面边界。
-该检查仍不确认作者身份或课程的独立完成要求。图片复核可用：
+构建生成数值图，编译准备材料两遍、综述三遍，并核对字数、引用、姓名学号、PDF元信息、来源哈希和页面边界。
+上游AAS组合ccaption与caption产生一条“未知类，使用标准默认值”的已知提示，
+构建仅豁免这一条，课程适配另设图注样式并做渲染检查；溢出、缺字、未定义引用和其他字体或包警告仍阻止交付。
 
-```powershell
-pdftoppm -scale-to 1400 -png frontiers-review/output/pdf/literature-review-layout.pdf frontiers-review/tmp/pdfs/layout
-pdftoppm -scale-to 1400 -png frontiers-review/output/pdf/reading-and-writing-guide.pdf frontiers-review/tmp/pdfs/guide
-pdftoppm -scale-to 1400 -png frontiers-review/output/pdf/multi-agent-literature-review.pdf frontiers-review/tmp/pdfs/review
-```
+`review-verification.json`记录技术检查，不虚构作者已核阅；
+`review-visual-audit.json`记录最终渲染检查。
+`report.tex`、`materials.tex`是早期样稿和阅读指南，不是当前完整综述。
 
-源文件和文献链接可以继续使用；完成本人正文后仍需人工检查论点、引文、图表及格式。
+## 课程要求
+
+作业主题需与课内内容相关、便于同学互评；不少于3000字，包含问题引入、方法总结与本人理解，
+图文并茂，提交按“姓名+学号.pdf”命名的PDF。
+截止为2026-11-20 23:59，互评截止2026-12-05。
+`inputs/`保存原资料副本，其中课堂概括属于二手材料，不作为论文结果的原始证据。

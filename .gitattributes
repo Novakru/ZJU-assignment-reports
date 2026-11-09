@@ -4,6 +4,11 @@
 *.ps1 text eol=lf
 *.md text eol=lf
 *.json text eol=lf
+*.csv text eol=lf
+*.txt text eol=lf
 *.pdf binary
 *.png binary
 frontiers-review/inputs/*.md whitespace=-blank-at-eol
+# Preserve the publisher's original template bytes and whitespace.
+frontiers-review/aas.cls -text whitespace=-blank-at-eol
+frontiers-review/picins.sty -text whitespace=-blank-at-eol

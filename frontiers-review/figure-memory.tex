@@ -1,0 +1,18 @@
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[node distance=6mm and 5mm,
+ b/.style={draw=black!55,align=center,text width=29mm,minimum height=12mm,font=\small,inner sep=2mm},
+ a/.style={-{Stealth[length=1.6mm]},line width=.7pt}]
+ \node[b] (h) {候选假设\\\footnotesize 生成依据与条件};
+ \node[b,right=of h] (o) {观察记录\\\footnotesize 原文、数据或日志};
+ \node[b,below=9mm of h,fill=PaperGray] (r) {修正或否定\\\footnotesize 保留反证与旧版本};
+ \node[b,below=9mm of o,fill=PaperGray] (v) {条件内支持\\\footnotesize 附检查范围};
+ \draw[a] (h)--(o);\draw[a] (o)--(v);
+ \draw[a] (o)--(r);\draw[a] (v)--(r);\draw[a] (r)--(h);
+ \node[below=6mm of r.south east,align=center,font=\footnotesize,text width=69mm]
+ {状态可以改变；原始证据与改变理由持续可追溯。};
+\end{tikzpicture}
+\caption{本文提出的科研记忆状态示意。借鉴记忆检索与分层存储思想\cite{memgpt,generative}，
+加入断言状态和修正关系；这是设计建议，并非原文已验证的架构。}
+\label{fig:memory}
+\end{figure}

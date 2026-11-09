@@ -1,0 +1,63 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{journal-review}[2026/11/09 AAS-based ZJUI course review]
+% Layout adaptation only; the downloaded aas.cls remains unchanged.
+\RequirePackage[a4paper,left=19mm,right=19mm,top=23mm,bottom=23mm,headheight=15pt,headsep=6mm]{geometry}
+\RequirePackage{fontspec}
+\setmainfont{TeX Gyre Termes}
+\setsansfont{TeX Gyre Heros}
+\RequirePackage{tabularx,xcolor,fancyhdr,tikz,microtype,placeins,xurl}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,backgrounds}
+\definecolor{ZJUIBlue}{HTML}{003F88}
+\definecolor{EvidenceGreen}{HTML}{28786B}
+\definecolor{MutedOrange}{HTML}{AA5927}
+\definecolor{PaperGray}{HTML}{F3F5F7}
+\hypersetup{hidelinks,pdftitle={\ReviewTitle：\ReviewSubtitle},pdfauthor={\AuthorName},
+ pdfsubject={工程技术前沿课程文献综述，修订稿}}
+\renewcommand{\baselinestretch}{1.0}
+\makeatletter
+\renewcommand\normalsize{\@setfontsize\normalsize{11}{16.2}}
+\makeatother
+\normalsize
+\setlength{\columnsep}{7.5mm}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0pt}
+\setlength{\emergencystretch}{1.8em}
+\setlength{\textfloatsep}{10pt plus 2pt minus 2pt}
+\setlength{\dbltextfloatsep}{12pt plus 2pt minus 2pt}
+\setlength{\floatsep}{10pt plus 2pt minus 2pt}
+\renewcommand{\topfraction}{.88}
+\renewcommand{\dbltopfraction}{.90}
+\renewcommand{\textfraction}{.10}
+\renewcommand{\floatpagefraction}{.75}
+\setcounter{topnumber}{3}
+\setcounter{dbltopnumber}{2}
+\ctexset{section={format=\raggedright\heiti\bfseries\fontsize{12}{17}\selectfont,
+ beforeskip=12pt,afterskip=6pt},subsection={format=\raggedright\heiti\fontsize{11}{16}\selectfont,
+ beforeskip=8pt,afterskip=4pt},bibname=参考文献}
+\captionsetup{font=small,labelfont=bf,skip=5pt,justification=justified,singlelinecheck=false}
+\AtBeginDocument{\captionsetup{labelsep=quad,font=small,labelfont=bf,justification=justified,singlelinecheck=false}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\fontsize{9}{12}\selectfont 蒋佳豪：面向科研任务的多智能体系统综述}
+\fancyhead[R]{\fontsize{9}{12}\selectfont 工程技术前沿}
+\fancyfoot[L]{\fontsize{8.5}{11}\selectfont ZJUI\quad 2026年秋季}
+\fancyfoot[C]{\fontsize{9}{12}\selectfont\thepage}
+\fancyfoot[R]{\fontsize{8.5}{11}\selectfont 课程综述·修订稿}
+\renewcommand{\headrulewidth}{.35pt}
+\raggedbottom
+\newcommand{\articleheading}{%
+ \noindent\begin{minipage}[c]{.48\linewidth}
+ \includegraphics[width=65mm]{assets/zjui-horizontal-color.pdf}
+ \end{minipage}\hfill\begin{minipage}[c]{.48\linewidth}\raggedleft
+ {\fontsize{11}{16}\selectfont 工程技术前沿\quad 2026年秋季}\par
+ {\fontsize{9.5}{14}\selectfont 期中文献综述\quad 2026年11月9日}
+ \end{minipage}\par\vspace{3mm}\hrule height .5pt\vspace{7mm}
+ \begin{center}
+ {\fontsize{21}{28}\selectfont\heiti\bfseries\ReviewTitle\par}
+ \vspace{2mm}{\fontsize{13.5}{19}\selectfont\ReviewSubtitle\par}
+ \vspace{4mm}{\fontsize{12}{18}\selectfont\AuthorName\quad 学号：\StudentID\par}
+ \vspace{1mm}{\fontsize{10}{14}\selectfont 浙江大学伊利诺伊大学厄巴纳香槟校区联合学院\par}
+ \end{center}\vspace{2mm}}
+\newcommand{\abstractlabel}[1]{\noindent\textbf{#1}\quad}
+\newcommand{\tabletext}{\fontsize{9.5}{13}\selectfont}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
