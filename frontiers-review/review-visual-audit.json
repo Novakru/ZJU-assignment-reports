@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-09",
+  "artifact": "multi-agent-literature-review.pdf",
+  "pages": 9,
+  "renderer": "Poppler pdftoppm, scale-to 1600",
+  "all_pages_rendered": true,
+  "all_pages_contact_sheet_inspected": true,
+  "detailed_pages_inspected": [
+    5,
+    7
+  ],
+  "caption_numbers_verified": true,
+  "table_word_breaks_corrected": true,
+  "abstract_body_flow_corrected": true,
+  "overflow_or_overlap_observed": false,
+  "source_hashes_match": true,
+  "review_copy_matches": true,
+  "original_research_experiments_claimed": false,
+  "author_information_pending": true
+}

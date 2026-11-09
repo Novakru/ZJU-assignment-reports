@@ -1,0 +1,33 @@
+{
+  "title": "面向科研任务的多智能体系统：知识增强、记忆机制与可信性评估",
+  "language": "zh",
+  "status": "complete AI-assisted draft; author information and review pending",
+  "pages": 9,
+  "body_chinese_characters_excluding_headings_figures_tables_and_references": 4090,
+  "minimum_body_characters": 3000,
+  "body_length_requirement_satisfied": true,
+  "figures": 3,
+  "tables": 2,
+  "original_research_experiments_conducted": false,
+  "references": 10,
+  "all_references_cited": true,
+  "reference_versions_verified": true,
+  "no_body_placeholders": true,
+  "source_selection": "representative, not exhaustive or systematic",
+  "author_confirmed": false,
+  "submission_ready": false,
+  "pending": [
+    "author name",
+    "student ID",
+    "author review and course AI-use compliance"
+  ],
+  "source_sha256": {
+    "review.tex": "153662fc4aa84ba6602a92854af255f6f7e5f2cbb765cc51fb33c4aef6abed89",
+    "review.sty": "b989f17af03d63d704dc2de8d9322e7dac3b2aa6502f158decfa4a415a2749a3",
+    "metadata.tex": "5d592292978b2b2316a4c7af698cdd0bf05936078bfbcdaddf2b5f375c5364e9",
+    "review-references.tex": "470521dabf281ccd9427298ed40d40473285f5cdd3713d9c2b34212381c32f96",
+    "review-sources.json": "f7463db1d9d462ed016d0c8fb5344d076a8a6523e917948cb7b9786afbaef2ff",
+    "verify_review.py": "f5e1d1df734088a5e3d7ac2f02f205f486160f68705a973c01c632dea0423e3c"
+  },
+  "pdf_sha256": "b94fe685460c6d7919de1c707608ffafd0fa219b9687cf9be9fcea2c992c7629"
+}

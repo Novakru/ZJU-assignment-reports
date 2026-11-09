@@ -4,7 +4,7 @@
 \RequirePackage{fontspec}
 \setmainfont{TeX Gyre Termes}
 \RequirePackage{amsmath,amssymb,graphicx,booktabs,tabularx,array,enumitem}
-\RequirePackage{xcolor,hyperref,fancyhdr,titlesec,microtype,tikz}
+\RequirePackage{xcolor,hyperref,fancyhdr,titlesec,microtype,tikz,caption}
 \usetikzlibrary{arrows.meta,positioning}
 \definecolor{ZJUIBlue}{RGB}{0,63,136}
 \hypersetup{colorlinks=true,linkcolor=ZJUIBlue,urlcolor=ZJUIBlue,citecolor=ZJUIBlue,
@@ -21,10 +21,15 @@
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{\small 工程技术前沿}
+\ifdefined\CompleteReview
+\fancyhead[R]{\small 多智能体科研系统文献综述}
+\else
 \fancyhead[R]{\small 文献综述写作准备}
+\fi
 \fancyfoot[C]{\small\thepage}
 \renewcommand{\headrulewidth}{.3pt}
 \raggedbottom
+\captionsetup{font=small,labelfont=bf,skip=6pt}
 \newcommand{\reviewcover}[1]{%
  \begin{titlepage}\centering
  \setlength{\parindent}{0pt}\setlength{\parskip}{0pt}
