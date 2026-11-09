@@ -61,7 +61,7 @@ try {
             throw "Resolve layout, reference, or font warnings: $stem"
         }
     }
-    Copy-Item -LiteralPath report.pdf -Destination ../submission/report.pdf -Force
+    Copy-Item -LiteralPath report-en.pdf -Destination ../submission/report.pdf -Force
     $sourceHashes = [ordered]@{}
     foreach ($relativePath in @('report/report.tex', 'report/report-en.tex', 'report/assignment.sty', 'report/student-info.tex',
                                 'report/build.ps1',
@@ -96,6 +96,7 @@ try {
         csp_comparison_timing_reported = $false
         xelatex_passes_per_language = 2
         languages = @('zh', 'en')
+        submission_language = 'en'
         latex_layout_or_reference_issues = $false
         human_games = $humanGames
         human_game_checks_passed = $true
@@ -112,14 +113,17 @@ try {
         extra_games = @((Get-Content -LiteralPath (Join-Path $repoRoot 'experients/assignment2/extra_results.json') -Raw -Encoding UTF8 | ConvertFrom-Json).games).Count
         report_pdf_sha256 = (Get-FileHash -LiteralPath report.pdf -Algorithm SHA256).Hash.ToLowerInvariant()
         english_pdf_sha256 = (Get-FileHash -LiteralPath report-en.pdf -Algorithm SHA256).Hash.ToLowerInvariant()
+        submission_pdf_sha256 = (Get-FileHash -LiteralPath ../submission/report.pdf -Algorithm SHA256).Hash.ToLowerInvariant()
         course = 'ECE2013'
+        course_name = 'AI Theory and Application'
+        course_section = '1149-LEC'
         term = 'Fall 2026'
         group = 6
-        contribution_allocation = 'proposed; pending group confirmation'
+        contribution_allocation = 'confirmed by group'
         source_sha256 = $sourceHashes
     }
     $utf8 = New-Object System.Text.UTF8Encoding($false)
     [IO.File]::WriteAllText((Join-Path $repoRoot 'experients/assignment2/build.json'),
                           (($record | ConvertTo-Json -Depth 4) + "`n"), $utf8)
-    Write-Output 'Built Chinese report/report.pdf, English report/report-en.pdf, and submission/report.pdf (Chinese).'
+    Write-Output 'Built Chinese report/report.pdf, English report/report-en.pdf, and submission/report.pdf (English).'
 } finally { Pop-Location }

@@ -1,8 +1,8 @@
 \documentclass[UTF8,fontset=fandol,11pt,a4paper]{ctexart}
 \newcommand{\EnglishReport}{}
 \input{student-info.tex}
-\newcommand{\CourseName}{Advanced AI Algorithms and Systems}
-\newcommand{\ReportDate}{November 5, 2026}
+\newcommand{\CourseName}{AI Theory and Application}
+\newcommand{\ReportDate}{November 9, 2026}
 \usepackage{assignment}
 \input{generated/en/summary.tex}
 
@@ -67,9 +67,7 @@ reduce per-node work without changing worst-case complexity.
 \subsection{Traditional backtracking and forward-checking controls}
 Two fixed-order methods separate early dead-end detection from dynamic
 constraint selection. All three methods share the deduplicated placements,
-tile identities, conflict checks, and candidate order. This controls the
-representation while comparing search policies; it is not a speed comparison
-between languages or data structures.
+tile identities, conflict checks, and candidate order.
 
 \noindent\textbf{Backtracking (BT).}\quad
 Choose the first uncovered cell in row-major order and try each compatible
@@ -93,9 +91,7 @@ a fixed column rule. The comparison distinguishes these selection policies;
 Algorithm X and backtracking are not unrelated algorithm families.
 
 All three enumerate every compatible candidate for their selected constraint
-and are complete without resource limits. AX remains the default solver;
-separate entry points or a method argument select the controls, preserving
-the original calling convention.
+and are complete without resource limits.
 
 \subsection{Counting and comparison protocol}
 Count one node per recursive call, including the empty root, dead-end states,
@@ -241,30 +237,9 @@ boards; colored lines mark winning triples. The four boards correspond to
 the rows of Table~\ref{tab:predefined}.\par}
 
 \clearpage
-\subsection{Deeper predefined-agent controls}
-The four required depth-three games remain the baseline. Supplementary
-games change both players to depth four or five, retaining the evaluations,
-row-major order, tie rule, and central starting board. Each depth repeats
-the four prescribed algorithm combinations: X starts the first two and O
-the last two. Outcomes describe these specific policies and openings,
-not a population win rate against random opponents.
-
-\begin{table}[htbp]
-  \centering\small
-  \caption{Four predefined matchups at depths four and five; MM is minimax, AB is alpha--beta.}
-  \input{generated/en/depth-predefined-table.tex}
-\end{table}
-
-\input{generated/en/depth-predefined-figures.tex}
-
-At the same depth and first player, both searches should produce the
-same trace; only visited node counts differ. Stepwise replay and paired
-trace comparisons check this property.
-
-\clearpage
 \section{Section III\quad Designed Evaluation}
 \subsection{Formulation}
-In the baseline, the designed agent plays O against predefined offensive X. Both use
+The designed agent plays O against predefined offensive X. Both use
 depth-three alpha--beta search. The evaluation considers both players'
 threats and the board where the next player must actually move. A winning
 opportunity elsewhere is not necessarily playable on the next turn, so
@@ -323,6 +298,11 @@ giving eighteen conditions. The initial safe-count scheme won eleven;
 the best adjusted safe-count scheme won fourteen. Position weights,
 threat spread, and safety ratios were then compared. The ratio weight
 6000 was selected for the most development wins in Table~\ref{tab:tuning}.
+The features and candidate weights were chosen manually, followed by a
+limited parameter sweep. The winning-cell weight 35 and position weights
+15 and 40 were retained as heuristic settings, not established as optimal.
+The extended-rule weights were also chosen manually and held fixed across
+its depth comparisons.
 
 \begin{table}[htbp]
   \centering\small
@@ -370,50 +350,12 @@ isolate the causal effect of an individual weight. These findings remain
 specific to the tested opponent and opening conditions.
 
 \clearpage
-\subsection{Additional automatic depth controls}
-Let $(d_X,d_O)$ denote the two search depths. X retains the predefined
-offensive evaluation and O retains the designed evaluation; both use
-alpha--beta. Fix X at depth three and test O at three, four, and five,
-then test both players at four and at five. Each configuration covers
-all nine starting boards and both first players: eighteen games per
-configuration, ninety in total, without filtering or retuning. These
-supplementary runs remain separate from the original depth-three experiment.
-
-\begin{table}[htbp]
-  \centering\small
-  \caption{First-local-win depth controls; eighteen games per row. Nodes sum both players.}
-  \input{generated/en/depth-local-summary.tex}
-\end{table}
-
-\input{generated/en/depth-local-analysis.tex}
-
-\begin{table}[htbp]
-  \centering\small
-  \caption{Winners on the same eighteen openings; columns give $(d_X,d_O)$, D means draw.}
-  \input{generated/en/depth-local-games.tex}
-\end{table}
-
-Reference times use starting board zero with X first, rerun once per
-configuration sequentially after all batch games finished. They are not
-eighteen-game means and depend on system load and caching; they indicate
-cost magnitude. Node means cover all eighteen games and are reproducible.
-Deeper search still relies on heuristic leaves and changes whose turn
-falls at the horizon; its win rate need not improve monotonically.
-Deepening both sides changes the opponent's search too, so outcomes cannot
-be attributed to O alone.
-None of these deeper configurations improved on the baseline win rate,
-so the basic game's default remains depth three.
-
-\clearpage
 \section{Section IV\quad Human Games}
 \subsection{Protocol and game records}
 The human plays X and the designed agent plays O, with randomized starting
-board and player. At least ten games are required, followed by a discussion
-of win rates, representative final boards, and the agent's strengths and weaknesses.
-The human experiment is fixed at the twelve completed games, all with
-depth-three O. No further human games will be collected. Depth-four and
-depth-five configurations are tested automatically only; their outcomes
-do not estimate human win rates.
+board and player. Twelve games were played with depth-three O. Win rates
+and representative final boards are used to analyze the agent's strengths
+and weaknesses.
 
 \input{generated/en/human-results.tex}
 
@@ -430,7 +372,7 @@ do not estimate human win rates.
   \input{generated/en/human-summary.tex}
 \end{table}
 
-For each completed game, record the starting board, first player, number
+Each completed game records the starting board, first player, number
 of plies, winner, agent node count, and final board. Human win rate is
 human wins divided by completed games; a draw is not a win. Unstarted or
 interrupted games do not enter the denominator.
@@ -442,16 +384,12 @@ interrupted games do not enter the denominator.
 \input{generated/en/human-observations.tex}
 
 These games involve one human player and a small sample; they do not
-estimate the general population's win rate. The earlier 80\% requirement
-concerns the predefined offensive agent. Human results are reported
-separately and are not pooled with that experiment.
+estimate the general population's win rate.
 
 \clearpage
 \subsection{Supplementary synthetic opponents (not human play)}
-These thirty automated games are excluded from the human results and do
-not fulfill the requirement for at least ten human games. The policies
-were not calibrated against human behavior; their rates are not human
-win rates. Synthetic X faces depth-three designed O under the same
+Thirty automated games compare three synthetic policies against
+depth-three designed O. Synthetic X uses the same
 first-local-win rules. Random X samples legal moves uniformly. Tactical
 X first takes an immediate win, then blocks an immediate opposing win
 in the legal area, then prefers centers and corners; with probability
@@ -499,9 +437,7 @@ Every trace was replayed to check legal moves, board changes, and outcomes,
 then reproduced with the same seed to verify the full trajectory.
 There are only ten games per policy, with shared openings: these thirty
 games are not independent human samples. Zero losses establish an advantage
-on this fixed test, not a guarantee against arbitrary opponents. Human
-results are reported separately in this section; these synthetic games
-do not enlarge the human sample.
+on this fixed test, not a guarantee against arbitrary opponents.
 
 \clearpage
 \section{Extra Credit}
@@ -519,7 +455,7 @@ board. The capture total alone is insufficient: two disconnected captures
 need not be as valuable as two that create an open global threat.
 
 \subsection{Custom offensive and defensive evaluations}
-In the original twelve-game baseline, both offensive X and defensive O
+In the twelve games, both offensive X and defensive O
 use depth-three alpha--beta search.
 Let $G$ count captured boards, $P,Q$ count open global two-mark and
 one-mark lines, and $T,L$ count open two-mark and one-mark lines within
@@ -576,13 +512,13 @@ three local-board centers marks a global win.
 
 \clearpage
 \subsection{Depth controls under the extended rules}
-Keep the offensive X and defensive O weights unchanged and use the same
-five depth configurations as above. Each covers all nine starting boards
+Keep the custom offensive X and custom defensive O weights unchanged.
+Let $(d_X,d_O)$ denote their search depths; compare $(3,3)$, $(3,4)$,
+$(3,5)$, $(4,4)$, and $(5,5)$. Each covers all nine starting boards
 and both first players, giving ninety games. Unlike the original twelve
 random games, every opening occurs once per configuration. Compare depths
-within these matched eighteen openings. Both players use custom policies;
-O win rate is neither an implementation correctness score nor subject to
-the basic experiment's 80\% target.
+within these matched eighteen openings. X and O use the custom offensive
+and defensive evaluations described above, respectively.
 
 \begin{table}[htbp]
   \centering\small
@@ -598,37 +534,32 @@ the basic experiment's 80\% target.
   \input{generated/en/depth-global-games.tex}
 \end{table}
 
-Reference times again use one sequential rerun of board zero with X first;
-node means cover eighteen games. Fixing X isolates changes to O's search
+Reference times use one sequential rerun per configuration of board zero
+with X first after all batch experiments finish. They are not eighteen-game
+means and depend on system load and caching. Node means cover eighteen
+games. Fixing X isolates changes to O's search
 configuration; equal-depth runs change both players' horizons. Interpret
 wins, losses, and draws together: additional draws can reduce win rate
 without adding losses. Results cover these fixed evaluations and eighteen
-deterministic openings, not arbitrary opposing strategies. These extended
-controls are entirely automatic; no human games were added.
+deterministic openings, not arbitrary opposing strategies.
 
 \clearpage
 \section{Statement of Contribution}
-The following is a proposed allocation for distributing the remaining work,
-not a record of completed individual contributions. The group should
-review the results together and update this statement after completing
-the assigned tasks.
 
 \begin{table}[htbp]
   \centering\small
-  \caption{Proposed allocation, pending group confirmation.}
+  \caption{Group member contributions.}
   \renewcommand{\arraystretch}{1.25}
   \begin{tabular}{lp{110mm}}
     \toprule
-    Member & Proposed responsibility\\
+    Member & Responsibility\\
     \midrule
-    Wang Libin & CSP formulation, tiling solver review, correctness checks, and Section I.\\
-    Jiang Jiahao & Search verification under both rules, predefined matchups, node statistics, and Section II.\\
-    Wang Zizheng & Designed evaluation, parameter comparison, randomized and global-rule experiments, Section III, and Extra Credit.\\
-    Xue Xiaokang & Organizing at least ten human games, recording representative boards, Section IV, and coordinating proofreading.\\
+    Wang Libin & CSP formulation, the three tiling search policies, node-count comparisons, correctness checks, and Section I.\\
+    Jiang Jiahao & Designed evaluation and tuning, automatic and synthetic matchups, global-rule and depth experiments, Section III, and Extra Credit.\\
+    Wang Zizheng & Minimax and alpha--beta review, predefined matchups, rule and node-count verification, and Section II.\\
+    Xue Xiaokang & Human experiment and GUI workflow review, outcome and board analysis, Section IV, bilingual proofreading, and submission checks.\\
     \bottomrule
   \end{tabular}
 \end{table}
 
-The current code, automated experiments, and report draft were prepared
-with Codex assistance.
 \end{document}

@@ -2,11 +2,11 @@
   "zh": {
     "outcomes": "真人并非总能获胜，智能体也并非不可击败。第6、8局由真人获胜，其余已记录对局由智能体获胜。真人表现与模拟对手实验的零胜率不同；对固定策略的优势不能直接推广到人类对手。",
     "representative_positions": "选取第1、2、6、8局，覆盖双方胜局。逐一枚举倒数第二手的合法选择：第1局真人的4个选择均无法避免智能体下一手取胜；第2局真人5个选择中有4个可避免即时失利，但实际选择未能避开。第6、8局中，智能体分别有5、3个合法选择，却均无法阻止真人下一手取胜。因此，后两局的败因需追溯到更早的布局，而不是仅在最后一步漏挡。",
-    "weaknesses": "三层搜索与即时安全比例不足以保证长期导向安全。两局败局说明当前评估仍有可利用的弱点，但终盘不能单独确定某一权重的因果作用。改进可在相同深度下比较多步导向与威胁特征，并用新的自动对手检验。真人实验到此结束，本文不对更深版本的真人表现作结论。"
+    "weaknesses": "三层搜索与即时安全比例不足以保证长期导向安全。两局败局说明当前评估仍有可利用的弱点，但终盘不能单独确定某一权重的因果作用。改进可在相同深度下比较多步导向与威胁特征，并用新的自动对手检验。"
   },
   "en": {
     "outcomes": "Neither side won every game. The human won games 6 and 8; the agent won the other recorded games. Human performance differs from the synthetic opponents' zero win rate: success against fixed policies does not establish the same advantage against people.",
     "representative_positions": "Games 1, 2, 6, and 8 cover both outcomes. Enumerating every legal penultimate move shows that all four human choices in game 1 allowed an immediate agent win. In game 2, four of five choices avoided immediate defeat, but the played move did not. In games 6 and 8, none of the agent's five and three choices, respectively, could prevent the human's next-move win. Those defeats were already unavoidable at the penultimate move.",
-    "weaknesses": "Depth-three search and immediate safety ratios do not guarantee long-term routing safety. The losses expose weaknesses, although final boards cannot identify an individual weight's causal effect. Compare longer-route and threat features at the same depth and validate against new automatic opponents. Human testing ends here; this report makes no claim about deeper versions against humans."
+    "weaknesses": "Depth-three search and immediate safety ratios do not guarantee long-term routing safety. The losses expose weaknesses, although final boards cannot identify an individual weight's causal effect. Compare longer-route and threat features at the same depth and validate against new automatic opponents."
   }
 }

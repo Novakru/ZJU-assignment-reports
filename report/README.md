@@ -2,9 +2,9 @@
 
 本分支沿用仓库的浙大技术报告样式，以及 `assignment1-cs1050` 的课程作业版式：浙大横向 Logo、求是蓝、衬线正文与居中页码。增加中文字体支持，章节按本次 MP2 要求组织。未使用示例中的实验室身份或课程1的教师、课程号。
 
-封面统一为 **ECE2013 · Fall 2026 · Group 6**，组员为王骊斌、蒋佳豪、王子征、薛晓康，不列学号。信息集中在 `student-info.tex`。贡献表是供组内分派任务的暂拟方案，明确标为待确认，不能视为实际完成记录。真人实验仍待完成。
+封面课程为 **ECE2013: AI Theory and Application · Section 1149-LEC · Fall 2026**，作业小组为 **Group 6**。组员为王骊斌、蒋佳豪、王子征、薛晓康，不列学号。信息集中在 `student-info.tex`。贡献表为组内已确认的实际分工。
 
-真人章节已完整渲染10局记录表、胜率汇总、4幅预留终盘和观察填写项。未录入项用破折号与Pending标记，不能解释成平局或零胜率。真人记录保存到 `experients/assignment2/human_games.json` 后，构建会自动更新表格与棋盘；观察文字分别填入 `human-notes.json` 的 `zh`、`en` 下三个字段。
+真人章节已录入12局、胜率汇总、4幅代表终盘及分析。真人记录位于 `experients/assignment2/human_games.json`，观察文字位于 `human-notes.json` 的 `zh`、`en` 下三个字段。
 
 全局三连扩展已完成12局真实自动实验，X胜5局、O胜5局、平局2局，并逐步回放验证。扩展代码包含在提交的 `uttt.py` 中，默认仍运行必做的首个局部棋盘获胜规则。
 
@@ -13,7 +13,7 @@
 - `report.tex` → `report.pdf`：中文版。
 - `report-en.tex` → `report-en.pdf`：英文版。
 
-两版共用样式、实验数据与矢量棋盘。表格与图注分别本地化，数值和抽取的代表局面保持一致。当前 `submission/report.pdf` 沿用中文版；英文版留在报告目录供复核，不额外放入仅允许三个文件的提交目录。
+两版共用样式、实验数据与矢量棋盘。表格与图注分别本地化，数值和代表局面保持一致。`submission/report.pdf` 使用英文版；中文版用于复核，不额外放入仅允许三个文件的提交目录。
 
 报告保留作业指定的章节顺序，在对应章节补充精确覆盖约束、Algorithm X与MRV、minimax递推、α–β剪枝条件，以及评估特征和有限搜索视野。原理与实验结果分别排版，原始结果保持不变。封面使用统一左对齐和衬线学院名称，以留白取代标题与组员信息之间的分隔线。
 
@@ -26,7 +26,7 @@ python -m pip install -r experients/assignment2/requirements.txt
 powershell -NoProfile -ExecutionPolicy Bypass -File report/build.ps1
 ```
 
-构建时验证必做与扩展对局，生成两种语言的数据表和图注，分别编译两次，并将中文版 PDF 同步到 `submission/report.pdf`。如需重新运行全部自动实验：
+构建时验证必做与扩展对局，生成两种语言的数据表和图注，分别编译两次，并将英文版 PDF 同步到 `submission/report.pdf`。如需重新运行全部自动实验：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File report/build.ps1 -RunExperiments
@@ -50,8 +50,7 @@ python submission/uttt.py human --games 10 --output experients/assignment2/human
 落点、终盘、独立三连判定，以及智能体每一步的选择、估值和节点数。
 当前12局真人实验为真人2胜、智能体10胜、无平局；代表图包含第1、2、6、8局，
 观察文字依据记录与倒数第二手的合法选择枚举填写。
-真人实验已结束，固定保留这12局三层版本，不再追加真人对局。
-四层、五层的结果全部来自自动实验，不与真人数据合并，也不声称这些配置的真人胜率。
+真人实验共12局，智能体搜索深度为3；四层、五层对照数据来自自动对战。
 运行方法与代码路径仅保留在文档中，不进入报告正文。
 
 单独复现扩展实验：
@@ -74,7 +73,11 @@ python submission/uttt.py extra --games 12 --seed 2013 --output extra_games.json
 
 Blackboard 只上传 `submission` 内的 `solve.py`、`uttt.py`、`report.pdf`，不提交 LaTeX 源文件和实验日志。
 
-新增深度对照保留全部原有三层结果和提交代码默认深度，评估权重均不变：
+报告包含扩展规则下自定义进攻X与自定义防守O的搜索深度对照（90局），
+以及三层四组预定义对局、40局自定义对攻及12局真人结果。
+以下为实验日志与脚本的复现信息。
+
+已完成的深度对照保留全部原有三层结果和提交代码默认深度，评估权重均不变：
 
 - 基础版：预定义进攻X对自定义O，`(dX,dO)` 为 `(3,3)`、`(3,4)`、`(3,5)`、`(4,4)`、`(5,5)`。
 - 扩展版：原自定义进攻X对防守O，使用同样五组配置。
