@@ -64,7 +64,7 @@ try {
     Copy-Item -LiteralPath report-en.pdf -Destination ../submission/report.pdf -Force
     $sourceHashes = [ordered]@{}
     foreach ($relativePath in @('report/report.tex', 'report/report-en.tex', 'report/assignment.sty', 'report/student-info.tex',
-                                'report/build.ps1',
+                                'report/build.ps1', 'report/assets/zjui-horizontal-color.pdf',
                                 'report/generate.py', 'submission/solve.py', 'submission/uttt.py',
                                 'experients/assignment2/results.json', 'experients/assignment2/extra_results.json',
                                 'experients/assignment2/run_extra.py', 'experients/assignment2/check_extra.py',
