@@ -1,6 +1,15 @@
 {
     "template_base":  "main@cc1fa9c and assignment1-cs1050 coursework layout",
     "behavioral_checks_passed":  true,
+    "csp_comparison_checks_passed":  true,
+    "csp_comparison_methods":  [
+                                   "backtracking",
+                                   "forward_checking",
+                                   "algorithm_x"
+                               ],
+    "csp_comparison_cases":  12,
+    "csp_comparison_node_limit":  1000000,
+    "csp_comparison_timing_reported":  false,
     "xelatex_passes_per_language":  2,
     "languages":  [
                       "zh",
@@ -20,20 +29,20 @@
     "human_requirement_satisfied":  true,
     "global_rule_checks_passed":  true,
     "extra_games":  12,
-    "report_pdf_sha256":  "75446e69a486a621a8d0a95090f376380f55659aa371b6e2c239af9cacbaf247",
-    "english_pdf_sha256":  "56d8f40c1fdb4fbae78f0335ef6f44f652fde44a3beb89bb7034db8f36590cb5",
+    "report_pdf_sha256":  "2aeed3df6c87b581b7aa14409f2830c02996a9691e25ef0321b36b4f96ae0729",
+    "english_pdf_sha256":  "f8c6a90aa6d62313d3b496c03923f10154e53d36a63b4a63c7e69c3568049bc7",
     "course":  "ECE2013",
     "term":  "Fall 2026",
     "group":  6,
     "contribution_allocation":  "proposed; pending group confirmation",
     "source_sha256":  {
-                          "report/report.tex":  "fba291f4c463fa3f7aedd40575aad3e20149116ff3f50ff41055357c254f306b",
-                          "report/report-en.tex":  "4d32ef942e4bfb9d573eeb9af209498dc797c5b4097f6c5cc559b07eab72c967",
+                          "report/report.tex":  "521755b3445f368d9b53b4383750e721e52d09b86441950a7e8573db3198fa1e",
+                          "report/report-en.tex":  "725907a73e1776cccab4ac6f4d9ed4c125c45754775284b4c4eea46280ab30a4",
                           "report/assignment.sty":  "3f688c8e3e689aa7b862e17aae95a526ebe2b6981d1995a3fb46c90566203abf",
                           "report/student-info.tex":  "3184b7737c9e52337342f5e27bbd395778ad91f3cfa589e47ca7f9dfdef82f2f",
-                          "report/build.ps1":  "6922fc4e746e7fdeba08bb8d13895d11b4c6e11277000f80cfdd85760b3f4828",
-                          "report/generate.py":  "2d756730be8023054d2f08e99ddce7bdb58d1d4c8ffef474c24243565c619068",
-                          "submission/solve.py":  "83f602b3cc036dddf4d1d3a21da828148ebb1f7ec6a324520e1bfad5f4dbb2fc",
+                          "report/build.ps1":  "bf0e4b8ee36c76f59491e786ebca8dbfb83a6ec39330007fde276e87e6abc71c",
+                          "report/generate.py":  "ec0c337498740b840befb282b1b7902dcd848fc39fd968fe5547e27baeb7c6fd",
+                          "submission/solve.py":  "e0643b1d18f71ead77cc0f2e4badc3d160abfc8b443a11584ea3c78502674421",
                           "submission/uttt.py":  "3701a7772a421b527bbe3d2b3bd9075f6222f8efb815e28ecaff0a9ae463eaa6",
                           "experients/assignment2/results.json":  "58df0c309ef9a1bc23c3f83302040ef26bc470f256a094267255c9ba47944f79",
                           "experients/assignment2/extra_results.json":  "0a1dee09a8d20ce4c39fa5d587efec47e7c775a29ddd5218fd78f31c5ee52a26",
@@ -51,6 +60,9 @@
                           "experients/assignment2/depth_global_results.json":  "000dced91b1bd8ad12dd39b6e6eb8f413317a8db84a3143709299921785e8125",
                           "experients/assignment2/run_predefined_depth.py":  "ddbd7157da59062d5ab603682388508478dec1fc9a0c9c416fe9287d6041421c",
                           "experients/assignment2/depth_predefined_results.json":  "f4f584192fef4947106f735cc3a5294574c1d43e3b876dfea0de244affca4ef6",
+                          "experients/assignment2/run_csp_comparison.py":  "ab4f7c0e2f3e56d352c363f423f75c334b5bce14ddf295bff66ec6b87b0a4127",
+                          "experients/assignment2/check_csp_comparison.py":  "0df82a813acfed00cba1cd1bbd810ac338194f1cc0bd8d5f77f897a93119b455",
+                          "experients/assignment2/csp_comparison.json":  "fc906cb1bc879fd0011b9e8a611edd7bda0d755e4130c6f6937e71edfd113a79",
                           "experients/assignment2/human_games.json":  "1e83e511a391191813316cce774850d92da86c541bcfa907dfba0a632577897d"
                       }
 }

@@ -416,11 +416,22 @@ def generate():
     write('summary.tex','\n'.join('\\newcommand{\\'+key+'}{'+str(value)+'}' for key,value in macros.items()))
     names = {'board_6x10':r'$6\times10$', 'board_5x12':r'$5\times12$',
              'board_3x20':r'$3\times20$', 'empty_chessboard':tr(r'$8\times8$中心挖空',r'$8\times8$ (central hole)')}
-    rows = [[names[g['board']], {'dominos':2,'triominos':3,'pentnominos':5}[g['tiles']],
-             g['stats']['placements'], g['stats']['search_nodes'], f"{g['seconds']*1000:.2f}"]
-            for g in data['csp']]
-    tabular('csp-table.tex',tr(['棋盘','骨牌格数','候选放置','搜索节点','耗时 / ms'],
-                              ['Board','Tile size','Placements','Search nodes','Time / ms']),rows,'lrrrr')
+    comparison=json.loads((DATA/'csp_comparison.json').read_text(encoding='utf-8'))
+    rows=[]
+    solved={method:0 for method in comparison['methods']}
+    for case in comparison['cases']:
+        cells=[]
+        for record in case['methods']:
+            solved[record['method']]+=record['status']=='solved'
+            cells.append(f'{record["search_nodes"]:,}' if record['status']=='solved' else r'$\geq 10^6$*')
+        rows.append([names[case['board']],{'dominos':2,'triominos':3,'pentnominos':5}[case['tiles']],
+                     f'{case["methods"][0]["placements"]:,}']+cells)
+    tabular('csp-table.tex',tr(['棋盘','格数','候选','BT节点','FC节点','AX节点'],
+                              ['Board','Size','Candidates','BT nodes','FC nodes','AX nodes']),rows,'lrrrrr')
+    rows=[[label,solved[method],12-solved[method]] for method,label in zip(comparison['methods'],
+          tr(['传统回溯（BT）','回溯＋前向检查（FC）','Algorithm X＋MRV（AX）'],
+             ['Backtracking (BT)','Forward checking (FC)','Algorithm X + MRV (AX)']))]
+    tabular('csp-completion.tex',tr(['方法','找到解','达到节点上限'],['Method','Solved','Node cap reached']),rows,'lrr')
     draw_board('csp-6x10.pdf', data['csp'][2]['tiling'], True)
     draw_board('csp-hole.pdf', data['csp'][11]['tiling'], True)
     rows=[]

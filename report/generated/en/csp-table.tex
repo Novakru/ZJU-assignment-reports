@@ -1,18 +1,18 @@
-\begin{tabular}{lrrrr}
+\begin{tabular}{lrrrrr}
 \toprule
-Board & Tile size & Placements & Search nodes & Time / ms \\
+Board & Size & Candidates & BT nodes & FC nodes & AX nodes \\
 \midrule
-$6\times10$ & 2 & 3120 & 31 & 14.74 \\
-$6\times10$ & 3 & 3600 & 40 & 18.40 \\
-$6\times10$ & 5 & 2056 & 863 & 17.01 \\
-$5\times12$ & 2 & 3090 & 31 & 14.05 \\
-$5\times12$ & 3 & 3520 & 27 & 17.75 \\
-$5\times12$ & 5 & 1936 & 1073 & 16.71 \\
-$3\times20$ & 2 & 2910 & 31 & 13.64 \\
-$3\times20$ & 3 & 3040 & 31 & 15.46 \\
-$3\times20$ & 5 & 1236 & 238 & 9.59 \\
-$8\times8$ (central hole) & 2 & 3000 & 31 & 14.70 \\
-$8\times8$ (central hole) & 3 & 3280 & 28 & 23.40 \\
-$8\times8$ (central hole) & 5 & 1568 & 2104 & 19.63 \\
+$6\times10$ & 2 & 3,120 & 31 & 31 & 31 \\
+$6\times10$ & 3 & 3,600 & 85,413 & 69 & 40 \\
+$6\times10$ & 5 & 2,056 & 139,426 & 17,902 & 863 \\
+$5\times12$ & 2 & 3,090 & 31 & 31 & 31 \\
+$5\times12$ & 3 & 3,520 & $\geq 10^6$* & 27 & 27 \\
+$5\times12$ & 5 & 1,936 & 651,856 & 91,603 & 1,073 \\
+$3\times20$ & 2 & 2,910 & 31 & 31 & 31 \\
+$3\times20$ & 3 & 3,040 & $\geq 10^6$* & 31 & 31 \\
+$3\times20$ & 5 & 1,236 & $\geq 10^6$* & $\geq 10^6$* & 238 \\
+$8\times8$ (central hole) & 2 & 3,000 & 31 & 31 & 31 \\
+$8\times8$ (central hole) & 3 & 3,280 & 40 & 40 & 28 \\
+$8\times8$ (central hole) & 5 & 1,568 & 20,224 & 6,150 & 2,104 \\
 \bottomrule
 \end{tabular}

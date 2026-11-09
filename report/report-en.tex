@@ -64,21 +64,81 @@ The heuristic changes exploration order, not the solution set. Bitsets
 reduce per-node work without changing worst-case complexity.
 
 \clearpage
+\subsection{Traditional backtracking and forward-checking controls}
+Two fixed-order methods separate early dead-end detection from dynamic
+constraint selection. All three methods share the deduplicated placements,
+tile identities, conflict checks, and candidate order. This controls the
+representation while comparing search policies; it is not a speed comparison
+between languages or data structures.
+
+\noindent\textbf{Backtracking (BT).}\quad
+Choose the first uncovered cell in row-major order and try each compatible
+placement covering it. Placements cannot overlap selected tiles or reuse a
+tile identity. Undo a failed choice and try the next candidate. BT checks
+current compatibility but does not proactively inspect every other cell
+or unused tile for an empty domain.
+
+\medskip
+\noindent\textbf{Backtracking with forward checking (FC).}\quad
+Keep the same first-empty-cell rule, but before expanding candidates inspect
+all unmet constraints. If any uncovered cell or unused tile has no available
+placement, backtrack immediately. This adds dead-end detection without MRV.
+
+\medskip
+\noindent\textbf{Algorithm X with MRV (AX).}\quad
+Choose the cell or tile identity with the fewest available placements.
+This detects empty domains and prioritizes tightly constrained choices.
+Fixed-order backtracking can itself be viewed as exact-cover search with
+a fixed column rule. The comparison distinguishes these selection policies;
+Algorithm X and backtracking are not unrelated algorithm families.
+
+All three enumerate every compatible candidate for their selected constraint
+and are complete without resource limits. AX remains the default solver;
+separate entry points or a method argument select the controls, preserving
+the original calling convention.
+
+\subsection{Counting and comparison protocol}
+Count one node per recursive call, including the empty root, dead-end states,
+and successful leaf. Placement generation, filtering known conflicts, and
+internal heuristic checks do not add nodes. Stop at the first valid solution.
+The count therefore measures explored partial states, not complete tilings
+or candidate placements. Different methods may return different valid tilings.
+
+Each instance and method receives the same cap of $10^6$ recursive nodes.
+Reaching it is recorded separately, neither as unsatisfiability nor as the
+exact number needed to find a solution. The default solver has no such cap;
+it is a resource control for this experiment. Only search nodes are compared,
+not time. FC and MRV do different work within each node, so node reductions
+are not equivalent to proportional runtime reductions.
+
+\clearpage
 \subsection{Results}
 Four boards were tested with dominoes, triominoes, and pentominoes. All twelve
-instances passed the supplied correctness checker. The single-run times in
-Table~\ref{tab:csp} include placement generation and search.
+AX solutions passed the supplied correctness checker. BT and FC solutions
+were validated only when completed within the cap.
 
 \begin{table}[htbp]
   \centering\small
-  \caption{Tiling results across boards and tile sets.}\label{tab:csp}
+  \caption{Search nodes for three policies sharing the same candidates.}\label{tab:csp}
   \input{generated/en/csp-table.tex}
 \end{table}
 
-The number of placements alone does not predict search effort. For example,
-the $6\times10$ pentomino instance has fewer placements than its domino
-counterpart but requires more backtracking. The interactions between tile
-shapes matter more than the candidate count alone.
+\noindent{\small * No solution found after $10^6$ nodes; the required count remains unknown.\par}
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{Completion within the same node budget, across twelve instances.}
+  \input{generated/en/csp-completion.tex}
+\end{table}
+
+For $6\times10$ triominoes, BT, FC, and AX visit 85,413, 69, and 40 nodes:
+early dead-end detection gives the main reduction, with MRV reducing it further.
+For $5\times12$ pentominoes the counts are 651,856, 91,603, and 1,073,
+showing a larger effect from constraint selection. On $3\times20$ pentominoes,
+BT and FC hit the cap while AX solves in 238 nodes. All domino instances
+take 31 nodes for every method, with no backtracking for a heuristic to avoid.
+These results use a fixed candidate order; MRV need not reduce nodes on
+every possible tiling problem.
 
 \begin{figure}[htbp]
   \centering

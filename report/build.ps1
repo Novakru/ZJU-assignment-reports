@@ -7,6 +7,12 @@ try {
         & $PythonCommand -B 'experients/assignment2/run_experiments.py'
         if ($LASTEXITCODE -ne 0) { throw 'Experiments failed.' }
     }
+    if ($RunExperiments -or -not (Test-Path -LiteralPath 'experients/assignment2/csp_comparison.json')) {
+        & $PythonCommand -B 'experients/assignment2/run_csp_comparison.py'
+        if ($LASTEXITCODE -ne 0) { throw 'CSP comparison failed.' }
+    }
+    & $PythonCommand -B 'experients/assignment2/check_csp_comparison.py'
+    if ($LASTEXITCODE -ne 0) { throw 'CSP comparison verification failed.' }
     if ($RunExperiments -or -not (Test-Path -LiteralPath 'experients/assignment2/extra_results.json')) {
         & $PythonCommand -B 'experients/assignment2/run_extra.py'
         if ($LASTEXITCODE -ne 0) { throw 'Global-rule experiment failed.' }
@@ -68,7 +74,9 @@ try {
                                 'experients/assignment2/run_depth.py', 'experients/assignment2/time_depth.py',
                                 'experients/assignment2/check_depth.py', 'experients/assignment2/depth_local_results.json',
                                 'experients/assignment2/depth_global_results.json',
-                                'experients/assignment2/run_predefined_depth.py', 'experients/assignment2/depth_predefined_results.json')) {
+                                'experients/assignment2/run_predefined_depth.py', 'experients/assignment2/depth_predefined_results.json',
+                                'experients/assignment2/run_csp_comparison.py', 'experients/assignment2/check_csp_comparison.py',
+                                'experients/assignment2/csp_comparison.json')) {
         $sourceHashes[$relativePath] = (Get-FileHash -LiteralPath (Join-Path $repoRoot $relativePath) -Algorithm SHA256).Hash.ToLowerInvariant()
     }
     $humanLog = Join-Path $repoRoot 'experients/assignment2/human_games.json'
@@ -81,6 +89,11 @@ try {
     $record = [ordered]@{
         template_base = 'main@cc1fa9c and assignment1-cs1050 coursework layout'
         behavioral_checks_passed = $true
+        csp_comparison_checks_passed = $true
+        csp_comparison_methods = @('backtracking','forward_checking','algorithm_x')
+        csp_comparison_cases = 12
+        csp_comparison_node_limit = 1000000
+        csp_comparison_timing_reported = $false
         xelatex_passes_per_language = 2
         languages = @('zh', 'en')
         latex_layout_or_reference_issues = $false

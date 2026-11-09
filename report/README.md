@@ -93,3 +93,24 @@ Blackboard 只上传 `submission` 内的 `solve.py`、`uttt.py`、`report.pdf`�
 以同一18种开局比较，固定X三层时：基础版O的三/四/五层胜率为100%、61.1%、88.9%；
 扩展版对应33.3%、61.1%、72.2%。双方同为四层、五层时，基础版O胜率100%、77.8%，
 扩展版22.2%、27.8%。扩展版五层同深度有9局平局，O不败率77.8%，不能只用胜率评价。
+
+CSP另有三种搜索策略的节点对照，不报告耗时。调用方式：
+
+```python
+from solve import solve, solve_backtracking, solve_forward_checking, solve_algorithm_x
+solution = solve(board, tiles)  # Default Algorithm X + MRV; original interface retained.
+solution = solve(board, tiles, method='backtracking')
+solution = solve_forward_checking(board, tiles)
+solution = solve_algorithm_x(board, tiles)
+stats = dict(solve.last_stats)
+```
+
+三种方法共用候选生成、候选顺序和冲突过滤：BT固定选择首个空格；FC额外检查全部
+未满足约束是否出现零候选；AX选择最小候选域。节点为递归调用次数，含根与成功叶，
+不含预处理；对照统一使用100万节点上限，触及上限抛出 `SearchLimitReached`，
+不会返回“无解”。默认调用没有上限，显式实验可传 `node_limit=1000000`。
+状态与候选数、节点数均从 `solve.last_stats` 读取，包装入口也更新同一统计位置。
+复现：`python -B experients/assignment2/run_csp_comparison.py`；验证：
+`python -B experients/assignment2/check_csp_comparison.py`。共12实例×3策略，
+上限内完成数BT为9、FC为11、AX为12；已完成解均通过课程验证器。
+比较的是固定候选表示下的搜索策略，而不是独立实现的运行速度。
