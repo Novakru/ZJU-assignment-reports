@@ -2,14 +2,14 @@
   "artifacts": {
     "literature-review-layout": {
       "pages": 5,
-      "sha256": "92d4797e549da9ca4c3ecbc7763489537aae6514f86d0bef1c4d1c1528c1cf6d",
-      "chinese_characters_including_prompts": 1409,
+      "sha256": "7b5db299b64664a48b4096f5f3280541948341da7bd6ddb251c992131cee2463",
+      "chinese_characters_including_prompts": 1403,
       "submission_ready": false
     },
     "reading-and-writing-guide": {
       "pages": 10,
-      "sha256": "078d4aa57d3d768e6e1a506eff6a704f936f27a8c06acfc78518bfd29c41f41c",
-      "chinese_characters_including_prompts": 4246,
+      "sha256": "0baf10b38b8a1730f2880d31e1f3be9340d79c294d809d53de0dad04ee1e8147",
+      "chinese_characters_including_prompts": 4240,
       "submission_ready": false
     }
   },
@@ -19,10 +19,7 @@
   "original_body_requirement": 3000,
   "original_body_complete": false,
   "pending": [
-    "author name",
-    "student ID",
-    "author-written body",
-    "final word count"
+    "supporting artifacts are writing guides, not the completed review"
   ],
   "course_prohibits_direct_ai_generated_submission": true,
   "template_base": "MP2@9a46ef1 cover principles and official ZJUI vector identity; rewritten for personal review",

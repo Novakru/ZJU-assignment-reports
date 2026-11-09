@@ -1,0 +1,32 @@
+{
+  "type": "redrawn published tables; not new experiments",
+  "react": {
+    "source": "https://arxiv.org/abs/2210.03629v3",
+    "locator": "Table 1, PDF p.5",
+    "model": "PaLM-540B",
+    "metrics": [
+      "HotpotQA exact match (%)",
+      "FEVER accuracy (%)"
+    ],
+    "sampling_note": "CoT-SC uses 21 trajectories; tool access and inference cost differ across conditions",
+    "transformation": "Seven prompting rows copied verbatim; supervised SoTA excluded because not a prompting condition"
+  },
+  "audit": {
+    "source": "https://arxiv.org/abs/2509.08713v2",
+    "locator": "Section 6.2 and Table 11, PDF pp.16-18",
+    "n": 100,
+    "design": "20 examples per category, 10 positive and 10 negative; some problems injected by authors",
+    "auditor": "gemini-2.5-flash-preview-05-20",
+    "transformation": "Accuracy columns copied; no pooling or inferred confidence intervals"
+  },
+  "uncertainty": "Original point estimates only; no invented error bars; no causal or cross-system ranking",
+  "matplotlib_version": "3.10.9",
+  "data_sha256": {
+    "audit.csv": "27327e380caed78670a6a1300673b4bda6a1746b294f8d3e747aa62313bdda52",
+    "react.csv": "5ffb0db7eb353cd5a737fc55be323a139f6394c799da8c6ac89a6724a8ba52ba"
+  },
+  "figure_sha256": {
+    "audit-with-artifacts.pdf": "e1f40353555bdbba31c7f5155cc716ec667530bb265df86ce299d869bbab18be",
+    "react-task-dependence.pdf": "3079fb248e28c637cf75658b97b3ee808067a1cc70f5b8df5482985e2aee2308"
+  }
+}
