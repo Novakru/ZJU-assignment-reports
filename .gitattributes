@@ -6,3 +6,4 @@
 *.json text eol=lf
 *.pdf binary
 *.png binary
+frontiers-review/inputs/*.md whitespace=-blank-at-eol
