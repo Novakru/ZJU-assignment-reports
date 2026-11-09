@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-09",
+  "renderer": "Poppler pdftoppm, scale-to 1400",
+  "artifacts": {
+    "literature-review-layout.pdf": 5,
+    "reading-and-writing-guide.pdf": 10
+  },
+  "every_page_rendered": true,
+  "contact_sheets_inspected": true,
+  "detailed_figure_page_inspected": true,
+  "overflow_or_overlap_observed": false,
+  "reference_page_separated": true,
+  "formal_submission_ready": false
+}

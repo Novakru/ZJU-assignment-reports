@@ -1,0 +1,32 @@
+{
+  "artifacts": {
+    "literature-review-layout": {
+      "pages": 5,
+      "sha256": "1c6bce17b57f93a3a277344b91ed852b641ca1a905b586d07c96c825b1188b99",
+      "chinese_characters_including_prompts": 1409,
+      "submission_ready": false
+    },
+    "reading-and-writing-guide": {
+      "pages": 10,
+      "sha256": "beaf55cd2ceea8134caace4d765623185c4d8a7710092f94d19d901678658f1b",
+      "chinese_characters_including_prompts": 4246,
+      "submission_ready": false
+    }
+  },
+  "course": "工程技术前沿",
+  "language": "zh",
+  "sources_verified": 8,
+  "original_body_requirement": 3000,
+  "original_body_complete": false,
+  "pending": [
+    "author name",
+    "student ID",
+    "author-written body",
+    "final word count"
+  ],
+  "course_prohibits_direct_ai_generated_submission": true,
+  "template_base": "MP2@9a46ef1 cover principles and official ZJUI vector identity; rewritten for personal review",
+  "required_submit_deadline": "2026-11-20 23:59 Asia/Shanghai",
+  "peer_review_deadline": "2026-12-05",
+  "finalized_submission_created": false
+}

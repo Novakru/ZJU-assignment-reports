@@ -1,0 +1,62 @@
+{
+  "retrieved": "2026-11-09",
+  "selection": "purposeful representative selection, not systematic or exhaustive",
+  "papers": [
+    {
+      "id": "2005.11401v4",
+      "url": "https://arxiv.org/pdf/2005.11401v4",
+      "pages": 19,
+      "sha256": "23e3249e9a1e75418d82efecab0ea8c4d033b89c93742f63208d47ce01f21233",
+      "downloaded": true
+    },
+    {
+      "id": "2404.16130v2",
+      "url": "https://arxiv.org/pdf/2404.16130v2",
+      "pages": 26,
+      "sha256": "730f1a9f38d16689900969a3eeeb1b31e45eda1dcc1f37a043afa90aff76c867",
+      "downloaded": true
+    },
+    {
+      "id": "2307.03172v3",
+      "url": "https://arxiv.org/pdf/2307.03172v3",
+      "pages": 18,
+      "sha256": "653b29619eae2ae4b361d7bdcdc06db4bedcb1b0eabe31814036beca8c1af0b1",
+      "downloaded": true
+    },
+    {
+      "id": "2210.03629v3",
+      "url": "https://arxiv.org/pdf/2210.03629v3",
+      "pages": 33,
+      "sha256": "f285b0971ae4a790e402fb93966bed3adde2cf0a04977d08b2b40d6ab0cace69",
+      "downloaded": true
+    },
+    {
+      "id": "2308.08155v2",
+      "url": "https://arxiv.org/pdf/2308.08155v2",
+      "pages": 43,
+      "sha256": "fcf8b1acae6b1bd6f14c92463caa9726828bf998234ba9f10c2411087897c96b",
+      "downloaded": true
+    },
+    {
+      "id": "2304.03442v2",
+      "url": "https://arxiv.org/pdf/2304.03442v2",
+      "pages": 22,
+      "sha256": "1b31e77fb24d25d7598f2c49e955d12a28b95a6dabad34acdac40f44bfb7a139",
+      "downloaded": true
+    },
+    {
+      "id": "2310.08560v2",
+      "url": "https://arxiv.org/pdf/2310.08560v2",
+      "pages": 13,
+      "sha256": "9f674bcff69c86f11c813dcfad613d8841f5f8ed17979e3c4df06a91df7762e0",
+      "downloaded": true
+    },
+    {
+      "id": "2501.04227v2",
+      "url": "https://arxiv.org/pdf/2501.04227v2",
+      "pages": 84,
+      "sha256": "67b9543ae1d8e3ad86a65e2a436ddbd12700d7c8f4a66c5b4c2a6fccc1674d75",
+      "downloaded": true
+    }
+  ]
+}
