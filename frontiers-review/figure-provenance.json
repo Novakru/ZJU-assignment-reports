@@ -31,12 +31,12 @@
     "scienceagentbench.csv": "ffb1d63d52989f42a20c3c18bd2c95712cff0656e104e9ad5d1644fd30a1e43c"
   },
   "figure_sha256": {
-    "review-timeline.pdf": "40799833961b19acb8e1a3542905543102c0d0046157b290ef08fab7af858b42",
-    "review-knowledge-memory.pdf": "16aa53963a45ef7d64b3bd7d5760ed52709c0911677603c67a5d258b484d7076",
-    "review-sciencebench.pdf": "fd9fc27171eff51a2145ccadc883f83082a7ad9945f93bac7f1ded9bea16e894",
-    "review-audit.pdf": "00717312188305f0175f9111e727f5ba6206654f45a6dc9376a9b20f3644b397",
-    "coscientist-suzuki.pdf": "7e4797db0640f06d5a58f12f052dc6c045e44c22b673d0508026ebedeea172f4",
-    "coscientist-sonogashira.pdf": "04d7fe6bdc75eb18b037a96c2088995dfdd6d3b609ed1c860759103032385336",
-    "coscientist-architecture.pdf": "fdeaf3d9d1001a91d46495a1e953cbe3c13177faf31264f4aa8743d31776c73d"
+    "review-timeline.pdf": "54dd24e64bb503d9925d148524ae03b3a9261e62bf58e6f1c294d80697041c2b",
+    "review-knowledge-memory.pdf": "2d0f9cb21e7073d309d26404a471be0ccff21d94c8e833547cdd26efc0374c41",
+    "review-sciencebench.pdf": "f8bc76c344d1d862a427942fe8a4e4f2460f466300a714488eae12f4e53aae41",
+    "review-audit.pdf": "688245010b6c340fcd9150954643c479522a1727709f26764c385d1de9e9c577",
+    "coscientist-suzuki.pdf": "4e2223749c76214d485c5ce0f4683c28172aeedca0e67da927d6eaa3f800c9f8",
+    "coscientist-sonogashira.pdf": "1eb1ead4f4e12e96450ffcf6c58f66136df2f5689ea1696984acadb9311d45a6",
+    "coscientist-architecture.pdf": "1428fceda7db4f705ccb78786dee0a4aef769a76185a92eaff7c602cfc2b4c79"
   }
 }

@@ -23,5 +23,116 @@
     "scientific-visualization"
   ],
   "skill_source": "https://github.com/K-Dense-AI/scientific-agent-skills",
-  "tool_acknowledgment_in_manuscript": true
+  "tool_acknowledgment_in_manuscript": true,
+  "heading_revision": {
+    "date": "2026-11-10",
+    "scope": "section and subsection names only; body, captions, tables, data and references unchanged",
+    "changes": [
+      {
+        "before": "科研系统的三类研究路径",
+        "after": "科研应用与代表性系统"
+      },
+      {
+        "before": "从文献中形成问题",
+        "after": "文献综合与研究构思"
+      },
+      {
+        "before": "用计算实验推进研究",
+        "after": "计算实验与端到端科研"
+      },
+      {
+        "before": "从假设比较到生物学检验",
+        "after": "假设生成与生物学验证"
+      },
+      {
+        "before": "在实体装置上执行并核对",
+        "after": "工具增强与实体实验"
+      },
+      {
+        "before": "协作机制：分工、交接与检查",
+        "after": "多智能体协作与研究过程控制"
+      },
+      {
+        "before": "角色划分何时产生作用",
+        "after": "角色分工与通信组织"
+      },
+      {
+        "before": "交接内容比角色名称更具体",
+        "after": "任务交接与流程约束"
+      },
+      {
+        "before": "多一个检查者是否多一份证据",
+        "after": "反馈机制与独立核验"
+      },
+      {
+        "before": "从分配任务到选择研究分支",
+        "after": "候选搜索与资源调度"
+      },
+      {
+        "before": "知识与记忆应围绕什么组织",
+        "after": "研究判断的组织与更新"
+      },
+      {
+        "before": "候选越容易生成，验证越重要",
+        "after": "探索与验证的资源权衡"
+      },
+      {
+        "before": "人应在哪些地方介入",
+        "after": "人机协作与人工投入评价"
+      },
+      {
+        "before": "本文的范围与不足",
+        "after": "综述范围与研究局限"
+      },
+      {
+        "before": "结语",
+        "after": "结论"
+      },
+      {
+        "before": "先明确评价对象",
+        "after": "评价对象与基准设计"
+      },
+      {
+        "before": "执行反馈的收益及其限度",
+        "after": "执行反馈与资源效率"
+      },
+      {
+        "before": "最终论文遗漏了哪些信息",
+        "after": "过程审计与方法学缺陷识别"
+      },
+      {
+        "before": "怎样检验协作本身",
+        "after": "协作贡献的对照与消融"
+      },
+      {
+        "before": "研究对象与技术脉络",
+        "after": "技术基础与概念界定"
+      },
+      {
+        "before": "几条技术路线的汇合",
+        "after": "技术发展脉络"
+      },
+      {
+        "before": "什么构成了多智能体协作",
+        "after": "智能体定义与协作边界"
+      },
+      {
+        "before": "片段、层次摘要与关系图",
+        "after": "检索粒度与索引结构"
+      },
+      {
+        "before": "何时检索，怎样使用检索结果",
+        "after": "检索决策与证据利用"
+      },
+      {
+        "before": "从历史对话到研究记录",
+        "after": "经历记忆与分层存储"
+      },
+      {
+        "before": "两类记录怎样衔接",
+        "after": "知识库与任务记忆的协同管理"
+      }
+    ],
+    "body_equality_after_removing_headings": true
+  }
 }

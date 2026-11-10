@@ -1,10 +1,10 @@
 {
   "reviewed": "2026-11-10",
   "artifact": "output/pdf/multi-agent-literature-review.pdf",
-  "pdf_sha256": "f4de9dc175f78c4d0e0e54bc654fcdf98f6055833c47ee1147476790046b040c",
+  "pdf_sha256": "b75fdadcdb71f983eba836d6d3cfb80886b49ea8cb0026f61a50605d73a7fe6d",
   "pages": 12,
   "renderer": "Poppler pdftoppm -scale-to 1800 -png",
-  "contact_sheet": "tmp/pdfs/editorial-final-contact.png",
+  "contact_sheet": "tmp/pdfs/headings-final-contact.png",
   "all_pages_contact_sheet_reviewed": true,
   "detailed_pages_across_final_iterations": [
     1,
@@ -26,7 +26,8 @@
     "Audit bars start at zero and show correct cases from exact n=20 conversion",
     "No overlapping labels, missing glyphs, unresolved citations or clipped references",
     "No blank column from pending full-width table; conclusion has no one-line continuation",
-    "Personal-name, review-directory and submission PDFs match audited PDF hash"
+    "Personal-name, review-directory and submission PDFs match audited PDF hash",
+    "All revised section and subsection headings fit their columns; academic noun-phrase titles and hierarchy reviewed"
   ],
   "changes_after_visual_review": [
     "Removed three generic box-arrow figures",
@@ -35,8 +36,15 @@
     "Removed crowded scatter annotations and corrected Chinese/math font fallback",
     "Layered node fills above index edges",
     "Moved final comparison-table declaration to prevent an empty text column",
-    "Shortened conclusion to remove isolated continuation"
+    "Shortened conclusion to remove isolated continuation",
+    "Replaced 26 conversational headings; verified source text outside headings is unchanged"
   ],
   "visual_defects_remaining": [],
-  "author_review_confirmed": false
+  "author_review_confirmed": false,
+  "heading_revision_detailed_pages": [
+    4,
+    5,
+    9,
+    11
+  ]
 }
