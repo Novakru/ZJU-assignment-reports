@@ -1,43 +1,42 @@
 {
-  "scheme": "vector analytical schematics, two redrawn data figures, unchanged licensed source panels",
+  "scheme": "two mechanism/index figures, two source-table plots, and two licensed source-figure composites",
   "data_sources": {
     "review-sciencebench": {
       "url": "https://arxiv.org/abs/2410.05080v3",
       "locator": "Table 3, PDF p.8",
-      "selection": "all three framework conditions for GPT-4o and Claude-3.5-Sonnet, without expert knowledge",
+      "selection": "all three frameworks, GPT-4o and Claude-3.5-Sonnet, no expert knowledge",
       "n_tasks": 102,
       "attempts_per_task": 3,
-      "aggregation": "best of three independent runs per task; prioritized SR, VER, CBS, lower cost; average selected runs",
-      "uncertainty": "selected-run point estimates from Table 3; not three-run means or invented intervals"
+      "aggregation": "best of three independent runs per task; SR, VER, CBS, lower cost priority; average selected runs",
+      "uncertainty": "Table 3 selected-run estimates; no invented intervals"
     },
     "review-audit": {
       "url": "https://arxiv.org/abs/2509.08713v2",
       "locator": "Section 6.2 and Table 11, pp.16-18",
       "n": 100,
       "per_category": 20,
-      "positive_negative_ratio": "1:1; some defects injected by original authors"
+      "positive_negative_ratio": "1:1; some defects injected",
+      "transformation": "correct_count = accuracy_percent * n_per_category / 100; exact integer conversion"
     }
   },
   "licensed_panels": {
     "url": "https://doi.org/10.1038/s41586-023-06792-0",
-    "original": "Fig.5i and Fig.5j, PDF p.6",
+    "original": "Fig.1abc PDF p.2 and Fig.5i/5j PDF p.6",
     "license": "CC BY 4.0 https://creativecommons.org/licenses/by/4.0/",
-    "processing": "PDF page clipping only, unchanged vector content; panel layout rearranged in the review"
+    "processing": "page clips only; source labels, photographs, curves, axes unchanged"
   },
-  "schematics": "Analytical illustrations; no positions, areas or arrow widths encode measured effect sizes",
+  "schematics": "index topology is explanatory; chronology has true equal year spacing; no measured performance encoding",
   "data_sha256": {
     "audit.csv": "27327e380caed78670a6a1300673b4bda6a1746b294f8d3e747aa62313bdda52",
     "scienceagentbench.csv": "ffb1d63d52989f42a20c3c18bd2c95712cff0656e104e9ad5d1644fd30a1e43c"
   },
   "figure_sha256": {
-    "coscientist-sonogashira.pdf": "e2552f6a678202b33fe36c4eebd46531f059d375c55babb94faaf7d2af1d5003",
-    "coscientist-suzuki.pdf": "aa0533760e0391c8f4971bc6aacaf06ff772dbf62ef394e399924f21198dedd2",
-    "review-audit.pdf": "85cf77d15480248f29859bbc76fee7d6e5696246aa092f67d87d3b61e60cceb6",
-    "review-evidence-cycle.pdf": "8c89f3e5420bdbdfb57fefb97ea9a0dc33f93bcbca39b469dea9504eeb98c8de",
-    "review-framework.pdf": "5defcc81313bcb8c8f32ff733ca121c2a19e9907dc8021f4b8d61df5659f02f8",
-    "review-knowledge-memory.pdf": "902a0fdfb5dce08b6abc8f5ad1d2195ae1f4ac8b83676ee4a1755b0318ad202d",
-    "review-sciencebench.pdf": "37a47c1f849fa5760fe5734d9d1e159ff21e7d6ee9d84b49901eef8b27a7b7e0",
-    "review-timeline.pdf": "7428e512a43ec43c4cce492e500b028302dce3ced8c9209426358cf783fe356b",
-    "review-topologies.pdf": "14224cda1bb9d23e66ba95b10c521d5fc612d40366e8b296b80f8225ec3a97c0"
+    "review-timeline.pdf": "40799833961b19acb8e1a3542905543102c0d0046157b290ef08fab7af858b42",
+    "review-knowledge-memory.pdf": "16aa53963a45ef7d64b3bd7d5760ed52709c0911677603c67a5d258b484d7076",
+    "review-sciencebench.pdf": "fd9fc27171eff51a2145ccadc883f83082a7ad9945f93bac7f1ded9bea16e894",
+    "review-audit.pdf": "00717312188305f0175f9111e727f5ba6206654f45a6dc9376a9b20f3644b397",
+    "coscientist-suzuki.pdf": "7e4797db0640f06d5a58f12f052dc6c045e44c22b673d0508026ebedeea172f4",
+    "coscientist-sonogashira.pdf": "04d7fe6bdc75eb18b037a96c2088995dfdd6d3b609ed1c860759103032385336",
+    "coscientist-architecture.pdf": "fdeaf3d9d1001a91d46495a1e953cbe3c13177faf31264f4aa8743d31776c73d"
   }
 }

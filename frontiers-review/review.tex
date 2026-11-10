@@ -6,16 +6,13 @@
 \articleheading
 \begin{minipage}{\textwidth}\fontsize{10}{14.8}\selectfont
 \abstractlabel{摘\quad 要}
-大语言模型正推动科研辅助由文献问答和代码生成，向涵盖假设提出、实验执行及结果论证的连续工作流发展。
-多智能体系统通过任务分解、角色协作和工具调用，为复杂研究过程提供了新的组织方式，
-其研究重点也逐渐从单项任务性能转向长期协作能力与科学产出的有效性。
-本文围绕知识增强、长期记忆、协作控制和可信评价，梳理科研多智能体系统的发展脉络与主要技术路线。
-首先建立研究流程与支撑机制相结合的分类框架，比较片段检索、层次检索、图组织、反思记忆及多种协作拓扑；
-继而分析文献综合、假设生成、计算实验和实体实验中的代表性系统，讨论其自动化范围、反馈来源与验证方式。
-结合科学任务基准和过程审计的公开结果，进一步辨析执行成功与任务完成、候选排序与科学验证之间的差异。
-在此基础上，本文认为知识结构与研究状态的协同维护、探索资源与验证资源的合理分配，
-以及人工判断在关键研究节点的参与，是提高系统实用性的重要方向。
-未来研究需要在可追溯证据、长期任务评价和可复现流程的基础上，检验多智能体协作带来的实际科研增益。
+科研多智能体系统正将文献阅读、计算实验和实体操作组织成连续工作流，但自动化范围的扩大尚不能直接说明科学判断更可靠。
+本文围绕知识检索、研究记忆和代理协作梳理代表方法，比较片段检索、层次摘要与关系图的适用问题，分析反思和分层存储的不同作用，
+并结合文献综合、计算科研与生物化学实验讨论系统产出及其验证方式。
+ScienceAgentBench的两组自调试配置中，有效执行率与任务成功率相差约60个百分点；过程审计研究也显示，补充日志和代码能够改善缺陷识别。
+这些现象说明，系统评价需要保留任务、预算和过程材料，不能只依据生成论文或内部评分。
+本文据此提出，应以研究判断的来源和修订关系组织知识与记忆，以检查能否提供新信息衡量角色分工，并将人的投入纳入协作评价。
+现有证据支持科研流程的部分自动化，对长期、自主且可复查的研究能力仍需更有针对性的检验。
 \par\vspace{2mm}
 \abstractlabel{关键词}科研智能体；多智能体协作；检索增强生成；长期记忆；科学发现；可信评价
 \par\vspace{3mm}
@@ -24,13 +21,12 @@ A Review of Multi-Agent Systems for Scientific Research:\\
 Technical Evolution, Core Methods and Trustworthy Evaluation
 \end{center}\vspace{1mm}
 \abstractlabel{Abstract}
-Large language models are extending research assistance from literature question answering and code generation to workflows that include hypothesis formulation, experimentation and scientific argumentation.
-Multi-agent systems organize these capabilities through task decomposition, role coordination and tool use.
-This review traces their development and synthesizes four technical dimensions: knowledge augmentation, long-term memory, collaborative control and trustworthy evaluation.
-It compares retrieval structures, reflective memory and communication topologies, then examines representative systems for literature synthesis, hypothesis generation, computational research and physical experimentation.
-Published benchmark and auditing results are used to distinguish executable programs from successful research tasks, and candidate ranking from empirical validation.
-The discussion identifies coordinated knowledge and state management, balanced allocation of exploration and verification resources, and human participation at critical decisions as priorities for practical research systems.
-Future progress requires evaluations grounded in traceable evidence, reproducible workflows and sustained research tasks.
+Multi-agent research systems connect literature analysis, computational experiments and physical operations, but wider automation does not by itself establish more reliable scientific judgments.
+This review compares retrieval structures, reflective and hierarchical memory, and agent coordination, then examines their use in literature synthesis, computational research and biochemical experiments.
+Published evaluations reveal substantial gaps between valid execution and task success, while access to logs and code changes the detection of methodological defects.
+These findings motivate comparisons that preserve task conditions, resource budgets and process records.
+The discussion argues for organizing memory around the sources and revisions of research judgments, assessing whether checking agents contribute additional information, and accounting for human effort.
+Current evidence supports partial automation of research workflows; sustained and independently inspectable scientific work remains a more demanding objective.
 \par\vspace{2mm}
 \abstractlabel{Keywords}scientific agents; multi-agent collaboration; retrieval-augmented generation; long-term memory; scientific discovery; trustworthy evaluation
 \end{minipage}\vspace{6mm}}]

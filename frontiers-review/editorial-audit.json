@@ -1,19 +1,19 @@
 {
-  "reviewed": "2026-11-09",
+  "reviewed": "2026-11-10",
   "review_type": "structured narrative synthesis; not systematic or exhaustive",
   "course_requirement_mapping": {
-    "problem_introduction": "Section 1: research motivation, scope, and comparison with earlier surveys",
-    "method_synthesis": "Sections 2-5: common framework, mechanisms, collaboration and representative systems",
-    "author_analysis": "Sections 6-7: evidence boundaries, controlled comparisons, knowledge-state synthesis and testable questions"
+    "problem_introduction": "Section 1: research motivation, earlier surveys and scope",
+    "method_synthesis": "Sections 2-5: definitions, mechanism comparisons and three application paths",
+    "author_analysis": "Sections 6-7: evaluation interpretation and research judgment management"
   },
   "editorial_changes": [
-    "Use continuous research questions to connect sections, with explicit scope and related reviews",
-    "Separate reported findings from the review synthesis and future proposals",
-    "Distinguish retrieval, reflection, memory and collaboration instead of listing products",
-    "Replace generic diagrams with vector technical figures, source-table plots and licensed experimental panels",
-    "Document best-of-three ScienceAgentBench aggregation and historical costs",
-    "Retain linked-report relationships instead of counting project versions as independent replications",
-    "Exclude implementation filenames and project-maintenance details from the scholarly discussion"
+    "Rewrote prose around comparisons, examples and disagreements instead of paper-by-paper summaries with generic conclusions",
+    "Removed generic framework, topology and cycle figures; retained six displays with specific explanatory or empirical purpose",
+    "Compared RAG, RAPTOR and GraphRAG using source, summary and entity index topology",
+    "Added the licensed original Coscientist architecture and experimental apparatus photograph, Fig.1abc",
+    "Removed the generic flowchart beside original spectra and explained retention-time and mass-spectrum comparison",
+    "Replaced colored template plots with monochrome shape-coded scatter plots and exact per-category case counts",
+    "Preserved best-of-three aggregation, historical model and cost conditions, project versions and AI-use disclosure"
   ],
   "numeric_evidence": "Source-table extraction; no newly executed scientific experiments or fabricated uncertainty",
   "human_author_review_confirmed": false,

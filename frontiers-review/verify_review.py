@@ -33,7 +33,7 @@ def verify():
     assert r'\writingtask' not in tex and '作者待完成' not in tex
     figures=len(re.findall(r'\\begin\{figure\*?\}',tex))
     tables=len(re.findall(r'\\begin\{table\*?\}',tex))
-    assert (figures,tables)==(8,4),(figures,tables)
+    assert (figures,tables)==(6,4),(figures,tables)
     references=(ROOT/'review-references.tex').read_text(encoding='utf-8')
     keys=re.findall(r'\\bibitem\{([^}]+)\}',references)
     citations={key for group in re.findall(r'\\cite\{([^}]+)\}',tex+'\n'+references) for key in group.split(',')}
@@ -64,14 +64,13 @@ def verify():
                     if x0<-.5 or y0<-.5 or x1>page.rect.width+.5 or y1>page.rect.height+.5:
                         outside.append([i+1,span['text']])
     assert not outside,outside
-    for fig in ('review-timeline','review-framework','review-knowledge-memory','review-topologies',
-                'review-sciencebench','review-audit','review-evidence-cycle'):
+    for fig in ('review-timeline','review-knowledge-memory','review-sciencebench','review-audit'):
         figure=fitz.open(ROOT/'figures'/f'{fig}.pdf')
         assert len(figure)==1 and len(figure[0].get_text())>80
     provenance=json.loads((ROOT/'figure-provenance.json').read_text(encoding='utf-8'))
     for name,digest in provenance['data_sha256'].items():assert sha(ROOT/'data'/name)==digest
     for name,digest in provenance['figure_sha256'].items():assert sha(ROOT/'figures'/name)==digest
-    for panel in ('coscientist-suzuki','coscientist-sonogashira'):
+    for panel in ('coscientist-suzuki','coscientist-sonogashira','coscientist-architecture'):
         figure=fitz.open(ROOT/'figures'/f'{panel}.pdf')
         assert len(figure)==1 and len(figure[0].get_drawings())>15,panel
     record=dict(title='面向科研任务的多智能体系统综述：技术脉络、关键方法与可信评价',

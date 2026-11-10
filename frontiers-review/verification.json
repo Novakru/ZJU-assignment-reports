@@ -2,13 +2,13 @@
   "artifacts": {
     "literature-review-layout": {
       "pages": 5,
-      "sha256": "02fc57d87ec08589747c72319ca71ef6475aecc26484c1e1bf8e41f2038ca939",
+      "sha256": "e9976e382d9bcb59af9e35e990b0cf8c7e9f12fbd39b89b91ec78d07289e4bf0",
       "chinese_characters_including_prompts": 1401,
       "submission_ready": false
     },
     "reading-and-writing-guide": {
       "pages": 10,
-      "sha256": "c4b97b53050adefd976618302a3844860203dcca46268baa75e5f59f9fa2ef8b",
+      "sha256": "c3140d7de0bc8f25fb4c2177550944b94ac001f86efdc0e53c50b8c19a9bb349",
       "chinese_characters_including_prompts": 4238,
       "submission_ready": false
     }
