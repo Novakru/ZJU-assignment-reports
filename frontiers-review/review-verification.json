@@ -13,9 +13,11 @@
   "tables": 4,
   "scholarly_reports": 32,
   "review_reports": 3,
-  "tool_references": 1,
+  "tool_references": 0,
+  "manuscript_tool_note_present": false,
+  "footer": "工程技术前沿课程论文",
   "related_reports_not_counted_as_independent_replications": true,
-  "references": 33,
+  "references": 32,
   "all_references_cited": true,
   "original_experiments_conducted": false,
   "primary_fulltexts_retrieved": true,
@@ -36,18 +38,18 @@
     "review-foundations.tex": "7fd9f0964bfac6464e0c4d7dc2702d477475f05a5d20391b34b19ebda68493f3",
     "review-introduction.tex": "cc2f1d89bcb012a88774fcc0f44abe5032990f0373ee032b917c8e49b8c0596a",
     "review-knowledge.tex": "91fb849579655b2e34aa61583a639b61937659b5b4685eea86dfbe53c642bf24",
-    "review-references.tex": "672bd0f08457cc5e9e947ab83470b0bd71f65b3f242ca3d7826e405a97bc4575",
+    "review-references.tex": "c0756efff259b0cb7a2650fa9378f41dca76d716a5068dae0a7e586f7abd6965",
     "review.tex": "2cd69df67acf0db4511098a755bdfbc73b3e7292f87beb3a1b609e05087094b0",
     "aas.cls": "6806ea740616fa742f9c94eac598e94f6559186b964b5dbf23ebd272a3bece6b",
     "picins.sty": "966be2d6697d350acc45763d06f503a80205c7f528f6eb580db004a8ae2939c0",
-    "journal-review.sty": "1a692f8fee1daa48f9328c72dbd3a102e2f641aefa7b36eb2134d84af1bceda2",
+    "journal-review.sty": "16bef31fe5c2642a788f0500dcb7486fd9f34d7b2cf50296833d167861a50cc7",
     "metadata.tex": "35028fbe2219bd852e58979fe3858e50747a1ab8a8e39c8f0fb0fbc032303f15",
-    "verify_review.py": "f1f1b0948a28dc5b3fcee801bb84918d3ba0e0301dad26485a381db2d925c1f8",
+    "verify_review.py": "6e83d5d19953d2a4a00efad1116383caabc2c410df6458bda606739991365341",
     "figure-provenance.json": "1f70087f78d7f67bc1ff134d26b95ced2f3954e4491a932cbd647ed033b1bb9e",
     "review-sources.json": "56f3f8420977702a6231bd59e4b60b767c25ac90ed3c98edc963efca5cc109fa",
     "make_review_diagrams.py": "0ecbe3dcb2e9257ed46eb0ad568a5e6f8869ee20464e39fabe747c62cd0414be",
-    "format_references.py": "f15c12debe1f95c71dacbe9cdd526973067766bf24dc773139984da902d39cad",
-    "reference-records.tex": "ae88c3e68b80cb4ec2995f12b32a24c4a90212a76eb6cf7c29ed604f9fd461da"
+    "format_references.py": "1d390cf29924541738ae6b936b8f7f237b700fff75e53339da04cb80f1e3b4d3",
+    "reference-records.tex": "1fc8b5cb51e510c92ad24e7b3d69108f87b7684874ee26beaf22847540fdeada"
   },
-  "pdf_sha256": "783a809b2ab4df74e8f0c4b09bcde6e83f48feec4114e3f4d0e0ee66d3a49215"
+  "pdf_sha256": "8086fb1a7c25a27e822bfb3c4acf4459b96f2e72d6c1c53db488588e151ac6aa"
 }

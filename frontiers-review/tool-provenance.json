@@ -1,0 +1,18 @@
+{
+  "recorded": "2026-11-10",
+  "purpose": "Repository record of writing and figure-production assistance; separate from the scientific bibliography",
+  "assistant": "Codex",
+  "assistance": ["literature retrieval", "writing and editing", "figure code", "compilation and layout inspection"],
+  "skills": ["literature-review", "scientific-writing", "scientific-visualization"],
+  "skill_repository": "https://github.com/K-Dense-AI/scientific-agent-skills",
+  "tool_reference": {
+    "authors": "Kassis T, Agarwal V, He Y, et al.",
+    "title": "Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents",
+    "year": 2026,
+    "doi": "10.48550/arXiv.2609.00065"
+  },
+  "manuscript_tool_note_removed_at_user_request": true,
+  "human_author_review_confirmed": false,
+  "original_experiments_conducted": false,
+  "external_submission_performed": false
+}

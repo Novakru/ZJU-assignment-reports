@@ -37,7 +37,7 @@ def verify():
     references=(ROOT/'review-references.tex').read_text(encoding='utf-8')
     keys=re.findall(r'\\bibitem\{([^}]+)\}',references)
     citations={key for group in re.findall(r'\\cite\{([^}]+)\}',tex+'\n'+references) for key in group.split(',')}
-    assert len(keys)==33 and citations==set(keys),(keys,citations)
+    assert len(keys)==32 and citations==set(keys),(keys,citations)
     manifest=json.loads((ROOT/'review-sources.json').read_text(encoding='utf-8'))
     assert len(manifest['papers'])==32
     assert len({p['id'] for p in manifest['papers']})==32
@@ -48,8 +48,10 @@ def verify():
         if cached.exists():assert sha(cached)==paper['sha256'],paper['id']
     path=ROOT/'output/pdf/multi-agent-literature-review.pdf'
     doc=fitz.open(path);text='\n'.join(page.get_text() for page in doc)
-    for fragment in ('多智能体系统综述','关键词','结论','参考文献','资料与工具说明','蒋佳豪','22671064'):
+    for fragment in ('多智能体系统综述','关键词','结论','参考文献','工程技术前沿课程论文','蒋佳豪','22671064'):
         assert fragment in text,fragment
+    for removed in ('资料与工具说明','课程综述·修订稿','Codex','Scientific Agent Skills'):
+        assert removed not in text,removed
     assert '待填写' not in text and '作者待完成' not in text
     assert doc.metadata['author']=='蒋佳豪',doc.metadata
     assert '\ufffd' not in text
@@ -78,7 +80,8 @@ def verify():
       language='zh',status='substantially revised AI-assisted narrative review; author review pending',
       pages=len(doc),body_chinese_characters_excluding_headings_figures_tables_equations_and_references=characters,
       minimum_body_characters=3000,body_length_requirement_satisfied=True,
-      figures=figures,tables=tables,scholarly_reports=32,review_reports=3,tool_references=1,
+      figures=figures,tables=tables,scholarly_reports=32,review_reports=3,tool_references=0,
+      manuscript_tool_note_present=False,footer='工程技术前沿课程论文',
       related_reports_not_counted_as_independent_replications=True,
       references=len(keys),all_references_cited=True,original_experiments_conducted=False,
       primary_fulltexts_retrieved=True,source_selection='purposeful narrative, not systematic or exhaustive',

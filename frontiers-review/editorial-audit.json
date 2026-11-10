@@ -13,7 +13,7 @@
     "Added the licensed original Coscientist architecture and experimental apparatus photograph, Fig.1abc",
     "Removed the generic flowchart beside original spectra and explained retention-time and mass-spectrum comparison",
     "Replaced colored template plots with monochrome shape-coded scatter plots and exact per-category case counts",
-    "Preserved best-of-three aggregation, historical model and cost conditions, project versions and AI-use disclosure"
+    "Preserved best-of-three aggregation, historical model and cost conditions, project versions and repository assistance record"
   ],
   "numeric_evidence": "Source-table extraction; no newly executed scientific experiments or fabricated uncertainty",
   "human_author_review_confirmed": false,
@@ -23,7 +23,7 @@
     "scientific-visualization"
   ],
   "skill_source": "https://github.com/K-Dense-AI/scientific-agent-skills",
-  "tool_acknowledgment_in_manuscript": true,
+  "tool_acknowledgment_in_manuscript": false,
   "heading_revision_history": [
     {
       "date": "2026-11-10",
@@ -255,5 +255,16 @@
       }
     ],
     "body_equality_after_removing_headings": true
+  },
+  "presentation_cleanup": {
+    "date": "2026-11-10",
+    "requested_by_user": true,
+    "changes": [
+      "Remove the final Materials and tools note",
+      "Replace the draft footer with the course-paper footer",
+      "Remove the now-uncited tool-only reference; preserve its provenance in the repository"
+    ],
+    "scientific_manuscript_content_changed": false,
+    "assistance_record": "tool-provenance.json"
   }
 }

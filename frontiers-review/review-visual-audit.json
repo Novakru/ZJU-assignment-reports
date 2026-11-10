@@ -1,10 +1,10 @@
 {
   "reviewed": "2026-11-10",
   "artifact": "output/pdf/multi-agent-literature-review.pdf",
-  "pdf_sha256": "783a809b2ab4df74e8f0c4b09bcde6e83f48feec4114e3f4d0e0ee66d3a49215",
+  "pdf_sha256": "8086fb1a7c25a27e822bfb3c4acf4459b96f2e72d6c1c53db488588e151ac6aa",
   "pages": 12,
   "renderer": "Poppler pdftoppm -scale-to 1800 -png",
-  "contact_sheet": "tmp/pdfs/topic-headings-final-contact.png",
+  "contact_sheet": "tmp/pdfs/footer-cleanup-final-contact.png",
   "all_pages_contact_sheet_reviewed": true,
   "detailed_pages_across_final_iterations": [
     1,
@@ -28,7 +28,11 @@
     "No blank column from pending full-width table; conclusion has no one-line continuation",
     "Personal-name, review-directory and submission PDFs match audited PDF hash",
     "All revised section and subsection headings fit their columns; academic noun-phrase titles and hierarchy reviewed",
-    "Topic-specific headings use natural lengths; paired wording retained only for substantive relations; heading-to-content fit reviewed"
+    "Topic-specific headings use natural lengths; paired wording retained only for substantive relations; heading-to-content fit reviewed",
+    "Final note removed without leaving a heading or an empty final page",
+    "Course-paper footer is readable and complete on every regular page",
+    "All 32 scientific references remain cited; their numbering is unchanged",
+    "PDF subject metadata matches the neutral course-paper label"
   ],
   "changes_after_visual_review": [
     "Removed three generic box-arrow figures",
@@ -39,7 +43,8 @@
     "Moved final comparison-table declaration to prevent an empty text column",
     "Shortened conclusion to remove isolated continuation",
     "Replaced 26 conversational headings; verified source text outside headings is unchanged",
-    "Replaced mechanical paired titles with concise subject names; no changes outside headings"
+    "Replaced mechanical paired titles with concise subject names; no changes outside headings",
+    "Removed final tool note and its sole tool-only reference; replaced revision footer at explicit user request"
   ],
   "visual_defects_remaining": [],
   "author_review_confirmed": false,
@@ -50,5 +55,9 @@
     9,
     10,
     11
+  ],
+  "footer_cleanup_detailed_pages": [
+    2,
+    12
   ]
 }
