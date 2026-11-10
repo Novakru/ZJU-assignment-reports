@@ -75,14 +75,16 @@ MemGPT处理的重点又有所不同。
 这种管理比“记住全部对话”更接近科研需求，也把课堂中的知识图谱与自主记忆联系到了同一个实际问题：研究判断如何随新材料而更新。
 
 \begin{table*}[t]\centering\tabletext
-\caption{知识与记忆方法解决的问题及其代价。}
+\caption{知识管理方法的机制比较。}
 \label{tab:knowledge}
-\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{27mm}YYY@{}}\toprule
-方法 & 主要改变 & 适合的查询或任务 & 代价与未解决问题\\\midrule
-RAG\cite{rag} & 检索文本参与生成 & 局部事实、来源定位 & 片段相关不等于支持完整结论\\
-RAPTOR\cite{raptor} & 可检索的层次摘要 & 跨段主题、长文综合 & 摘要压缩限定，需追索源片段\\
-GraphRAG\cite{graphrag} & 实体关系与社区摘要 & 语料级主题、跨文档关联 & 抽取、消歧及索引维护\\
-Self-RAG\cite{selfrag} & 训练检索与反思决策 & 按需检索、支持度判断 & 需要相应训练与评价设计\\
-Reflexion\cite{reflexion} & 反馈的文字化解释 & 具有可用反馈的重复尝试 & 错误归因可能影响后续行动\\
-MemGPT\cite{memgpt} & 上下文与外部存储调度 & 长期交互、信息保留 & 容量管理不保证记录真实\\\bottomrule
+\begin{tabularx}{\textwidth}{@{}L{25mm}L{46mm}L{35mm}Y@{}}\toprule
+\textbf{方法} & \textbf{作用机制} & \textbf{适用任务} & \textbf{主要限制}\\\midrule
+\tabgroup{4}{外部知识检索}
+\tabname{RAG}{rag} & 检索原文后条件生成 & 事实查询、来源定位 & 易遗漏分散在多处的条件\\[3pt]
+\tabname{RAPTOR}{raptor} & 递归聚类，构建分层摘要 & 长文理解、跨段综合 & 摘要可能压缩关键限定\\[3pt]
+\tabname{GraphRAG}{graphrag} & 抽取实体关系，生成社区摘要 & 语料级主题分析 & 抽取误差及索引维护成本\\[3pt]
+\tabname{Self-RAG}{selfrag} & 用反思标记控制检索和生成 & 按需检索、支持度判断 & 需要专门训练和评价设计\\
+\tabgroup{4}{项目经历管理}
+\tabname{Reflexion}{reflexion} & 把反馈解释写入后续上下文 & 迭代尝试、程序调试 & 错误归因可能固化为经验\\[3pt]
+\tabname{MemGPT}{memgpt} & 在上下文和外部存储间调度 & 长对话、持续任务 & 容量管理不保证记录可信\\\bottomrule
 \end{tabularx}\end{table*}

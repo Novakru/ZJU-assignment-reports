@@ -15,16 +15,18 @@ RE-Bench采用7个开放机器学习研究工程环境，并引入人类专家�
 代理快速搜索若干方案与专家长期改进同一研究，并不是可以不计资源直接比较的活动。
 
 \begin{table*}[t]\centering\tabletext
-\caption{科研评价中的任务对象与测量内容。}
+\caption{科研评价工作的任务及测量内容。}
 \label{tab:benchmarks}
-\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{31mm}YYY@{}}\toprule
-评价工作 & 材料或任务 & 主要观察量 & 未直接测量的对象\\\midrule
-PaperQA2 / LitQA2\cite{paperqa} & 检索、文献综合与矛盾识别 & 回答质量、专家比较 & 实体实验与发现的有效性\\
-ScienceAgentBench\cite{sciencebench} & 来自44篇论文的102项任务 & 执行率、成功率、代码及成本 & 完整研究问题的提出与解决\\
-RE-Bench\cite{rebench} & 7个研究工程环境 & 随预算变化的任务收益 & 所有学科的长期科研能力\\
-MAST\cite{mast} & 多代理轨迹与失败案例 & 规范、协调及核验失败 & 科学产出的统一质量分数\\
-科研过程审计\cite{pitfalls} & 受控任务、论文、日志与代码 & 方法学缺陷识别 & 自然科研中缺陷的发生比例\\\bottomrule
-\end{tabularx}\end{table*}
+\begin{tabularx}{\textwidth}{@{}L{39mm}L{48mm}Y@{}}\toprule
+\textbf{评价工作} & \textbf{任务材料} & \textbf{主要测量内容}\\\midrule
+\tabname{PaperQA2 / LitQA2}{paperqa} & 检索、综合与矛盾识别 & 回答质量、来源支持及专家比较\\[5pt]
+\tabname{ScienceAgentBench}{sciencebench} & 44篇论文中的102项任务 & VER、SR、代码相似度及费用\\[5pt]
+\tabname{RE-Bench}{rebench} & 7个研究工程环境 & 不同时间预算下的任务收益\\[5pt]
+\tabname{MAST}{mast} & 多代理轨迹及失败案例 & 规范、协调和核验环节的失败类型\\[5pt]
+科研过程审计\cite{pitfalls} & 100个受控审计案例 & 方法学缺陷识别准确率\\\bottomrule
+\end{tabularx}
+\tabnote{注：VER为有效执行率，SR为任务成功率。各工作的任务、预算及评分定义不同，成绩不可直接合并。}
+\end{table*}
 
 \subsection{执行反馈的实证表现}
 图\ref{fig:sciencebench}重绘ScienceAgentBench中两个模型在三种框架下的结果。

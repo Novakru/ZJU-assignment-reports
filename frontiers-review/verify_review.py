@@ -36,7 +36,8 @@ def verify():
     assert (figures,tables)==(6,4),(figures,tables)
     references=(ROOT/'review-references.tex').read_text(encoding='utf-8')
     keys=re.findall(r'\\bibitem\{([^}]+)\}',references)
-    citations={key for group in re.findall(r'\\cite\{([^}]+)\}',tex+'\n'+references) for key in group.split(',')}
+    citation_text=re.sub(r'\\tabname\{[^}]*\}\{([^}]+)\}',r'\\cite{\1}',tex+'\n'+references)
+    citations={key for group in re.findall(r'\\cite\{([^}]+)\}',citation_text) for key in group.split(',')}
     assert len(keys)==32 and citations==set(keys),(keys,citations)
     manifest=json.loads((ROOT/'review-sources.json').read_text(encoding='utf-8'))
     assert len(manifest['papers'])==32

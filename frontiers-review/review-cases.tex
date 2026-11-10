@@ -85,15 +85,22 @@ Coscientist进一步把装置文档、代码执行和实验设备连在一起\ci
 表\ref{tab:systems}据此按产出和验证方式比较代表系统，避免将文献能力、计算能力和实体实验混成一种成绩。
 
 \begin{table*}[t]\centering\tabletext
-\caption{代表系统的研究产出与验证方式。}
+\caption{代表性科研系统的产出及验证方式。}
 \label{tab:systems}
-\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{29mm}YYY@{}}\toprule
-系统 & 主要产出 & 原报告中的检查或验证 & 比较时需保留的条件\\\midrule
-PaperQA2\cite{paperqa} & 带来源的文献综合 & 文献基准与专家比较 & 信息问题的定义与资料范围\\
-ResearchAgent / SciAgents\cite{researchagent,sciagents} & 研究问题与方法构思 & 评审反馈及案例分析 & 构思评价与后续实施的区别\\
-The AI Scientist系列\cite{scientist,scientistv2,scientistjournal} & 程序实验与研究论文 & 计算结果、自动评审及工作坊评审 & 模板、搜索预算和报告版本\\
-Agent Laboratory\cite{lab} & 人给定想法下的研究流程 & 人工与模型评价 & 人工输入、修改与评分差异\\
-AI co-scientist\cite{cosci} & 排序及演化后的假设 & 专家反馈与部分生物医学检验 & 不同案例的验证性质\\
-Virtual Lab\cite{virtual} & 纳米抗体候选及设计流程 & 候选计算筛选与实验表征 & 专用模型贡献及功能测量\\
-ChemCrow / Coscientist\cite{chemcrow,chem} & 化学规划、工具调用与实体执行 & 专家检查、装置反馈和产物测量 & 工具覆盖、设备和人工操作\\\bottomrule
-\end{tabularx}\end{table*}
+\begin{tabularx}{\textwidth}{@{}L{40mm}L{48mm}Y@{}}\toprule
+\textbf{系统} & \textbf{研究产出} & \textbf{原报告采用的验证方式}\\\midrule
+\tabgroup{3}{文献综合与研究构思}
+\tabname{PaperQA2}{paperqa} & 带引用的文献综合 & 文献问答、矛盾识别及专家比较\\[4pt]
+\tabname{ResearchAgent}{researchagent} & 问题、方法与实验构思 & 迭代评审及案例分析\\[4pt]
+\tabname{SciAgents}{sciagents} & 跨概念的材料研究构思 & 代理评议及材料研究案例\\
+\tabgroup{3}{计算研究}
+\tabname{The AI Scientist}{scientist,scientistv2,scientistjournal} & 程序实验与研究论文 & 程序实验、自动评审及工作坊评审\\[4pt]
+\tabname{Agent Laboratory}{lab} & 人给定目标下的计算研究 & 人工评分、模型评分及后端比较\\
+\tabgroup{3}{生物医学与化学实验}
+\tabname{AI co-scientist}{cosci} & 迭代排序后的研究假设 & 专家反馈，部分候选接受生物医学检验\\[4pt]
+\tabname{Virtual Lab}{virtual} & 纳米抗体设计候选 & 计算筛选及纳米抗体实验表征\\[4pt]
+\tabname{ChemCrow}{chemcrow} & 化学检索、计算和合成规划 & 专家评估及部分实验任务\\[4pt]
+\tabname{Coscientist}{chem} & 实验程序及产物测量 & 装置反馈、色谱与质谱对照\\\bottomrule
+\end{tabularx}
+\tabnote{注：验证均限于原报告设定的任务条件。The AI Scientist一行归并同一研究系列的不同报告。}
+\end{table*}

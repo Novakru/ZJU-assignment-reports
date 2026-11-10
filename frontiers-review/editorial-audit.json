@@ -266,5 +266,34 @@
     ],
     "scientific_manuscript_content_changed": false,
     "assistance_record": "tool-provenance.json"
+  },
+  "table_revision": {
+    "date": "2026-11-10",
+    "scope": "four tables and shared typesetting; prose outside tables unchanged",
+    "rows": {
+      "mechanism_table": 6,
+      "system_table": 9,
+      "evaluation_table": 5,
+      "proposed_comparisons": 4
+    },
+    "content_changes": [
+      "Group retrieval versus project memory",
+      "Separate previously combined system rows",
+      "Remove repeated explanatory caveats from cells and retain common notes",
+      "Keep task and measurement definitions in evaluation table",
+      "Distinguish fixed conditions, changed factors and observations in future designs"
+    ],
+    "layout_changes": [
+      "10pt table text, up from 9.5pt",
+      "Content-specific column widths",
+      "Protected system names with attached citations",
+      "Moderate row spacing and group separators",
+      "Semantic line breaks only where needed",
+      "9.5pt references retained with 11.5pt line spacing to avoid a short trailing page"
+    ],
+    "scientific_numeric_results_changed": false,
+    "proposals_reported_as_experiments": false,
+    "source_basis": "existing manuscript and its 32 cited reports",
+    "manual_author_verification_confirmed": false
   }
 }

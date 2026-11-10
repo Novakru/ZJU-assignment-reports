@@ -31,25 +31,25 @@
     "author review and compliance with course rules on AI assistance"
   ],
   "source_sha256": {
-    "review-cases.tex": "be4172cf0474e5f4dc359234aada6fdd08b5703ef25dbb533e57565910cfe9ce",
+    "review-cases.tex": "3794fb0af4c632f36540f2f500cde6e48ca85154038b9a6b8d5e40da3e4a5241",
     "review-collaboration.tex": "c9a718310f20929f8e8966c7696e98b0924c864a87a3609c6df5ef8b30551a34",
-    "review-discussion.tex": "fcb35b48d586e8fe74ea0520889ca0e9c47f56131dc737e4f87186f0bde7bb25",
-    "review-evaluation.tex": "f2a73982ec6ac76c6d446e1d91cd56b34e697e46af15c47b374961f1fc258e99",
+    "review-discussion.tex": "7c5f84d9bb8597f3a218f17957ebaa68c77550c3b62743765c3e4e401fa18e26",
+    "review-evaluation.tex": "1646fba7e56fd5f327d160c18223283c9f491002db03b35a70e15365b7538e0c",
     "review-foundations.tex": "7fd9f0964bfac6464e0c4d7dc2702d477475f05a5d20391b34b19ebda68493f3",
     "review-introduction.tex": "cc2f1d89bcb012a88774fcc0f44abe5032990f0373ee032b917c8e49b8c0596a",
-    "review-knowledge.tex": "91fb849579655b2e34aa61583a639b61937659b5b4685eea86dfbe53c642bf24",
-    "review-references.tex": "c0756efff259b0cb7a2650fa9378f41dca76d716a5068dae0a7e586f7abd6965",
+    "review-knowledge.tex": "38fac6799c12fff48eefb4e882d37b62d7fa32e0eb1c17ef381536482604453c",
+    "review-references.tex": "9344ae748b4bc81b24a5c5fe4917ca29151358e1eff2e6546eb6d64f0fdc67e8",
     "review.tex": "2cd69df67acf0db4511098a755bdfbc73b3e7292f87beb3a1b609e05087094b0",
     "aas.cls": "6806ea740616fa742f9c94eac598e94f6559186b964b5dbf23ebd272a3bece6b",
     "picins.sty": "966be2d6697d350acc45763d06f503a80205c7f528f6eb580db004a8ae2939c0",
-    "journal-review.sty": "16bef31fe5c2642a788f0500dcb7486fd9f34d7b2cf50296833d167861a50cc7",
+    "journal-review.sty": "fa44b38bd69106563eaecd4651f2ae11d0ef9cc74f5ba088fac42cee0ed45e8a",
     "metadata.tex": "35028fbe2219bd852e58979fe3858e50747a1ab8a8e39c8f0fb0fbc032303f15",
-    "verify_review.py": "6e83d5d19953d2a4a00efad1116383caabc2c410df6458bda606739991365341",
+    "verify_review.py": "c0898f971d83ae2d99f122e84f412b82b963a1d142927769f0502b06ae606888",
     "figure-provenance.json": "1f70087f78d7f67bc1ff134d26b95ced2f3954e4491a932cbd647ed033b1bb9e",
     "review-sources.json": "56f3f8420977702a6231bd59e4b60b767c25ac90ed3c98edc963efca5cc109fa",
     "make_review_diagrams.py": "0ecbe3dcb2e9257ed46eb0ad568a5e6f8869ee20464e39fabe747c62cd0414be",
-    "format_references.py": "1d390cf29924541738ae6b936b8f7f237b700fff75e53339da04cb80f1e3b4d3",
+    "format_references.py": "8f1b8b55a6f766a8dfcf5b182f6986be5818ce21e4bd9b06f089b4d18b4b8a7d",
     "reference-records.tex": "1fc8b5cb51e510c92ad24e7b3d69108f87b7684874ee26beaf22847540fdeada"
   },
-  "pdf_sha256": "8086fb1a7c25a27e822bfb3c4acf4459b96f2e72d6c1c53db488588e151ac6aa"
+  "pdf_sha256": "71bed507739d7167bb80a1ceac671bfc441b9fb736d9db76ca1b3217f9d0b700"
 }

@@ -1,10 +1,10 @@
 {
   "reviewed": "2026-11-10",
   "artifact": "output/pdf/multi-agent-literature-review.pdf",
-  "pdf_sha256": "8086fb1a7c25a27e822bfb3c4acf4459b96f2e72d6c1c53db488588e151ac6aa",
+  "pdf_sha256": "71bed507739d7167bb80a1ceac671bfc441b9fb736d9db76ca1b3217f9d0b700",
   "pages": 12,
   "renderer": "Poppler pdftoppm -scale-to 1800 -png",
-  "contact_sheet": "tmp/pdfs/footer-cleanup-final-contact.png",
+  "contact_sheet": "tmp/pdfs/tables-final-contact.png",
   "all_pages_contact_sheet_reviewed": true,
   "detailed_pages_across_final_iterations": [
     1,
@@ -32,7 +32,12 @@
     "Final note removed without leaving a heading or an empty final page",
     "Course-paper footer is readable and complete on every regular page",
     "All 32 scientific references remain cited; their numbering is unchanged",
-    "PDF subject metadata matches the neutral course-paper label"
+    "PDF subject metadata matches the neutral course-paper label",
+    "All four tables reviewed at final width: no split system names, single-character residual lines, clipping or overlapping cells",
+    "Table groups and unequal column widths make comparison dimensions visible",
+    "Nine individual system entries retain source citations and distinct research outputs",
+    "Future comparison table separates fixed conditions, variable settings and measurements",
+    "All 32 references fit without an almost-empty final page; reference font size retained"
   ],
   "changes_after_visual_review": [
     "Removed three generic box-arrow figures",
@@ -44,7 +49,8 @@
     "Shortened conclusion to remove isolated continuation",
     "Replaced 26 conversational headings; verified source text outside headings is unchanged",
     "Replaced mechanical paired titles with concise subject names; no changes outside headings",
-    "Removed final tool note and its sole tool-only reference; replaced revision footer at explicit user request"
+    "Removed final tool note and its sole tool-only reference; replaced revision footer at explicit user request",
+    "Restructured and condensed all four tables; adjusted widths and row spacing; removed repetitive cell-level caveats; reduced bibliography leading to preserve clean pagination"
   ],
   "visual_defects_remaining": [],
   "author_review_confirmed": false,
@@ -58,6 +64,13 @@
   ],
   "footer_cleanup_detailed_pages": [
     2,
+    12
+  ],
+  "table_revision_detailed_pages": [
+    5,
+    8,
+    9,
+    11,
     12
   ]
 }

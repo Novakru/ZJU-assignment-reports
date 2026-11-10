@@ -61,5 +61,16 @@
  \vspace{1mm}{\fontsize{10}{14}\selectfont 浙江大学伊利诺伊大学厄巴纳香槟校区联合学院\par}
  \end{center}\vspace{2mm}}
 \newcommand{\abstractlabel}[1]{\noindent\textbf{#1}\quad}
-\newcommand{\tabletext}{\fontsize{9.5}{13}\selectfont}
+\newcommand{\tabletext}{%
+ \fontsize{10}{14}\selectfont
+ \setlength{\tabcolsep}{5pt}%
+ \renewcommand{\arraystretch}{1.10}%
+ \setlength{\heavyrulewidth}{.65pt}%
+ \setlength{\lightrulewidth}{.35pt}}
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\tabname}[2]{\mbox{#1\cite{#2}}}
+\newcommand{\tabgroup}[2]{%
+ \addlinespace[4pt]\multicolumn{#1}{@{}l}{\fontsize{9}{12}\selectfont\bfseries #2}\\[2pt]}
+\newcommand{\tabnote}[1]{%
+ \par\vspace{3pt}\noindent\parbox{\textwidth}{\fontsize{9}{12}\selectfont\raggedright #1}}
