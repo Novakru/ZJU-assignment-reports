@@ -29,13 +29,13 @@
     "author review and compliance with course rules on AI assistance"
   ],
   "source_sha256": {
-    "review-cases.tex": "23c2f40865fb751228c24d78580a7f9734e203893faf3ca47a17ef69a738cd70",
-    "review-collaboration.tex": "f0a0c173466b55cde7cfcec941905a35ec445c0054260c56d367b8774ef2663f",
-    "review-discussion.tex": "e2939f4949130c1a89e5e49f550d2bb12aacaf517b857072606cbeda9de79cb4",
-    "review-evaluation.tex": "d9be194183aa08279127d0315d355af30e3f9638952bf2e0d784197ef133e9e5",
-    "review-foundations.tex": "f8498a2fbd64c316f45b426ef399c2af7f4bbed96127289a6b7a7c9fcb201b22",
+    "review-cases.tex": "be4172cf0474e5f4dc359234aada6fdd08b5703ef25dbb533e57565910cfe9ce",
+    "review-collaboration.tex": "c9a718310f20929f8e8966c7696e98b0924c864a87a3609c6df5ef8b30551a34",
+    "review-discussion.tex": "fcb35b48d586e8fe74ea0520889ca0e9c47f56131dc737e4f87186f0bde7bb25",
+    "review-evaluation.tex": "f2a73982ec6ac76c6d446e1d91cd56b34e697e46af15c47b374961f1fc258e99",
+    "review-foundations.tex": "7fd9f0964bfac6464e0c4d7dc2702d477475f05a5d20391b34b19ebda68493f3",
     "review-introduction.tex": "cc2f1d89bcb012a88774fcc0f44abe5032990f0373ee032b917c8e49b8c0596a",
-    "review-knowledge.tex": "b3875633270b6e6ace6adee76ee0277f139c13d2d71e7188eb36f3062a172b3c",
+    "review-knowledge.tex": "91fb849579655b2e34aa61583a639b61937659b5b4685eea86dfbe53c642bf24",
     "review-references.tex": "672bd0f08457cc5e9e947ab83470b0bd71f65b3f242ca3d7826e405a97bc4575",
     "review.tex": "2cd69df67acf0db4511098a755bdfbc73b3e7292f87beb3a1b609e05087094b0",
     "aas.cls": "6806ea740616fa742f9c94eac598e94f6559186b964b5dbf23ebd272a3bece6b",
@@ -49,5 +49,5 @@
     "format_references.py": "f15c12debe1f95c71dacbe9cdd526973067766bf24dc773139984da902d39cad",
     "reference-records.tex": "ae88c3e68b80cb4ec2995f12b32a24c4a90212a76eb6cf7c29ed604f9fd461da"
   },
-  "pdf_sha256": "b75fdadcdb71f983eba836d6d3cfb80886b49ea8cb0026f61a50605d73a7fe6d"
+  "pdf_sha256": "783a809b2ab4df74e8f0c4b09bcde6e83f48feec4114e3f4d0e0ee66d3a49215"
 }
