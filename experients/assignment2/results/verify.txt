@@ -1,0 +1,7 @@
+PASS: gradient flows through Linear
+PASS: gradient flows through Conv1d
+PASS: gradient flows through Transformer
+PASS: gradient flows through RNN
+PASS: GCN via mean first, then feature transform
+PASS: Bellman linear system gives V(A)=33/5, V(B)=12
+All additional checks passed.

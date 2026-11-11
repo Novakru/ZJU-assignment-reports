@@ -1,0 +1,2 @@
+Output: (80, 24, 384)
+Features per head: 64

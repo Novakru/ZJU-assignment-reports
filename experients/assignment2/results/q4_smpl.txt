@@ -1,0 +1,4 @@
+Pose: 24 axis-angle rotations: (24, 3)
+Pose scalar count: 72
+Shape coefficient count (common setting): 10
+Parameter layout only; no SMPL mesh is generated.

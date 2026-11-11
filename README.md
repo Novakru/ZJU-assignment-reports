@@ -1,5 +1,11 @@
 # ZJU Report Templates
 
+当前作业分支：`assignment2-cs1050`。Assignment2 报告见
+[`report/report.pdf`](report/report.pdf)，构建说明见
+[`report/README.md`](report/README.md)，实验见
+[`experients/assignment2/`](experients/assignment2/README.md)。
+Assignment1 文件作为历史材料保留。
+
 面向浙江大学学习与科研场景的 Typora 主题和 LaTeX 报告模板合集。包含本科课程/实验报告样例，以及独立的英文技术报告与论文模板。项目由个人维护，非浙江大学官方模板。
 
 ## 技术报告与论文预览

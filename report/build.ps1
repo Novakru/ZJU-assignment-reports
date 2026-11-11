@@ -6,7 +6,7 @@ $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path -Parent $PSScriptRoot
 Push-Location $repoRoot
 try {
-    & $PythonCommand 'experients/assignment1/run.py'
+    & $PythonCommand 'experients/assignment2/run.py'
     if ($LASTEXITCODE -ne 0) { throw 'Experiment or verification failed.' }
 } finally {
     Pop-Location
@@ -26,9 +26,9 @@ try {
     }
 
     # Separate final artifact record avoids a circular hash in the PDF manifest.
-    $experimentManifest = Get-Content -Raw -Encoding UTF8 -LiteralPath '../experients/assignment1/results/manifest.json' | ConvertFrom-Json
+    $experimentManifest = Get-Content -Raw -Encoding UTF8 -LiteralPath '../experients/assignment2/results/manifest.json' | ConvertFrom-Json
     $questionCount = @($experimentManifest.question_runs).Count
-    if ($questionCount -ne 10) { throw 'The report requires successful runs of all ten question scripts.' }
+    if ($questionCount -ne 10) { throw 'The report requires successful runs of all ten scripts (including Question 1 subparts).' }
     $record = [ordered]@{
         command = 'powershell -NoProfile -File report/build.ps1'
         experiments_passed = $true
@@ -36,11 +36,11 @@ try {
         xelatex_passes = 2
         latex_warnings_or_overflow = $false
         report_pdf_sha256 = (Get-FileHash -LiteralPath 'report.pdf' -Algorithm SHA256).Hash.ToLowerInvariant()
-        manifest_sha256 = (Get-FileHash -LiteralPath '../experients/assignment1/results/manifest.json' -Algorithm SHA256).Hash.ToLowerInvariant()
+        manifest_sha256 = (Get-FileHash -LiteralPath '../experients/assignment2/results/manifest.json' -Algorithm SHA256).Hash.ToLowerInvariant()
     }
     $recordJson = ($record | ConvertTo-Json) + "`n"
     $utf8 = New-Object System.Text.UTF8Encoding($false)
-    [System.IO.File]::WriteAllText((Join-Path $repoRoot 'experients/assignment1/results/build.json'), $recordJson, $utf8)
+    [System.IO.File]::WriteAllText((Join-Path $repoRoot 'experients/assignment2/results/build.json'), $recordJson, $utf8)
     Write-Output "Built: $(Join-Path $PSScriptRoot 'report.pdf')"
     if (Select-String -LiteralPath 'student-info.tex' -Pattern '\[YOUR (NAME|STUDENT ID)\]' -Quiet) {
         Write-Warning 'Fill in Name and Student ID in report/student-info.tex before submission.'

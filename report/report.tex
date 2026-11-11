@@ -1,225 +1,206 @@
 \documentclass[11pt,a4paper]{article}
 \input{student-info.tex}
 \usepackage{assignment}
-
 \begin{document}
 \makeassignmenttitle
-
-\question{1}
-The two lines have the common direction $\mathbf d=(4,2,5)^\top$.
-For a point $\mathbf a+\lambda\mathbf d$ on either line,
-\[
- \lim_{\lambda\to\infty}
- \left(\frac{a_X+4\lambda}{a_Z+5\lambda},
-       \frac{a_Y+2\lambda}{a_Z+5\lambda}\right)
- =\left(\frac45,\frac25\right).
-\]
-Thus both lines have the same vanishing point
-$\answer{\mathbf v=(4/5,\,2/5)^\top=(0.8,\,0.4)^\top}$.
-Its homogeneous image coordinates are $(4,2,5)^\top$; the different line origins
-do not affect this limit.
-\questioncode{q1_vanishing_point}
-\questionoutput{q1_vanishing_point}
+\question{1.1: Linear layer}
+A linear layer maps the last feature dimension from 640 to 320,
+preserving the batch dimension. The missing arguments are
+\texttt{640, 320}, yielding $\boxed{(80,320)}$.
+\questioncode{q1_1_linear}
+\questionoutput{q1_1_linear}
 
 \clearpage
-\question{2}
-The plane has normal $\mathbf n=(6,3,2)^\top$.
-Every direction $\mathbf d$ parallel to it satisfies $\mathbf n^\top\mathbf d=0$.
-Under normalized perspective projection, its vanishing point is
-$\mathbf v\sim(d_X,d_Y,d_Z)^\top$. Therefore all these points satisfy
+\question{1.2: Convolutional layers}
+For either spatial dimension, the output length is
 \[
- \mathbf n^\top\mathbf v=0
- \quad\Longrightarrow\quad
- \answer{6x+3y+2=0},\qquad
- \answer{\boldsymbol\ell_\infty\sim(6,3,2)^\top}.
+ n_{\rm out}=\left\lfloor
+ \frac{n_{\rm in}+2p-d(k-1)-1}{s}+1\right\rfloor.
 \]
-The offset $17$ determines the plane's position, whereas its vanishing line
-depends only on its orientation. Directions with $d_Z=0$ are included as
-homogeneous points at infinity.
-\questioncode{q2_vanishing_line}
-\questionoutput{q2_vanishing_line}
+\begin{enumerate}[label=(\alph*)]
+\item \texttt{nn.Conv2d(36,48,3,stride=2)} uses padding 0 and
+dilation 1. The sizes are $\lfloor(224-3)/2+1\rfloor=111$ and
+$\lfloor(160-3)/2+1\rfloor=79$.
+\item \texttt{nn.Conv2d(36,72,4,stride=(2,1),padding=(1,2))}
+gives $\lfloor(224+2-4)/2+1\rfloor=112$ and
+$\lfloor(160+4-4)/1+1\rfloor=161$.
+\item Kernel $(5,3)$ and dilation $(1,2)$ give effective kernel sizes
+$(5,5)$. The sizes are $\lfloor(224+4-5)/2+1\rfloor=112$ and
+$\lfloor(160+2-5)/3+1\rfloor=53$.
+Both channel counts, 36 and 72, are divisible by 6, so six groups are valid.
+\end{enumerate}
+\questioncode{q1_2_convolution}
+\questionoutput{q1_2_convolution}
 
 \clearpage
-\question{3}
-For $12X+8Y+28Z=23$, a normal is
-\[
- \mathbf n=(12,8,28)^\top=4(3,2,7)^\top.
-\]
-If $\mathbf u$ and $\mathbf v$ lie on the plane, subtracting their plane
-equations gives $\mathbf n^\top(\mathbf u-\mathbf v)=0$.
-Consequently $(3,2,7)^\top$ is orthogonal to every direction in the plane,
-so it is perpendicular to the plane.
-\questioncode{q3_plane_normal}
-\questionoutput{q3_plane_normal}
+\question{1.3: Recurrent neural network}
+The input uses $(L,B,D)$ order. Choose \texttt{input\_size=96},
+\texttt{hidden\_size=192}, and \texttt{num\_layers=4}.
+A unidirectional RNN requires an initial hidden state of shape
+$(4,20,192)$, one vector per layer and batch item.
+The missing arguments are \texttt{96}, \texttt{num\_layers=4},
+and \texttt{4, 20}. The output is $(28,20,192)$.
+\questioncode{q1_3_rnn}
+\questionoutput{q1_3_rnn}
 
 \clearpage
-\question{4}
-The shared translation $\mathbf t=(-3,2,1)^\top$ cancels:
-$\mathbf x_2-\mathbf y_2=R(\mathbf x_1-\mathbf y_1)$.
-Writing $\mathbf d=\mathbf x_1-\mathbf y_1$ and using $R^\top R=I$,
-\[
- \|\mathbf x_2-\mathbf y_2\|_2^2
- =\mathbf d^\top R^\top R\mathbf d
- =\mathbf d^\top\mathbf d
- =\|\mathbf x_1-\mathbf y_1\|_2^2.
-\]
-Both norms are nonnegative; taking square roots proves
-$\answer{\|\mathbf x_2-\mathbf y_2\|_2=\|\mathbf x_1-\mathbf y_1\|_2}$.
-The code verifies the identity symbolically under the same orthogonality
-assumption; it does not rely on selecting a particular rotation.
-\questioncode{q4_rigid_distance}
-\questionoutput{q4_rigid_distance}
+\question{1.4: Transformer encoder layer}
+Set \texttt{d\_model=384}, \texttt{nhead=6}, and
+\texttt{batch\_first=True}. Each attention head has $384/6=64$ features.
+The encoder preserves sequence length and model dimension,
+yielding $(80,24,384)$. Evaluation mode disables dropout in this example.
+\questioncode{q1_4_transformer}
+\questionoutput{q1_4_transformer}
 
 \clearpage
-\question{5}
-Let $\mathbf X_i=(X_i,Y_i,Z_i,1)^\top$ and denote the rows of $P$ by
-$\mathbf p_1^\top,\mathbf p_2^\top,\mathbf p_3^\top$.
-Each correspondence imposes the two linear constraints
+\question{1.5: Combined architecture}
+Use a feature-wise linear layer, a temporal 1D convolution, a Transformer
+encoder, and an RNN:
 \[
- (\mathbf p_1^\top-x_i\mathbf p_3^\top)\mathbf X_i=0,
+\begin{aligned}
+ (B,L,384)&\xrightarrow{\rm Linear}(B,L,384)\\
+ &\xrightarrow{\rm transpose}(B,384,L)
+ \xrightarrow{\rm Conv1d}(B,384,L)\\
+ &\xrightarrow{\rm transpose}(B,L,384)
+ \xrightarrow{\rm Transformer}(B,L,384)
+ \xrightarrow{\rm RNN}(B,L,384).
+\end{aligned}
+\]
+Kernel size 3, stride 1, and padding 1 preserve the sequence length.
+Both the Transformer and RNN use batch-first order.
+All four required components participate in the forward pass.
+\questioncode{q1_5_network}
+\questionoutput{q1_5_network}
+
+\clearpage
+\question{2: Graph convolution}
+Adding self-loops gives
+\[
+ \widetilde A=A+I=
+ \begin{bmatrix}1&1&1\\1&1&1\\1&1&1\end{bmatrix},
+ \quad D=3I,\quad D^{-1/2}=\frac1{\sqrt3}I.
+\]
+The normalized adjacency and transformed features are
+\[
+ S=D^{-1/2}\widetilde A D^{-1/2}
+ =\frac13\begin{bmatrix}1&1&1\\1&1&1\\1&1&1\end{bmatrix},
  \qquad
- (\mathbf p_2^\top-y_i\mathbf p_3^\top)\mathbf X_i=0.
+ XW=\begin{bmatrix}1&2\\2&1\\0&1\end{bmatrix}
+       \begin{bmatrix}2&1\\0&1\end{bmatrix}
+    =\begin{bmatrix}2&3\\4&3\\0&1\end{bmatrix}.
 \]
-Stacking the six pairs gives $A\mathbf p=0$, where $\mathbf p$ contains the
-rows of $P$ in order. The $12\times12$ matrix $A$ has rank $11$, so the solution
-is unique up to scale. Its exact representative and norm are
+With identity activation, each row is the mean of the transformed features:
 \[
- P_0=\begin{bmatrix}
- 180&0&0&280\\0&180&0&220\\0&0&0&1
- \end{bmatrix},\qquad
- \|P_0\|_F=\sqrt{191601}.
+ \boxed{H^{(1)}=SXW=
+ \begin{bmatrix}2&7/3\\2&7/3\\2&7/3\end{bmatrix}}.
 \]
-The requested normalization is
-\[
- \answer{P=\frac{1}{\sqrt{191601}}
- \begin{bmatrix}180&0&0&280\\0&180&0&220\\0&0&0&1\end{bmatrix}}.
-\]
-This is an affine camera: $x=180X+280$ and $y=180Y+220$ do not depend on $Z$.
-The code uses normalized DLT: it centers and scales both point sets, takes
-the last right singular vector, and denormalizes by
-$P=T_{2D}^{-1}P_nT_{3D}$. It then enforces $\|P\|_F=1$ and fixes the global
-sign by making the largest-magnitude entry positive.
-\questioncode{q5_camera}
-\questionoutput{q5_camera}
+\questioncode{q2_gcn}
+\questionoutput{q2_gcn}
 
 \clearpage
-\question{6}
-Let $\mathbf X_h=(X,Y,Z,W)^\top$. For each camera, stack the rows
-$x_jP^{(j)}_3-P^{(j)}_1$ and $y_jP^{(j)}_3-P^{(j)}_2$.
-The supplied matrices and pixels give
-\[
- A=\begin{bmatrix}
- -900&0&0&0\\0&-900&0&0\\-900&0&-15&6\\0&-900&0&0
- \end{bmatrix},\qquad A\mathbf X_h=0.
-\]
-The first two equations imply $X=Y=0$; the third then gives
-$-15Z+6W=0$. Choosing $W=1$ yields
-\[
- \answer{\mathbf X=(0,\,0,\,0.4)^\top},\qquad
- \mathbf X_h=(0,\,0,\,0.4,\,1)^\top.
-\]
-Writing $P^{(2)}=K[I\mid\mathbf t]$ gives
-$\mathbf t=(-6/900,0,0)^\top$ and camera center
-$\mathbf C_2=(6/900,0,0)^\top$.
-The baseline is $B=6/900=1/150$ in the given world units.
-The depth can also be checked from the disparity:
-\[
- Z=\frac{fB}{x_1-x_2}=\frac{900(6/900)}{400-385}=0.4.
-\]
-The code solves the homogeneous system by SVD and divides by the last
-coordinate. Reprojection checks both image measurements; both depths are positive.
-\questioncode{q6_triangulation}
-\questionoutput{q6_triangulation}
+\question{3: ROI Align}
+ROI Pooling quantizes ROI boundaries and bin boundaries onto the feature grid,
+which can shift features relative to the original image. ROI Align retains
+fractional coordinates and samples features by bilinear interpolation at
+precisely located points within each bin, then aggregates those samples.
+It removes this coordinate quantization [2, Sec.~3].
+
+This alignment matters because instance segmentation assigns a label
+to each pixel. Small shifts can displace mask boundaries or lose thin
+structures even when a bounding box is acceptable.
+The code illustrates one fractional sample on a $2\times2$ feature map.
+\questioncode{q3_roi_align}
+\questionoutput{q3_roi_align}
 
 \clearpage
-\question{7}
-With the convention $\mathbf X_2=R\mathbf X_1+\mathbf t$, corresponding
-calibrated image points obey $\mathbf p_2^\top E\mathbf p_1=0$, with
-\[
- E=[\mathbf t]_\times R,\qquad
- [\mathbf t]_\times=\begin{bmatrix}
- 0&-t_z&t_y\\t_z&0&-t_x\\-t_y&t_x&0
- \end{bmatrix}.
-\]
-For $R=I$ and $\mathbf t=(3,0,0)^\top$,
-\[
- \answer{E=\begin{bmatrix}0&0&0\\0&0&-3\\0&3&0\end{bmatrix}}.
-\]
-It is defined up to nonzero scale. Since $K_1=K_2=I$, the fundamental
-matrix $F=K_2^{-\top}EK_1^{-1}$ is also $E$.
-\questioncode{q7_essential_matrix}
-\questionoutput{q7_essential_matrix}
+\question{4: SMPL}
+SMPL (Skinned Multi-Person Linear Model) is a learned parametric 3D human
+body model. It produces a mesh from a template using shape-dependent
+and pose-dependent blend shapes and linear blend skinning [3].
+\begin{itemize}
+\item $\boldsymbol\theta$ describes pose through joint rotations.
+Standard SMPL uses 24 axis-angle rotations (72 scalars), including
+the global root rotation.
+\item $\boldsymbol\beta$ contains coefficients in a learned body-shape
+space, controlling body proportions and build. A common setting
+uses 10 shape coefficients.
+\end{itemize}
+Global translation is specified separately. Changing $\theta$ articulates
+the body; changing $\beta$ changes its underlying shape.
+The code checks this common parameter layout without generating a mesh.
+\questioncode{q4_smpl}
+\questionoutput{q4_smpl}
 
 \clearpage
-\question{8}
-The epipolar line in image 2 is $\boldsymbol\ell_2=E\mathbf p_1$:
+\question{5: CLIP}
+CLIP trains an image encoder and a text encoder on paired images and captions.
+Normalized embeddings share a feature space. For $N$ pairs, let
+$s_{ij}=\mathbf v_i^\top\mathbf t_j/\tau$, with learned temperature $\tau$.
+The symmetric contrastive objective is [4, Sec.~2.3]
 \[
- \boldsymbol\ell_2=
- \begin{bmatrix}0&0&0\\0&0&-3\\0&3&0\end{bmatrix}
- \begin{bmatrix}280\\200\\1\end{bmatrix}
- =\begin{bmatrix}0\\-3\\600\end{bmatrix}.
+ \mathcal L=-\frac{1}{2N}\sum_{i=1}^{N}
+ \left[
+ \log\frac{\exp(s_{ii})}{\sum_j\exp(s_{ij})}
+ +\log\frac{\exp(s_{ii})}{\sum_j\exp(s_{ji})}
+ \right].
 \]
-Thus $\answer{\boldsymbol\ell_2\sim(0,1,-200)^\top}$, or equivalently
-$\answer{y_2=200}$, since $0x_2-3y_2+600=0$.
-\questioncode{q8_epipolar_line}
-\questionoutput{q8_epipolar_line}
+This favors matching image-caption pairs over mismatched pairs in the batch.
+
+For zero-shot classification, turn each candidate class into a text
+prompt (for example, \emph{a photo of a dog}), encode the prompts and
+image, and choose the class with greatest cosine similarity.
+The pretrained encoders provide a classifier without fitting it to labeled
+examples from the target task [4, Sec.~3.1].
+The example below illustrates the loss and class selection using synthetic
+embeddings; it does not run pretrained CLIP.
+\questioncode{q5_clip}
+\questionoutput{q5_clip}
 
 \clearpage
-\question{9}
-First multiply and then divide by the homogeneous image coordinate:
+\question{6: State-value function}
+For the deterministic transitions under the fixed policy,
 \[
- P\mathbf X=\begin{bmatrix}3\\1\\2\end{bmatrix}
- \quad\Longrightarrow\quad
- \widehat{\mathbf x}=(1.5,\,0.5)^\top.
+ V^\pi(s)=R(s,\mathrm{MoveForward})+\gamma V^\pi(s').
 \]
-The Euclidean reprojection error is
-\begin{align*}
- e&=\|\widehat{\mathbf x}-\mathbf x_m\|_2
-   =\sqrt{(1.5-280)^2+(0.5-200)^2}\\
-  &=\sqrt{278.5^2+199.5^2}
-   =\sqrt{117362.5}
-   \approx\answer{342.5821\ \text{px}}.
-\end{align*}
-\questioncode{q9_reprojection_error}
-\questionoutput{q9_reprojection_error}
+Working backward from $V^\pi(D)=0$ gives
+\[
+ \boxed{V^\pi(B)=12+0.8(0)=12},\qquad
+ \boxed{V^\pi(A)=-3+0.8(12)=6.6}.
+\]
+The delivery reward occurs on the transition from $B$ to $D$ and is
+discounted once when computing the return from $A$.
+\questioncode{q6_values}
+\questionoutput{q6_values}
 
 \clearpage
-\question{10}
-Unit-scale orthographic projection along $+Z$ discards the depth coordinate:
-\[
- \mathbf x=\begin{bmatrix}1&0&0\\0&1&0\end{bmatrix}
- \begin{bmatrix}5\\4\\8\end{bmatrix}
- =\answer{\begin{bmatrix}5\\4\end{bmatrix}}.
-\]
-\questioncode{q10_orthographic}
-\questionoutput{q10_orthographic}
+\renewcommand{\CurrentQuestion}{References and reproduction}
+\section{References}
+{\small
+[1] PyTorch documentation: \texttt{torch.nn}.
+\url{https://docs.pytorch.org/docs/2.14/nn.html}
 
-\clearpage
-\renewcommand{\CurrentQuestion}{Reproducibility}
-\section{Reproducibility}
-To rerun the calculations and build the report from the repository root:
+[2] K. He et al. Mask R-CNN. ICCV, 2017.
+\url{https://arxiv.org/abs/1703.06870}
+
+[3] M. Loper et al. SMPL: A Skinned Multi-Person Linear Model.
+ACM Transactions on Graphics, 2015.
+\url{https://smpl.is.tue.mpg.de/}
+
+[4] A. Radford et al. Learning Transferable Visual Models From
+Natural Language Supervision. ICML, 2021.
+\url{https://arxiv.org/abs/2103.00020}
+}
+\section{Reproduction}
+From the repository root:
 \begin{lstlisting}[style=output]
-python -m pip install -r experients/assignment1/requirements.txt
+python -m pip install -r experients/assignment2/requirements.txt
 powershell -NoProfile -File report/build.ps1
 \end{lstlisting}
-Each question has a standalone script using NumPy and/or SymPy. The build
-runs all ten scripts, captures their standard output, and includes the complete
-source and output directly under the corresponding question.
-
-The independent checks in \codepath{experients/assignment1/verify.py}
-cover all ten scripts. They also confirm the exact DLT rank and null vector,
-the two-view reprojection, distance preservation under 100 proper rotations,
-and the epipolar constraint for independently projected points. All checks
-passed. The complete verification log is saved in
-\codepath{experients/assignment1/results/verify.txt}.
-
-\subsection{Recorded execution environment}
-\input{../experients/assignment1/results/provenance.tex}
-
-The source files and printed outputs are linked by SHA-256 hashes in
-\codepath{experients/assignment1/results/manifest.json}.
-The input data are recorded in \codepath{experients/assignment1/inputs.md}.
-Numerical checks use the unrounded arrays; displayed negative zeros are
-rounding artifacts.
-
+The ten standalone scripts check their results with assertions.
+The report includes their source and captured output.
+\codepath{experients/assignment2/results/manifest.json}
+records hashes of the inputs, scripts, and outputs.
+Neural-network examples run on CPU with seed 1050.
+\subsection{Execution environment}
+\input{../experients/assignment2/results/provenance.tex}
 \end{document}
