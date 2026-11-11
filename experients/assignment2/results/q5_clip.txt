@@ -1,4 +1,3 @@
 Illustrative image-text logits: [[10.0, 0.0], [0.0, 10.0]]
 Symmetric contrastive loss: 0.00004542
 Predicted class: room
-Synthetic embeddings; no pretrained CLIP inference.

@@ -1,3 +1,2 @@
 Fractional sample coordinate (x, y): (0.25, 0.5)
 Bilinear feature value: 12.5
-Illustration of one sample, not a full ROI Align layer.

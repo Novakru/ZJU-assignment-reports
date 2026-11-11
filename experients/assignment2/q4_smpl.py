@@ -7,4 +7,3 @@ assert theta.size == 72
 print("Pose: 24 axis-angle rotations:", theta.shape)
 print("Pose scalar count:", theta.size)
 print("Shape coefficient count (common setting):", beta.size)
-print("Parameter layout only; no SMPL mesh is generated.")

@@ -73,7 +73,7 @@ def main():
         ],
         "external_inputs_sha256": external_inputs,
         "files_sha256": {p.relative_to(ROOT).as_posix(): sha256(p) for p in paths},
-        "note": "SHA-256 binds these results to source files; it does not assert authorship.",
+        "note": "SHA-256 records source, input, and output file versions.",
     }
     manifest_path = output / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",

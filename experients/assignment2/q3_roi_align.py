@@ -10,4 +10,3 @@ sample = ((1 - x) * (1 - y) * feature[0, 0]
 assert np.isclose(sample, 12.5)
 print("Fractional sample coordinate (x, y):", (x, y))
 print("Bilinear feature value:", sample)
-print("Illustration of one sample, not a full ROI Align layer.")

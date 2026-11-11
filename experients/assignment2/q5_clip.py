@@ -17,4 +17,3 @@ assert prediction == "room"
 print("Illustrative image-text logits:", logits.tolist())
 print(f"Symmetric contrastive loss: {loss.item():.8f}")
 print("Predicted class:", prediction)
-print("Synthetic embeddings; no pretrained CLIP inference.")

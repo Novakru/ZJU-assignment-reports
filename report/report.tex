@@ -127,7 +127,7 @@ uses 10 shape coefficients.
 \end{itemize}
 Global translation is specified separately. Changing $\theta$ articulates
 the body; changing $\beta$ changes its underlying shape.
-The code checks this common parameter layout without generating a mesh.
+The code gives the corresponding parameter array shapes.
 \questioncode{q4_smpl}
 \questionoutput{q4_smpl}
 
@@ -151,8 +151,7 @@ prompt (for example, \emph{a photo of a dog}), encode the prompts and
 image, and choose the class with greatest cosine similarity.
 The pretrained encoders provide a classifier without fitting it to labeled
 examples from the target task [4, Sec.~3.1].
-The example below illustrates the loss and class selection using synthetic
-embeddings; it does not run pretrained CLIP.
+The code computes the loss and class scores for two example embedding pairs.
 \questioncode{q5_clip}
 \questionoutput{q5_clip}
 
@@ -173,7 +172,7 @@ discounted once when computing the return from $A$.
 \questionoutput{q6_values}
 
 \clearpage
-\renewcommand{\CurrentQuestion}{References and reproduction}
+\renewcommand{\CurrentQuestion}{References}
 \section{References}
 {\small
 [1] PyTorch documentation: \texttt{torch.nn}.
@@ -190,17 +189,4 @@ ACM Transactions on Graphics, 2015.
 Natural Language Supervision. ICML, 2021.
 \url{https://arxiv.org/abs/2103.00020}
 }
-\section{Reproduction}
-From the repository root:
-\begin{lstlisting}[style=output]
-python -m pip install -r experients/assignment2/requirements.txt
-powershell -NoProfile -File report/build.ps1
-\end{lstlisting}
-The ten standalone scripts check their results with assertions.
-The report includes their source and captured output.
-\codepath{experients/assignment2/results/manifest.json}
-records hashes of the inputs, scripts, and outputs.
-Neural-network examples run on CPU with seed 1050.
-\subsection{Execution environment}
-\input{../experients/assignment2/results/provenance.tex}
 \end{document}
