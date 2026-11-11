@@ -4,6 +4,6 @@
     "questions_executed":  10,
     "xelatex_passes":  2,
     "latex_warnings_or_overflow":  false,
-    "report_pdf_sha256":  "a5d715e5fc8c0eb98e92e4ccf9d51721366b964e14ac2c892cb26f4600c756ad",
-    "manifest_sha256":  "6243ce11bb16337ccfe191e975e567257cf08759c3f18ae305cd6eeef062f027"
+    "report_pdf_sha256":  "865456e42611c6b67f5dc8790a6968769da0dcb801bdb16529f69249d341198a",
+    "manifest_sha256":  "1f569b29b875c8dafcd646c897ee1ccb95f254ce3f4e0d70ffd14bd1a812aab1"
 }

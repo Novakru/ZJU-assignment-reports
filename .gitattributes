@@ -3,3 +3,4 @@
 /report/** text eol=lf
 /experients/** text eol=lf
 /report/*.pdf binary
+/report/assets/*.pdf binary

@@ -48,7 +48,7 @@ def main():
     paths = [
         *sorted(HERE.glob("*.py")), HERE / "requirements.txt", HERE / "inputs.md",
         ROOT / ".gitattributes",
-        ROOT / "zju-tech-report" / "assets" / "zju-horizontal-blue.png",
+        ROOT / "report" / "assets" / "zjui-horizontal-color.pdf",
         ROOT / "report" / "report.tex", ROOT / "report" / "student-info.tex",
         ROOT / "report" / "assignment.sty", ROOT / "report" / "build.ps1",
         *sorted(output.glob("*.txt")),
