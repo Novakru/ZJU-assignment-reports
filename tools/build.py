@@ -73,7 +73,8 @@ def write_speaker_notes():
         lines.extend([f'第{i}页  {item["title"]}  （{timing}）',item['speech'],'',
                       '引用（不朗读）：',*item['sources'],'',''])
     (ROOT/'review').mkdir(exist_ok=True)
-    (ROOT/'review/speaker-notes-zh.txt').write_text('\n'.join(lines),encoding='utf-8-sig')
+    with (ROOT/'review/speaker-notes-zh.txt').open('w',encoding='utf-8-sig',newline='\n') as handle:
+        handle.write('\n'.join(lines).rstrip()+'\n')
 
 def main():
     env,node=runtime_environment()
