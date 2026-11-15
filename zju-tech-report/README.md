@@ -2,6 +2,9 @@
 
 这是一个独立的英文 LaTeX 模板，用于浙江大学主题的技术报告、预印本和会议论文。模板使用求是蓝（`RGB 0,63,136`），正文与标题采用衬线字体，摘要使用带圆角的蓝色边框。
 
+技术报告与论文两种模式默认使用 **ZJUI 彩色横向组合标识**，以矢量 PDF 保存在
+`assets/zjui-horizontal-color.pdf`。新作业沿用默认路径即可，无需再次替换院徽。
+
 本模板为个人维护的非官方模板，不代表浙江大学官方格式。示例标题、作者、摘要和正文内容均为占位内容。
 
 ## 编译
@@ -30,7 +33,7 @@ latexmk -xelatex zju-tech-report.tex
 \newcommand{\ReportAuthorPlacement}{back}
 ```
 
-此时首页标题下显示 `ReLER Lab, Zhejiang University`，作者列表放在参考文献之后。实验室 Logo 与浙大 Logo 并排放在首页顶栏。
+此时首页标题下显示 `ReLER Lab, Zhejiang University`，作者列表放在参考文献之后。实验室 Logo 与 ZJUI Logo 并排放在首页顶栏。
 
 如果希望作者和实验室都出现在首页，可以改为：
 
@@ -84,9 +87,10 @@ latexmk -xelatex zju-tech-report.tex
 - `\ReportAuthorNotes`：作者脚注
 - `\ReportNumber`、`\ReportDate`：报告编号和日期
 - `\ReportContact`、`\ReportKeywords`：通信信息和关键词
-- `\ZJULogo`、`\LabLogo`：浙大 Logo 和实验室 Logo 路径
+- `\ZJULogo`、`\LabLogo`：机构标识和实验室 Logo 路径；前者默认指向 ZJUI 矢量标识，保留原宏名以兼容已有配置
 
-`assets/` 中已经放入当前使用的浙大横向 Logo 和实验室 Logo，可以替换为其他已获授权的版本。
+`assets/` 中包含默认 ZJUI 标识和实验室 Logo，并保留旧浙大横向图片作为可选素材。
+标识来源及其他分支的复用记录见 [assets/README.md](assets/README.md)。
 
 ## 适用范围
 
