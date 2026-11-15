@@ -1,1 +1,15 @@
 .vscode/
+.build/
+.chart-data-*/
+__pycache__/
+*.pyc
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+sources/downloads/
+review/previews/

@@ -1,0 +1,11 @@
+﻿claim_id,sha256,evidence_ids,locator,verification
+C001,f57cb3bb238ce83f099414f2b3198c9a70d2a22b52f7dcc5bb23ac8524b72b65,"E005,E007",E005 II-C; E007 pp. 1-2,agent_checked; human review not recorded
+C002,87e48634b16464393ae5dade7c7c808c5fe274ec147d8ec06ad99d4587d5bd0f,E005,"IV-B-E, pp. 6-9",agent_checked; human review not recorded
+C003,a0b2f678ed3867903844b47016500bba543fac94a4780b024342e37e489f6cf4,E005,"IV-C, p. 8; interpretive analysis",agent_checked; human review not recorded
+C004,d6dc34a2d4791bf5469730315fdf29e7924e3df9ba3ea748d1176250f0fea5f0,"E005,E008","V-B, pp. 11-12; Table II",agent_checked; human review not recorded
+C005,c1d0bbcf8a82a52189629529521129be2e931546be111db60d70715369bfddc3,"E005,E006","V-B, p. 12; full version F-C",agent_checked; human review not recorded
+C006,ee2f34b1fc7db3dab9663329086e0a0217bd452427dfc80a099c7d2e0635e147,E005,IV; interpretive analysis,agent_checked; human review not recorded
+C007,fa42d1dfff87acc57e9a6944be4ee16f64af407aa11f47d5d86d6190cdb0f671,E006,"Appendix C, pp. 16-17",agent_checked; human review not recorded
+C008,0fd475b256d5c8256ca9738dcdbe4b63e31bd50ed88a3569e4db974df687e1cc,E005,IV-B; Table IV,agent_checked; human review not recorded
+C009,d7929a04b9b37f0d7712204e85791dd497c942ce9980ee0e0c3b969e06b31823,original_proposal,"Proposed follow-up, no results claimed",agent_checked; human review not recorded
+C010,4bdc493817a00e82bf2661c317e7e643508740ad47caf408affafa1f7edd3a1a,original_proposal,"Proposed follow-up, no results claimed",agent_checked; human review not recorded

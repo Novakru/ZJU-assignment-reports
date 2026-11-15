@@ -1,0 +1,61 @@
+\documentclass[10pt,a4paper,twoside]{article}
+\usepackage{zju-reading}
+\begin{document}
+\makereadingtitle
+\begin{readingabstract}
+This report examines ACE, a defense for LLM-integrated applications, with emphasis on the boundary between control-flow protection and task correctness. Its architectural separation is persuasive, but the evaluation should be interpreted through its precise success criteria and trust assumptions. I propose an ablation-based follow-up that measures harmful effects alongside useful completion. All experimental values below are the paper's reported results; I did not rerun the system.
+\end{readingabstract}
+
+\section{Problem and contribution}
+Li et al. study a strong adversary that controls an application's implementation, description, schema, and outputs \citep{ace}. The distinction matters: isolating an application's runtime leaves an attack surface if its text still influences a privileged planner. IsolateGPT supplies the relevant isolation-based predecessor \citep{isolategpt}. My reading of ACE's contribution is that it makes the authority of application metadata an explicit systems-design problem.
+
+The key question is therefore whether an untrusted component can change actions outside its intended role. A tool can return syntactically valid text while attempting to redirect the workflow. Conversely, a security mechanism can block that redirection while still failing the user's task. A convincing evaluation must observe both outcomes rather than infer one from the other.
+
+\section{Mechanism and security boundary}
+ACE separates abstract planning, concrete matching, and execution \citep[Sec.~IV]{ace}. The abstract planner uses trusted input without installed-app metadata. A concrete planner matches abstract operations to installed applications through independent pairwise decisions. Static information-flow checks reject policy-violating assignments. A rule-based orchestrator then mediates typed communication between isolated workers.
+
+I interpret the abstract plan as a constraint on downstream authority. Application output can supply values to an already specified program, including its permitted branches, without gaining permission to invent a new operation. This distinction is subtler than saying that execution never depends on data. ACE's language supports restricted conditionals and loops; their structure is established before execution.
+
+As an illustrative policy, suppose a financial record must not reach a personal-only email tool. Tracking the record's label through intermediate computations is necessary even when a string conversion preserves the expected type. Type checking establishes an interface property, while information-flow checking establishes whether a destination is permitted to receive the information. Neither property alone establishes that an application's answer is truthful.
+
+\section{Published evidence and interpretation}
+On the adapted InjecAgent benchmark \citep{injecagent}, ACE reports no attacker-tool invocation in 1,054 cases. Its GPT-4o configuration nevertheless achieves 83.6\% overall expected-tool success \citep[Sec.~V-B, Table~II]{ace}. The gap demonstrates why security and utility require separate denominators and definitions. These simulated-tool tests do not establish final-answer correctness.
+
+\begin{table}[ht]
+\centering\small
+\caption{Selected reported results; values are not new measurements.}
+\label{tab:results}
+\begin{tabularx}{\linewidth}{@{}Xrr@{}}
+\toprule
+Evaluation and configuration & Security & Utility / accuracy \\
+\midrule
+InjecAgent, GPT-4o & 100\% & 83.6\% \\
+InjecAgent, GPT-4o / o3-mini & 100\% & 85.3\% \\
+LangChain relational data, GPT-4.1 & --- & 85.7\% \\
+\bottomrule
+\end{tabularx}
+\vspace{2pt}\parbox{\linewidth}{\footnotesize Security: noninvocation of designated attacker tools. InjecAgent utility: overall expected-tool invocation. LangChain: final-output/environment accuracy. A dash means this table reports no security score for that row. Sources: \citeauthor{ace}, Tables~II--III.}
+\end{table}
+
+\newpage
+\section{Critical assessment}
+\textbf{Metric scope.} The main text records three attacker-tool invocations on ASB but interprets them as task-relevant rather than injection-induced violations \citep[Sec.~V-B]{ace}. That explanation can be reasonable, yet task relevance and trustworthiness are different properties. I would retain both the raw invocation measure and the adjudicated harmful-action measure, with explicit per-model denominators and the reason for each exception. Otherwise the meaning of ``secure'' changes between a mechanical metric and an interpretation of intent.
+
+\textbf{Trusted components.} The design concentrates authority in the user query, trusted operational context, security labels, analysis, and orchestrator. This is an intelligible engineering tradeoff, but it moves the review burden to those components. A policy checker can correctly enforce a poorly chosen clearance. Likewise, matching a legitimate abstract operation to a malicious implementation may preserve the plan's structure while returning false information. I would review label provenance and capability grants as part of the deployment, and test behavior inside an authorized operation separately from attempts to escape it.
+
+\textbf{Assurance level.} The extended version explicitly notes that the restricted Python language and runtime lack a formal soundness guarantee for data privacy \citep[extended version, App.~C]{ace}. Static analysis is valuable evidence of an enforcement mechanism, but it should not be presented as a proved end-to-end noninterference theorem. I would prioritize a precise language semantics, a proof connecting the analysis to execution, and adversarial tests of that connection. These are distinct obligations: passing examples cannot substitute for a proof, and a proof about an abstraction cannot establish an implementation's fidelity by itself.
+
+\textbf{Coverage and efficiency.} ACE leaves multi-query interaction for future work \citep[Sec.~IV-B]{ace}. Persistent histories, evolving tool registries, and recovery after a failed action would therefore be meaningful extensions, rather than covered deployment cases. Cost also deserves a controlled comparison. For GPT-4.1, the paper reports 20.95 seconds and US\$0.27 per query on the multiple-tool suite \citep[Table~IV]{ace}. These are historical experimental measurements, not current API prices. A speedup over a differently configured system would require matched models, tools, hardware, and accounting of every phase.
+
+\section{Proposed follow-up}
+I would compare the full architecture with three ablations: direct metadata-visible planning, removal of information-flow checks, and removal of worker isolation. The model, prompts, tool inventory, budgets, and task set should remain fixed across conditions. Tasks should cover metadata injection, output injection, and sensitive multi-step data flows, with benign counterparts to measure unnecessary rejection.
+
+For each trial, I would record unauthorized calls, actual secret leakage, final-task correctness, rejection or execution errors, latency, and API usage. Security should be reported jointly with utility so that aborting every task cannot appear successful. Per-task paired differences, repeated stochastic runs, and uncertainty intervals would help distinguish a consistent benefit from sampling variation. This is a proposed evaluation, not a completed experiment. My overall assessment is favorable: ACE offers a useful separation of authority, while its strongest deployment claims remain conditional on policy correctness, implementation fidelity, and evidence beyond the current benchmarks.
+
+\begingroup
+\setlength{\bibsep}{1pt}
+\renewcommand{\bibfont}{\footnotesize}
+\bibliographystyle{unsrtnat}
+\bibliography{references}
+\endgroup
+\end{document}

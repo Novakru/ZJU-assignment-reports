@@ -1,0 +1,104 @@
+"""Rebuild and validate all coursework deliverables in the local repository."""
+from datetime import datetime
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+
+def run(command, env=None, label='build'):
+    result = subprocess.run([str(x) for x in command], cwd=ROOT, env=env,
+                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    logs = ROOT/'.build/logs'
+    logs.mkdir(parents=True, exist_ok=True)
+    (logs/(label+'.txt')).write_bytes(result.stdout)
+    if result.returncode:
+        print(result.stdout.decode('utf-8',errors='replace')[-8000:])
+        raise SystemExit(result.returncode)
+    print(label + ': complete')
+
+def runtime_environment():
+    env = os.environ.copy()
+    modules = env.get('RUNTIME_NODE_MODULES') or env.get('CODEX_PRIMARY_RUNTIME_NODE_MODULES')
+    if not modules:
+        # WindowsApps permits access to the active package but can hide directory
+        # enumeration. Resolve it from bundled executables already on PATH first.
+        for binary in ['pdftoppm','pdfinfo','git']:
+            executable=shutil.which(binary)
+            if executable:
+                for parent in Path(executable).parents:
+                    candidate=parent/'dependencies/node/node_modules'
+                    if (candidate/'@oai/artifact-tool').is_dir():
+                        modules=str(candidate)
+                        break
+            if modules: break
+    if not modules:
+        candidates = sorted(Path(r'C:\Program Files\WindowsApps').glob(
+            'OpenAI.CodexPrimaryRuntime.*/dependencies/node/node_modules'),reverse=True)
+        if not candidates:
+            raise RuntimeError('Codex bundled Node runtime not found. Set RUNTIME_NODE_MODULES.')
+        modules = str(candidates[0])
+    env['RUNTIME_NODE_MODULES'] = modules
+    node = Path(modules).parent/'bin/node.exe'
+    if not node.exists():
+        found = shutil.which('node')
+        if not found: raise RuntimeError('Node executable not found.')
+        node = Path(found)
+    if not env.get('PRESENTATIONS_SKILL_DIR'):
+        base = Path.home()/'.codex/plugins/cache/openai-primary-runtime/presentations'
+        candidates = sorted(base.glob('*/skills/presentations'),reverse=True)
+        if not candidates: raise RuntimeError('Bundled presentation skill not found.')
+        env['PRESENTATIONS_SKILL_DIR'] = str(candidates[0])
+    env['PRESENTATIONS_PYTHON'] = sys.executable
+    env['PYTHONIOENCODING'] = 'utf-8'
+    return env,node
+
+def write_speaker_notes():
+    data = json.loads((ROOT/'presentation/notes.json').read_text(encoding='utf-8'))
+    total = sum(item['seconds'] for item in data['slides'])
+    lines = ['ACE 中文展示讲稿', '蒋佳豪 / Jiahao Jiang / 22671064',
+             f'正式部分：{total}秒；课程上限360秒；预留{360-total}秒。',
+             '第10、11页为隐藏备份页，不计入正式展示。',
+             '建议用个人彩排校准实际口述速度。', '']
+    elapsed=0
+    for i,item in enumerate(data['slides'],1):
+        if item.get('hidden'):
+            timing='问答备份'
+        else:
+            start=elapsed;elapsed+=item['seconds']
+            timing=f'{start//60}:{start%60:02d}—{elapsed//60}:{elapsed%60:02d}，{item["seconds"]}秒'
+        lines.extend([f'第{i}页  {item["title"]}  （{timing}）',item['speech'],'',
+                      '引用（不朗读）：',*item['sources'],'',''])
+    (ROOT/'review').mkdir(exist_ok=True)
+    (ROOT/'review/speaker-notes-zh.txt').write_text('\n'.join(lines),encoding='utf-8-sig')
+
+def main():
+    env,node=runtime_environment()
+    stamp=datetime.now().strftime('%Y%m%d-%H%M%S')
+    temporary=ROOT/'.build/validated'/stamp
+    temporary.mkdir(parents=True,exist_ok=False)
+    run([sys.executable,'tools/build_report.py'],env,'report')
+    run([node,'presentation/build_content.mjs'],env,'slide-content')
+    run([sys.executable,'tools/assemble_template.py'],env,'template-assembly')
+    checked=temporary/'checked.pptx'
+    run([node,'tools/finalize_presentation.mjs','.build/presentation-assembled.pptx',checked],env,'pptx-structural-check')
+    native=temporary/'native.pptx'
+    run([sys.executable,'tools/native_presentation.py','--input',checked,'--output',native],env,'powerpoint-native-check')
+    refreshed=temporary/'refreshed.pptx'
+    run([sys.executable,'tools/refresh_chart_cache.py',native,refreshed],env,'chart-cache-refresh')
+    final=temporary/'final.pptx'
+    run([node,'tools/finalize_presentation.mjs',refreshed,final],env,'pptx-final-check')
+    if refreshed.read_bytes()!=final.read_bytes():
+        raise RuntimeError('Finalization changed native-exported bytes. Re-render before delivery.')
+    shutil.copyfile(final,ROOT/'submission/presentation.pptx')
+    run([sys.executable,'tools/native_presentation.py','--input','submission/presentation.pptx','--render-only'],env,'final-powerpoint-preview')
+    write_speaker_notes()
+    run([sys.executable,'tools/validate_artifacts.py'],env,'deliverable-check')
+    print('Built submission/presentation.pptx, submission/report.pdf and review files.')
+
+if __name__=='__main__':
+    if hasattr(sys.stdout,'reconfigure'):sys.stdout.reconfigure(encoding='utf-8')
+    main()
