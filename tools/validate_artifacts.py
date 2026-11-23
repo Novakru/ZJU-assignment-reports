@@ -1,5 +1,6 @@
 """Check meaningful course requirements and cross-format numeric consistency."""
 from io import BytesIO
+import hashlib
 import json
 from pathlib import Path
 import posixpath
@@ -16,20 +17,23 @@ NS={'p':'http://schemas.openxmlformats.org/presentationml/2006/main',
     'c':'http://schemas.openxmlformats.org/drawingml/2006/chart',
     's':'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
 
-def main():
-    report=fitz.open(ROOT/'submission/report.pdf')
+def check_report(relative_path, expected_text):
+    report=fitz.open(ROOT/relative_path)
     assert len(report)==2,'Report exceeds the two-page requirement.'
     report_text='\n'.join(p.get_text() for p in report)
-    for value in ['Jiahao Jiang','22671064','83.6%','85.3%','85.7%','20.95','0.27']:
+    for value in [*expected_text,'22671064','83.6%','85.3%','85.7%','20.95','0.27']:
         assert value in report_text, f'Report missing {value}'
-    assert 'References' in report_text
-    assert 'follow-up' in report_text
     assert not re.search(r'First Author|author@example|ReLER|Group 6|TODO|TBD',report_text)
     for page in report:
         assert abs(page.rect.width-595.28)<1 and abs(page.rect.height-841.89)<1
-    notes=json.loads((ROOT/'presentation/notes.json').read_text(encoding='utf-8'))
+    return {'report_pages_including_references':len(report)}
+
+def check_presentation(language, deck_path, preview_path):
+    notes_file = 'notes-en.json' if language == 'en' else 'notes.json'
+    notes=json.loads((ROOT/'presentation'/notes_file).read_text(encoding='utf-8'))
     assert sum(s['seconds'] for s in notes['slides'])==340
-    z=zipfile.ZipFile(ROOT/'submission/presentation.pptx')
+    deck = ROOT/deck_path
+    z=zipfile.ZipFile(deck)
     pres=E.fromstring(z.read('ppt/presentation.xml'))
     ids=pres.find('p:sldIdLst',NS)
     assert len(ids)==11
@@ -42,6 +46,10 @@ def main():
     text='\n'.join(''.join(s.itertext()) for s in xmls)
     for value in ['22671064','83.6%','85.3%','100%','1,054','20.95','US$0.27']:
         assert value in text,f'PPT missing {value}'
+    assert notes['slides'][0]['title'] in text
+    if language == 'en':
+        for part in xmls[1:]:
+            assert not re.search(r'[\u3400-\u9fff]', ' '.join(part.xpath('.//a:t/text()', namespaces=NS)))
     notes_parts=[n for n in z.namelist() if re.fullmatch(r'ppt/notesSlides/notesSlide\d+\.xml',n)]
     assert len(notes_parts)==11
     notes_text='\n'.join(''.join(E.fromstring(z.read(n)).itertext()) for n in notes_parts)
@@ -57,6 +65,10 @@ def main():
     c=quantitative[0]
     values=[float(v.text) for v in c.findall('.//c:ser/c:val/c:numRef/c:numCache/c:pt/c:v',NS)]
     assert values==[.95,.80,.857],values
+    chart_labels = ''.join(c.itertext())
+    for label in (['Single tool','Multiple tools','Relational data'] if language == 'en'
+                  else ['单工具','多工具','关系数据']):
+        assert label in chart_labels
     assert c.find('.//c:valAx/c:scaling/c:min',NS).get('val')=='0'
     assert c.find('.//c:valAx/c:scaling/c:max',NS).get('val')=='1'
     workbooks=[n for n in z.namelist() if n.startswith('ppt/embeddings/') and n.endswith('.xlsx')]
@@ -69,20 +81,29 @@ def main():
             numeric.extend(float(cell.find('s:v',NS).text) for cell in tree.findall('.//s:c',NS)
                            if cell.get('t') not in {'s','str','inlineStr'} and cell.find('s:v',NS) is not None)
     assert numeric==[.95,.80,.857],numeric
-    preview=fitz.open(ROOT/'review/presentation-preview.pdf')
+    preview=fitz.open(ROOT/preview_path)
     assert len(preview)==11
-    native=json.loads((ROOT/'.build/native-check.json').read_text(encoding='utf-8'))
+    native=json.loads((ROOT/'.build'/language/'native-check.json').read_text(encoding='utf-8'))
     assert native['opened'] and not native['text_fit_findings']
-    (ROOT/'.build/course-check.json').write_text(json.dumps({
-        'report_pages_including_references':len(report),'report_word_count':len(report_text.split()),
+    assert native['final_file_sha256'] == hashlib.sha256(deck.read_bytes()).hexdigest()
+    return {
         'total_slides':len(ids),'main_slides':9,'hidden_backup_slides':[10,11],
         'planned_main_seconds':340,'buffer_seconds':20,
         'native_table_slides':[3,6],'native_chart_slides':[7],
         'chart_cache_and_embedded_workbook_agree':True,
         'all_speaker_notes_embedded':True,'native_powerpoint_opened':True,
         'preview_pages':len(preview),'status':'passed'
-    },ensure_ascii=False,indent=2),encoding='utf-8')
-    print('Course checks passed: 2-page English report; 9+2 slides; 340-second notes; native editable chart and tables.')
+    }
+
+def main():
+    results = {
+        'en': {**check_report('submission/report.pdf', ['Jiahao Jiang','References','follow-up']),
+               **check_presentation('en','submission/presentation.pptx','review/presentation-preview-en.pdf')},
+        'zh': {**check_report('review/report-zh.pdf', ['蒋佳豪','参考文献','后续研究建议']),
+               **check_presentation('zh','review/presentation-zh.pptx','review/presentation-preview.pdf')},
+    }
+    (ROOT/'.build/course-check.json').write_text(json.dumps(results,ensure_ascii=False,indent=2),encoding='utf-8')
+    print('Course checks passed for both languages: 2 pages, 9+2 slides, and 340-second speaker notes.')
 
 if __name__=='__main__':
     if hasattr(sys.stdout,'reconfigure'):sys.stdout.reconfigure(encoding='utf-8')

@@ -1,0 +1,70 @@
+\documentclass[11pt,a4paper,twoside]{article}
+\usepackage[UTF8,scheme=chinese,fontset=fandol]{ctex}
+\newcommand{\ReadingTitle}{ACE 阅读报告：大模型应用的安全架构}
+\newcommand{\ReadingShortTitle}{ACE 阅读报告}
+\newcommand{\ReadingLabel}{论文阅读报告}
+\newcommand{\ReadingAuthor}{蒋佳豪}
+\newcommand{\ReadingIDLabel}{学号}
+\newcommand{\ReadingCourse}{人工智能安全课程（Trustworthy Artificial Intelligence），ZJUI}
+\newcommand{\ReadingAbstractLabel}{摘要。}
+\usepackage{zju-reading}
+\linespread{1.00}
+
+\begin{document}
+\makereadingtitle
+\begin{readingabstract}
+本文评析面向大语言模型应用的防护架构 ACE，重点讨论控制流保护与任务正确性各自覆盖的范围。该架构通过分离规划与执行来限制第三方应用的权限。解读实验时，应明确每项指标的成功条件和架构的信任假设。本文提出一项消融研究，同时衡量有害后果与正常任务完成情况。下文数值均来自论文，本文未复现实验。
+\end{readingabstract}
+
+\section{研究问题与贡献}
+Li 等人考虑能够控制应用实现、描述、接口模式（schema）和输出的强攻击者 \citep{ace}。如果应用文本仍能影响具备决策权限的规划器，仅隔离应用运行环境仍会留下风险。IsolateGPT 是采用执行隔离的相关先行工作 \citep{isolategpt}。我认为，ACE 的贡献在于将应用元数据能影响哪些系统决策，明确为一个架构设计问题。
+
+需要判断的是，不可信组件能否改变超出自身职责范围的动作。工具可以返回符合格式的文本，同时试图改变执行流程。防护机制也可能阻止这种改变，却未能完成用户的任务。因此，评估需要同时观察是否阻止了越权动作，以及任务是否完成。
+
+\section{方法与安全边界}
+ACE 将工作流分为抽象规划、具体匹配与执行三个阶段 \citep[第~IV~节]{ace}。抽象规划器只接收可信输入，并以抽象工具表达计划。具体规划器独立判断每个抽象操作与已安装应用能否匹配。静态信息流检查拒绝违反策略的绑定，随后由基于规则的编排器管理隔离工作进程之间带类型的通信。
+
+我将抽象计划理解为对后续执行权限的约束。应用输出可以为程序提供数据，例如影响程序选择哪条已定义分支。程序支持受限的条件语句和循环，各路径包含的操作在执行前已确定。
+
+例如，策略规定金融信息不能流入仅有个人信息权限的邮件工具。即便转换后的数据仍符合字符串类型，也需要在中间计算中追踪其安全标签。类型检查验证数据是否满足接口要求，信息流检查验证目的地是否有权接收数据。应用结果是否真实，需要另行验证。
+
+\section{实验结果及其含义}
+在改编后的 InjecAgent 基准 \citep{injecagent} 中，ACE 在 1,054 个用例里都未调用指定的攻击者工具。与此同时，GPT-4o 配置调用预期工具的总体成功率为 83.6\% \citep[第~V-B~节，表~II]{ace}。两项结果回答不同的问题，应分别说明指标定义和分母。该模拟工具基准只评估工具调用，最终答案的正确性由其他实验衡量。
+
+\begin{table}[!ht]
+\centering\small
+\caption{原论文报告的部分实验结果}
+\begin{tabularx}{\linewidth}{@{}Xrr@{}}
+\toprule
+基准及模型配置 & 安全分 & 效用或正确率 \\
+\midrule
+InjecAgent，GPT-4o & 100\% & 83.6\% \\
+InjecAgent，GPT-4o / o3-mini & 100\% & 85.3\% \\
+LangChain 关系数据，GPT-4.1 & --- & 85.7\% \\
+\bottomrule
+\end{tabularx}
+\vspace{2pt}\parbox{\linewidth}{\footnotesize 安全分衡量未调用指定攻击者工具的比例。InjecAgent 的效用衡量调用预期工具的总体成功率。LangChain 的正确率检查最终输出及环境状态。横线表示该行未列安全分。数据来自 \citeauthor{ace} 的表 II 至表 III。}
+\end{table}
+
+\newpage
+\section{评析}
+\textbf{指标口径。} 原文报告在 ASB 上出现三次攻击者工具调用，作者将其判为与用户任务相关，并归为非注入所致 \citep[第~V-B~节]{ace}。这一判断可以成立，但工具与任务相关，并不能证明工具可信。我建议同时报告原始调用与经审核后确认的有害动作，明确各模型的分母，并给出例外判定的依据。
+
+\textbf{可信组件。} ACE 依赖用户请求、可信运行环境说明、安全标签、静态分析与编排器。这样的设计便于控制权限，也使这些组件成为部署审查的重点。检查器可以正确执行一项配置不当的权限策略。具体匹配也可能选中恶意实现，使执行路径符合抽象计划，却返回虚假信息。因此，应核查标签由谁配置、应用获准使用哪些能力，并分别评估应用在授权范围内的行为和越权情形。
+
+\textbf{保证程度。} 扩展版明确表示，受限 Python 语言和运行时还缺少数据隐私健全性的形式化保证 \citep[扩展版附录~C]{ace}。静态检查说明系统具备策略执行机制。要建立端到端的非干扰保证，还需要明确语言语义、证明分析结果对程序执行成立，并检验实现是否符合语义。测试用例和形式化证明在这里承担不同职责。
+
+\textbf{覆盖范围与开销。} 论文将多次查询之间的交互列为未来工作 \citep[第~IV-B~节]{ace}。持久化历史、工具列表变更与操作失败后恢复，都是可以继续评估的场景。在 GPT-4.1 的多工具测试中，每次查询平均耗时 20.95 秒，实验当时的 API 费用为 0.27 美元 \citep[表~IV]{ace}。比较不同架构的效率时，需要统一模型、工具、硬件以及各阶段的计费口径。
+
+\section{后续研究建议}
+我建议以完整系统为对照，分别评估三个消融版本，包括让规划器直接读取应用元数据、移除信息流检查，以及移除工作进程隔离。各条件使用相同模型、提示词、工具集、预算与任务。测试应覆盖应用元数据和输出对决策的干扰，以及多步任务中的敏感数据流，并使用相应的正常用例衡量误拒。
+
+每次试验记录越权调用、实际泄露、任务正确率、拒绝或执行错误、延迟和 API 用量。安全性与任务效用应一起报告，以便判断系统能否在阻止有害动作的同时完成正常任务。可比较同一任务在不同条件下的结果，多次运行并报告不确定性区间。以上为拟议研究。总体而言，ACE 给出了清晰的权限分离方案，其部署效果仍取决于策略、实现与现有基准之外的证据。
+
+\begingroup
+\setlength{\bibsep}{1pt}
+\renewcommand{\bibfont}{\footnotesize}
+\bibliographystyle{unsrtnat}
+\bibliography{references}
+\endgroup
+\end{document}

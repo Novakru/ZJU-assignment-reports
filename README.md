@@ -35,15 +35,16 @@
 
 | 文件 | 用途 |
 | --- | --- |
-| [submission/presentation.pptx](submission/presentation.pptx) | 中文展示，学院模板，9 页正式展示、2 页隐藏备份页 |
+| [submission/presentation.pptx](submission/presentation.pptx) | 英文展示，学院模板，9 页正式展示、2 页隐藏备份页 |
 | [submission/report.pdf](submission/report.pdf) | 英文阅读报告，2 页，含参考文献 |
-| [review/presentation-preview.pdf](review/presentation-preview.pdf) | 11 页静态预览，包含隐藏备份页 |
-| [review/speaker-notes-zh.txt](review/speaker-notes-zh.txt) | 中文逐页讲稿、时间分配和引用链接；同样嵌入 PPT 备注 |
-| [report/report.tex](report/report.tex) | 报告正文；配套样式改编自仓库技术报告模板 |
+| [review/presentation-zh.pptx](review/presentation-zh.pptx) · [review/report-zh.pdf](review/report-zh.pdf) | 中文展示和两页中文报告，供审核 |
+| [英文预览](review/presentation-preview-en.pdf) · [中文预览](review/presentation-preview.pdf) | 各 11 页，包含隐藏备份页 |
+| [英文讲稿](review/speaker-notes-en.txt) · [中文讲稿](review/speaker-notes-zh.txt) | 逐页讲稿、时间分配和引用，已嵌入对应 PPT 备注 |
+| [英文报告源码](report/report.tex) · [中文报告源码](report/report-zh.tex) | 共用 ZJUI 报告模板与参考文献 |
 | [presentation/build_content.mjs](presentation/build_content.mjs) | 可编辑 PPT 内容的生成源文件 |
 | [sources/source-manifest.json](sources/source-manifest.json) | 原始出处、精确页码、数值口径和图像来源 |
 
-课件规定展示共 6 分钟。正式讲稿计划为 **340 秒（5 分 40 秒）**，预留 20 秒用于
+课件规定展示共 6 分钟。中英文正式讲稿均按 **340 秒（5 分 40 秒）** 安排，预留 20 秒用于
 切页及口头停顿；实际用时需通过个人彩排校准。第 10、11 页在放映时默认隐藏，问答时可以跳转。
 报告和 PPT 的数据均为论文原文结果，拟议的消融实验明确标为后续建议，没有声称完成个人复现。
 
@@ -68,7 +69,7 @@ PPT 使用同级给定的 `ZJUI学院PPT模板.pptx`，保留学院封面、正�
 python tools/build.py
 ```
 
-也可只重建报告：
+也可只重建中英文报告：
 
 ```powershell
 python tools/build_report.py

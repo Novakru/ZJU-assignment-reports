@@ -7,6 +7,7 @@ objects still come from Artifact Tool; this is an OPC package merge, not a raste
 reconstruction or python-pptx authoring workflow.
 """
 from copy import deepcopy
+import argparse
 import json
 from pathlib import Path
 import posixpath
@@ -34,10 +35,11 @@ def resolve(part, target):
     return (target.lstrip('/') if target.startswith('/') else
             posixpath.normpath(posixpath.join(posixpath.dirname(part), target)))
 
-def assemble():
+def assemble(language):
+    build_dir = ROOT / '.build' / language
     with zipfile.ZipFile(ROOT/'assets/zjui-template.pptx') as z:
         original = {n:z.read(n) for n in z.namelist()}
-    with zipfile.ZipFile(ROOT/'.build/content.pptx') as z:
+    with zipfile.ZipFile(build_dir/'content.pptx') as z:
         content = {n:z.read(n) for n in z.namelist()}
     output = dict(original)
     # Remove only original slide parts; all masters, layouts, themes and artwork
@@ -91,7 +93,8 @@ def assemble():
     slide_list = pres.find('p:sldIdLst', NS)
     for node in list(slide_list):
         slide_list.remove(node)
-    data = json.loads((ROOT/'presentation/notes.json').read_text(encoding='utf-8'))
+    notes_file = 'notes-en.json' if language == 'en' else 'notes.json'
+    data = json.loads((ROOT/'presentation'/notes_file).read_text(encoding='utf-8'))
     template_indices = [1,3,3,3,3,3,3,3,10,3,3]
     for index, template_index in enumerate(template_indices, 1):
         source_part = f'ppt/slides/slide{index}.xml'
@@ -107,7 +110,7 @@ def assemble():
         if index == 1:
             for text in slide.findall('.//a:t', NS):
                 if text.text == 'Title':
-                    text.text = 'ACE：LLM应用系统的安全架构'
+                    text.text = data['slides'][0]['title']
                     run = text.getparent()
                     prop = run.find('a:rPr', NS)
                     if prop is None:
@@ -171,11 +174,13 @@ def assemble():
     output['ppt/presentation.xml'] = encode(pres)
     output['ppt/_rels/presentation.xml.rels'] = encode(rels)
     output['[Content_Types].xml'] = encode(types)
-    dest = ROOT/'.build/presentation-assembled.pptx'
+    dest = build_dir/'presentation-assembled.pptx'
     with zipfile.ZipFile(dest,'w',zipfile.ZIP_DEFLATED) as z:
         for name, blob in output.items():
             z.writestr(name,blob)
     print(f'Original template preserved; assembled {len(template_indices)} editable slides.')
 
 if __name__ == '__main__':
-    assemble()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--language', choices=['zh', 'en'], default='zh')
+    assemble(parser.parse_args().language)

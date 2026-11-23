@@ -1,0 +1,87 @@
+﻿ACE English speaker notes
+Jiahao Jiang / 22671064
+Main presentation: 340 seconds with 20 seconds for transitions.
+Slides 10 and 11 are hidden backup slides.
+
+Slide 1  ACE: Securing LLM App Systems  (0:00–0:15)
+Hi, I'm Jiahao Jiang. Today I'll present ACE, a paper from NDSS 2026 about protecting an LLM agent's decisions when it uses third-party apps.
+
+Sources
+ACE, title and abstract. https://doi.org/10.14722/ndss.2026.230352
+
+
+Slide 2  Threat Model  (0:15–0:50)
+Suppose a user asks an agent to compare fares from two ride apps. The user request and trusted operating context define the task. An attacker may control an app's description, schema, code, and output. When the model reads that material to decide its next action, text from a third party can influence decisions beyond that app's role. ACE addresses this risk across planning, execution, and data sharing.
+
+Sources
+ACE, Sections II-C and III, pp. 3–6.
+
+
+Slide 3  Three Gaps in IsolateGPT  (0:50–1:25)
+The paper identifies three failures in IsolateGPT. An app description can influence planning and cause the system to omit a legitimate app. During execution, an app output can cause the workflow to stop early or change how the manager reports another app's result. These cases show why the system needs controls on what decisions third-party text can influence, even when each app runs in isolation.
+
+Sources
+ACE, Section III-B–E, pp. 5–6.
+IsolateGPT, NDSS 2025. https://doi.org/10.14722/ndss.2025.241131
+
+
+Slide 4  The Three Stages of ACE  (1:25–2:25)
+Figure 3 shows the three stages. First, the abstract planner receives the user request and trusted context. It produces a program in terms of abstract tools, without reading installed app descriptions. Second, the concrete planner checks each abstract operation against candidate tools individually. It rejects bindings that violate the information flow policy. Third, an orchestrator runs the approved program with isolated workers, checks the types of messages, and grants only the capabilities each worker needs. The program can still have branches and loops. Tool outputs can supply values that determine which predefined branch runs. The approved program defines which operations are available along each path.
+
+Sources
+ACE, Fig. 3, p. 7, and Section IV-B–E, pp. 6–9.
+https://www.ndss-symposium.org/wp-content/uploads/2026-s352-paper.pdf
+
+
+Slide 5  Information Flow and Permissions  (2:25–3:05)
+Consider financial data and an email app with clearance for personal data only. The value can have the right type, such as a string, and still violate the destination's clearance. ACE tracks the label across intermediate variables and dependencies introduced by branch conditions. It checks the concrete plan before execution. This enforcement depends on correct labels and on the analysis, runtime, and isolation layers enforcing the policy as intended.
+
+Sources
+ACE, Section IV-F, pp. 9–10, Fig. 5, p. 11, and Appendix A, pp. 14–16.
+
+
+Slide 6  Security and Expected-Tool Success  (3:05–3:55)
+In the adapted InjecAgent benchmark, ACE made no calls to designated attacker apps across 1,054 test cases. That gives it a security score of 100 percent under this definition. The GPT-4o configuration called the expected tool successfully in 83.6 percent of cases. The GPT-4o and o3-mini configuration reached 85.3 percent. This benchmark measures tool calls and leaves final answers unscored. Agent Security Bench recorded three attacker-app invocations over 2,000 trials. The authors judged all three relevant to the requested tasks. Both the raw calls and that judgment matter when interpreting the result.
+
+Sources
+ACE, Section V-B, pp. 11–12, and Table II, p. 12.
+Extended version, Appendix F-C and Tables VII–VIII. https://arxiv.org/abs/2504.20984v3
+
+
+Slide 7  Accuracy, Latency, and Cost  (3:55–4:35)
+The LangChain benchmark also checks final outputs and the state of the environment. With GPT-4.1, overall accuracy was 95 percent on single-tool tasks, 80 percent on multiple-tool tasks, and 85.7 percent on relational data tasks. In the multiple-tool suite, a query averaged 20.95 seconds and cost 27 cents in API charges during the experiment. To compare architectures, we would need the same models, tools, hardware, and accounting scope.
+
+Sources
+ACE, Tables III–IV, pp. 12–13. Cost is the measurement reported in the paper.
+
+
+Slide 8  Limitations and Follow-Up  (4:35–5:35)
+I see three limits. First, the policy labels, trusted context, and orchestrator have to be correct. Second, the extended paper says that privacy soundness for the restricted Python language and runtime remains unproven. Third, interaction across multiple queries is future work. To test the contribution of each control, I would keep the model and tasks fixed and vary abstract planning, information flow checks, or worker isolation one at a time. I would record unauthorized calls, actual leakage, task accuracy, and latency. Reporting these together makes it possible to tell whether a system prevents harmful actions while continuing to complete legitimate tasks.
+
+Sources
+ACE, Section IV-B, p. 7, and extended version, Appendix C, pp. 16–17.
+The ablation study is proposed.
+
+
+Slide 9  THANK YOU  (5:35–5:40)
+Thank you. I'm happy to take questions.
+
+Sources
+
+
+Slide 10  Backup: Interpreting the Metrics  (Backup)
+Matching success, execution given a match, and overall success use different denominators. Rounded aggregate figures can also differ from calculations based on individual trials. The fixed program can take branches it already defines. For ASB, the main paper describes the authors' judgment about three task-relevant calls. Extended Table VII gives raw average security of 99.95 percent and 99.85 percent for the two model configurations.
+
+Sources
+ACE, Section V-B and Table II, pp. 11–12.
+Extended version, Appendices C and F-C, and Tables VII–VIII, pp. 23–24.
+
+
+Slide 11  Backup: References  (Backup)
+The architecture is shown in Figure 3 of the conference paper. The benchmark values come from Tables II through IV. The extended paper gives additional results for ASB and describes the limits of the Python runtime.
+
+Sources
+https://doi.org/10.14722/ndss.2026.230352
+https://arxiv.org/abs/2504.20984v3
+https://doi.org/10.14722/ndss.2025.241131
+https://aclanthology.org/2024.findings-acl.624/

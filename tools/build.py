@@ -56,25 +56,55 @@ def runtime_environment():
     env['PYTHONIOENCODING'] = 'utf-8'
     return env,node
 
-def write_speaker_notes():
-    data = json.loads((ROOT/'presentation/notes.json').read_text(encoding='utf-8'))
+def write_speaker_notes(language):
+    english = language == 'en'
+    notes_file = 'notes-en.json' if english else 'notes.json'
+    data = json.loads((ROOT/'presentation'/notes_file).read_text(encoding='utf-8'))
     total = sum(item['seconds'] for item in data['slides'])
-    lines = ['ACE 中文展示讲稿', '蒋佳豪 / Jiahao Jiang / 22671064',
-             f'正式部分：{total}秒；课程上限360秒；预留{360-total}秒。',
-             '第10、11页为隐藏备份页，不计入正式展示。',
-             '建议用个人彩排校准实际口述速度。', '']
+    lines = (['ACE English speaker notes', 'Jiahao Jiang / 22671064',
+              f'Main presentation: {total} seconds with {360-total} seconds for transitions.',
+              'Slides 10 and 11 are hidden backup slides.', ''] if english else
+             ['ACE 中文展示讲稿', '蒋佳豪 / Jiahao Jiang / 22671064',
+              f'正式部分 {total} 秒，预留 {360-total} 秒切页。',
+              '第 10、11 页为隐藏备份页。', ''])
     elapsed=0
     for i,item in enumerate(data['slides'],1):
         if item.get('hidden'):
-            timing='问答备份'
+            timing='Backup' if english else '问答备份'
         else:
             start=elapsed;elapsed+=item['seconds']
-            timing=f'{start//60}:{start%60:02d}—{elapsed//60}:{elapsed%60:02d}，{item["seconds"]}秒'
-        lines.extend([f'第{i}页  {item["title"]}  （{timing}）',item['speech'],'',
-                      '引用（不朗读）：',*item['sources'],'',''])
+            timing=f'{start//60}:{start%60:02d}–{elapsed//60}:{elapsed%60:02d}'
+        page_label = f'Slide {i}' if english else f'第 {i} 页'
+        lines.extend([f'{page_label}  {item["title"]}  ({timing})',item['speech'],'',
+                      'Sources' if english else '参考来源',*item['sources'],'',''])
     (ROOT/'review').mkdir(exist_ok=True)
-    with (ROOT/'review/speaker-notes-zh.txt').open('w',encoding='utf-8-sig',newline='\n') as handle:
+    with (ROOT/f'review/speaker-notes-{language}.txt').open('w',encoding='utf-8-sig',newline='\n') as handle:
         handle.write('\n'.join(lines).rstrip()+'\n')
+
+def build_presentation(language, env, node, temporary):
+    temporary.mkdir()
+    language_args = ['--language', language]
+    run([node,'presentation/build_content.mjs',language],env,f'slide-content-{language}')
+    run([sys.executable,'tools/assemble_template.py',*language_args],env,f'template-assembly-{language}')
+    assembled = ROOT/'.build'/language/'presentation-assembled.pptx'
+    checked = temporary/'checked.pptx'
+    run([node,'tools/finalize_presentation.mjs',assembled,checked],env,f'pptx-structural-check-{language}')
+    native = temporary/'native.pptx'
+    run([sys.executable,'tools/native_presentation.py','--input',checked,'--output',native,
+         *language_args],env,f'powerpoint-native-check-{language}')
+    refreshed = temporary/'refreshed.pptx'
+    run([sys.executable,'tools/refresh_chart_cache.py',native,refreshed],env,f'chart-cache-refresh-{language}')
+    final = temporary/'final.pptx'
+    run([node,'tools/finalize_presentation.mjs',refreshed,final],env,f'pptx-final-check-{language}')
+    if refreshed.read_bytes()!=final.read_bytes():
+        raise RuntimeError('Finalization changed the verified chart data.')
+    english = language == 'en'
+    destination = 'submission/presentation.pptx' if english else 'review/presentation-zh.pptx'
+    preview = 'review/presentation-preview-en.pdf' if english else 'review/presentation-preview.pdf'
+    run([sys.executable,'tools/native_presentation.py','--input',final,'--render-only',*language_args,
+         '--render-dir',f'review/previews/{language}','--pdf',preview],env,f'final-powerpoint-preview-{language}')
+    shutil.copyfile(final,ROOT/destination)
+    write_speaker_notes(language)
 
 def main():
     env,node=runtime_environment()
@@ -82,23 +112,10 @@ def main():
     temporary=ROOT/'.build/validated'/stamp
     temporary.mkdir(parents=True,exist_ok=False)
     run([sys.executable,'tools/build_report.py'],env,'report')
-    run([node,'presentation/build_content.mjs'],env,'slide-content')
-    run([sys.executable,'tools/assemble_template.py'],env,'template-assembly')
-    checked=temporary/'checked.pptx'
-    run([node,'tools/finalize_presentation.mjs','.build/presentation-assembled.pptx',checked],env,'pptx-structural-check')
-    native=temporary/'native.pptx'
-    run([sys.executable,'tools/native_presentation.py','--input',checked,'--output',native],env,'powerpoint-native-check')
-    refreshed=temporary/'refreshed.pptx'
-    run([sys.executable,'tools/refresh_chart_cache.py',native,refreshed],env,'chart-cache-refresh')
-    final=temporary/'final.pptx'
-    run([node,'tools/finalize_presentation.mjs',refreshed,final],env,'pptx-final-check')
-    if refreshed.read_bytes()!=final.read_bytes():
-        raise RuntimeError('Finalization changed native-exported bytes. Re-render before delivery.')
-    shutil.copyfile(final,ROOT/'submission/presentation.pptx')
-    run([sys.executable,'tools/native_presentation.py','--input','submission/presentation.pptx','--render-only'],env,'final-powerpoint-preview')
-    write_speaker_notes()
+    for language in ['en', 'zh']:
+        build_presentation(language, env, node, temporary/language)
     run([sys.executable,'tools/validate_artifacts.py'],env,'deliverable-check')
-    print('Built submission/presentation.pptx, submission/report.pdf and review files.')
+    print('Built English submission files and Chinese review files.')
 
 if __name__=='__main__':
     if hasattr(sys.stdout,'reconfigure'):sys.stdout.reconfigure(encoding='utf-8')
