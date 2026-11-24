@@ -10,50 +10,50 @@ Sources
 Qian et al., Title and abstract. https://arxiv.org/html/2601.12349v3
 
 
-Slide 2  A Valid Plan Can Reach the Wrong Screen  (0:15–0:50)
-Imagine the agent prepares a tap, and an incoming call changes the foreground before the tap arrives. The earlier decision may have been entirely sensible. The operating system still has to answer a different question: which window and control should receive this input now? The authors call the assumption that the relevant screen stays valid until dispatch visual atomicity. It is an assumption about state over time.
+Slide 2  When a Call Interrupts a Tap  (0:15–0:50)
+Imagine asking the agent to add a note. Point to the orange circles. Both circles mark the same position on the phone. On the left, that position belongs to the add-note control. On the right, the call has taken over the screen. The paper calls the assumption that the observed screen still applies when the tap arrives visual atomicity. An ordinary call makes it easy to see how that assumption can fail.
 
 Sources
 Qian et al., Figure 1 and Section 4. https://arxiv.org/html/2601.12349v3
 
 
-Slide 3  The Android Trust Boundary  (0:50–1:25)
-The user authorizes a task. The agent can read the screen and dispatch input across apps. The paper assumes an installed app controlled by the adversary, with no dangerous Android permissions. A context mismatch can route the agent's action to an operation outside the task. The receiving app still runs under its own permissions. The problem is the unintended use of authority that the agent already has.
+Slide 3  Who Authorizes and Who Acts?  (0:50–1:25)
+Start with the user at the left. The user delegates a specific task. The GUI agent in the middle can read screens and send input across applications. Android delivers that input to the current target. In the paper’s threat model, the adversary controls one installed app with no dangerous permissions. The security issue is how the agent’s existing ability to act across apps can take an operation beyond the user’s task.
 
 Sources
 Qian et al., Section 3. https://arxiv.org/html/2601.12349v3
 
 
-Slide 4  Observe, Reason, Act  (1:25–2:25)
-Follow the three stages. At observation, the agent reads the interface and identifies a control in the current window. During reasoning, it decides what to do based on that observation. An ordinary event can change either the foreground window or a control within that window. At dispatch, the planned input may reach the current window even though it was selected from an earlier one. That mismatch is action rebinding. This is a time-of-check to time-of-use race: what was checked and what is used can differ. A model could identify the original control perfectly and still send an input that lands on the wrong target. The input layer needs a way to preserve the binding between the two.
+Slide 4  How a Tap Changes Targets  (1:25–2:25)
+Read this timeline from left to right. The top row tracks the agent and the lower row tracks the foreground screen. At the first dot, the agent observes screen A. At the second dot it is still reasoning from that observation. The orange tick below marks a foreground change. By dispatch, screen B is in front. The tap still comes from the decision about A, but B can receive it. The authors call this action rebinding. The TOCTOU analogy is that the check uses the observed state and the use happens against the live state. Accurate recognition at the first dot only tells us what was there then.
 
 Sources
 Qian et al., Sections 4 and 5.1. https://arxiv.org/html/2601.12349v3
 
 
-Slide 5  Why Extra Steps Change the Outcome  (2:25–3:05)
-The paper distinguishes a single rebound action from a sequence of actions. A sequence needs the right state to persist and can depend on whether the agent resumes after a context change. The authors also test intent alignment, where earlier screen context can make a later confirmation appear relevant. For an agent, a dialog that seems to fit the task is evidence about plausibility. Approval also needs to come from the user and apply to the actual operation.
+Slide 5  When a Task Takes More Than One Tap  (2:25–3:05)
+The paper asks two follow-up questions. Read the blue row first. Can the agent resume after an interruption? A longer sequence depends on the app retaining state and the agent recovering. Then read the orange row. If the agent sees a confirmation, will it accept? The paper’s intent alignment strategy, or IAS, tests how task-related context influences that decision. We will look at recovery and confirmation in separate experiments.
 
 Sources
 Qian et al., Sections 6 and 7.3–7.4. https://arxiv.org/html/2601.12349v3
 
 
 Slide 6  Single Actions and Multi-Step Recovery  (3:05–3:55)
-The authors report one hundred percent success for single-action rebinding in their tests across six open-source Android agents. Table 1 measures recovery in a separate multi-step experiment. Among the five agents in that table, the recovery rate ranges from 45.7 percent to one hundred percent. Recovery is just one stage of a chain. The study selected apps that preserve their screen state, so those percentages are specific to the setup. The results show the problem can appear in several implementations. To estimate its frequency in everyday use, we would need a wider sample of devices, apps, and agent settings.
+Start with the number at the left. The paper reports one hundred percent single-action rebinding across the six agents in its tested setup. The bars at the right answer a different question from a separate test. They show how often each agent automatically recovered in a multi-step sequence. Three agents reached one hundred percent. Mobile-use and AutoGLM reached forty-five point seven percent. The study used apps that retain their UI state. Read the bars as recovery rates for that stage under those conditions.
 
 Sources
 Qian et al., Sections 7.3.1–7.3.2 and Table 1. https://arxiv.org/html/2601.12349v3
 
 
-Slide 7  Acceptance at a Confirmation Gate  (3:55–4:35)
-For the confirmation experiment, the authors ran ten trials per condition for each of six agents. Summing Table 2, agents accepted one out of sixty confirmations in the generic condition and thirty-four out of sixty in the intent-aligned condition. These are repeated trials for one confirmation task, and performance varies by agent. The change suggests that confirmation by the same model is sensitive to the context it has received.
+Slide 7  When the Agent Handles the Confirmation  (3:55–4:35)
+Each bar pools six agents, with ten trials per agent per condition. The generic context produced one acceptance in sixty trials. When the context made the confirmation look relevant to the task, agents accepted thirty-four in sixty. This was one confirmation task and the individual agents differed. It shows why a confirmation handled by the same model can depend on what the model saw earlier.
 
 Sources
 Qian et al., Section 7.4 and Table 2. https://arxiv.org/html/2601.12349v3
 
 
-Slide 8  Controls at Input Dispatch  (4:35–5:35)
-My proposal is to bind each planned action to trusted identifiers for the app and window and to a state version. The dispatcher should validate that binding when it sends the event. On mismatch, discard the pending action, observe again, and then decide whether to proceed. Checking the app name alone misses changes within an app. A sensitive operation can also require an independent user approval tied to the exact action and destination. These are design proposals. In a mock GUI, I would measure wrong-context dispatches alongside task completion, false cancellations, and latency.
+Slide 8  The Check Belongs at Dispatch  (4:35–5:35)
+Here is the design I propose in the report. Follow the two branches. A dispatcher compares the trusted application, window and UI state version with the planned action. When they still match, it can send the action to its bound target. When they have changed, it drops the old tap and observes again. Checking the app name alone can miss a change inside that app. For irreversible actions, I would also require independent approval of the action and target from the user. I would test this on a mock interface with ordinary UI changes and measure wrong-target input, task completion, false cancellations and delay.
 
 Sources
 Qian et al., Section 4. Controls and evaluation are proposed in the reading report.. https://arxiv.org/html/2601.12349v3

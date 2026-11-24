@@ -132,8 +132,21 @@
     "column_sums": [
       1,
       34
-    ]
+    ],
+    "auto_recovery_table_1": {
+      "Mobile-Agent-v3": 1.0,
+      "Droidrun": 1.0,
+      "mobile-use": 0.457,
+      "mobiagent": 1.0,
+      "AutoGLM": 0.457
+    }
   },
   "diagram": "Slide 4 is a conceptual illustration based on Sections 4 and 5.1.",
-  "review_proposal": "Context-bound dispatch, user approval, and the mock-GUI comparison are proposed evaluation and defenses."
+  "review_proposal": "Context-bound dispatch, user approval, and the mock-GUI comparison are proposed evaluation and defenses.",
+  "illustration": {
+    "slide": 2,
+    "file": "assets/call-interruption.png",
+    "creator": "ImageGen",
+    "description": "Original teaching illustration of a benign interruption, inspired by Figure 1 and Section 4 (E005)."
+  }
 }

@@ -40,23 +40,32 @@ def main():
             pres.Export(str(images),'PNG',1600,900)
             print_range=pres.PrintOptions.Ranges.Add(1,pres.Slides.Count)
             pres.ExportAsFixedFormat(str(pdf),2,1,False,1,1,True,print_range,1)
-            chart=None
-            for shape in pres.Slides(7).Shapes:
-                if shape.HasChart:
-                    chart=shape.Chart
-            assert chart is not None
-            values=list(chart.SeriesCollection(1).Values)
-            assert values == [1, 34]
-            assert chart.Axes(2).MinimumScale == 0 and chart.Axes(2).MaximumScale == 60
+            checked_charts = {}
+            for slide_number, expected, maximum in [
+                (6, [0.457, 1, 0.457, 1, 1], 1),
+                (7, [1, 34], 60),
+            ]:
+                charts = [shape.Chart for shape in pres.Slides(slide_number).Shapes if shape.HasChart]
+                assert len(charts) == 1, f'Expected one chart on slide {slide_number}.'
+                chart = charts[0]
+                values = list(chart.SeriesCollection(1).Values)
+                assert values == expected, (slide_number, values)
+                axis = chart.Axes(2)
+                assert axis.MinimumScale == 0 and axis.MaximumScale == maximum
+                checked_charts[slide_number] = {'values': values, 'axis': [0, maximum]}
             report=json.loads(report_path.read_text(encoding='utf-8'))
             report.update({'final_file_opened_read_only':True,
                            'final_file_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),
-                           'native_chart_values':values,'native_chart_axis':[0,60]})
+                           'native_charts':checked_charts})
             report_path.write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
             print('Final PPTX opened read-only; chart values, zero baseline and every slide exported.')
             return
         for i, item in enumerate(notes['slides'],1):
             slide = pres.Slides(i)
+            if alt := item.get('illustration_alt'):
+                pictures = [shape for shape in slide.Shapes if shape.Type == 13]
+                assert len(pictures) == 1, f'Expected one illustration on slide {i}.'
+                pictures[0].AlternativeText = alt
             slide.SlideShowTransition.Hidden = bool(item.get('hidden',False))
             slide.SlideShowTransition.AdvanceOnClick = True
             slide.SlideShowTransition.AdvanceOnTime = False

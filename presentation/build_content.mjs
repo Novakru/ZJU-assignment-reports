@@ -13,7 +13,8 @@ const t = (zh, en) => language === 'en' ? en : zh;
 const notes = JSON.parse(await fs.readFile(path.join(ROOT, t('presentation/notes.json', 'presentation/notes-en.json')), 'utf8'));
 const buildDir = path.join(ROOT, '.build', language);
 const p = Presentation.create({slideSize: {width: 960, height: 540}});
-const BLUE = '#124F8D', ORANGE = '#B85C00', INK = '#1C2633', GRAY = '#586470', FONT = '微软雅黑';
+const BLUE = '#124F8D', ORANGE = '#B85C00', INK = '#1C2633', GRAY = '#586470';
+const LIGHT_BLUE = '#EAF2F9', LIGHT_ORANGE = '#FFF0E0', RULE = '#CDD9E5', FONT = '微软雅黑';
 
 function text(slide, value, x, y, width, height, pt = 18, color = INK, bold = false, align = 'left') {
   const shape = slide.shapes.add({
@@ -28,24 +29,31 @@ function text(slide, value, x, y, width, height, pt = 18, color = INK, bold = fa
   return shape;
 }
 
-function table(slide, values, widths, {top = 115, height = 246, pt = 16} = {}) {
-  const grid = slide.tables.add({
-    rows: values.length, columns: values[0].length,
-    left: 46, top, width: 868, height, values, columnWidths: widths
+function mark(page, name, x, y, width, height, fill, geometry = 'rect') {
+  return page.shapes.add({
+    name, geometry, position: {left: x, top: y, width, height},
+    fill, line: {fill: 'none', width: 0}
   });
-  grid.borders.assign({fill: '#D5DEE8', width: .8});
-  for (let r = 0; r < values.length; r++) {
-    for (let c = 0; c < values[0].length; c++) {
-      const cell = grid.getCell(r, c);
-      cell.fill = r === 0 ? BLUE : '#FFFFFF';
-      cell.text.style = {
-        typeface: FONT, fontSize: pt * 4 / 3, color: r === 0 ? '#FFFFFF' : INK,
-        bold: r === 0, alignment: 'left', verticalAlignment: 'middle',
-        insets: 10, wrap: 'square', autoFit: 'none'
-      };
-    }
-  }
 }
+
+function arrow(page, x, y, width, height, color = BLUE, direction = 'rightArrow') {
+  mark(page, 'Flow direction', x, y, width, height, color, direction);
+}
+
+function takeaway(page, value, y = 430) {
+  mark(page, 'Takeaway rule', 46, y + 1, 4, 44, BLUE);
+  text(page, value, 61, y, 851, 64, 17, BLUE, true);
+}
+
+const categoryAxis = {textStyle: {typeface: FONT, fontSize: 16, fill: GRAY}};
+const gridAxis = {
+  min: 0, textStyle: {typeface: FONT, fontSize: 15, fill: GRAY},
+  majorGridlines: {fill: RULE, width: 0.6}
+};
+const chartStyle = {
+  hasLegend: false, chartFill: '#FFFFFF', chartLine: {fill: 'none', width: 0},
+  plotAreaFill: '#FFFFFF'
+};
 
 function slide(n, reference = '') {
   const entry = notes.slides[n - 1];
@@ -73,68 +81,143 @@ text(s, t('针对安卓 GUI 智能体的动作重绑定攻击', 'Action Rebindin
 text(s, t('蒋佳豪  Jiahao Jiang  ·  22671064', 'Jiahao Jiang  ·  22671064'), 157, 393, 650, 30, 15, BLUE, false, 'center');
 text(s, 'Qian et al.  ·  ACM CCS 2026', 157, 430, 650, 23, 11, GRAY, false, 'center');
 
-s = slide(2, t('来源：Qian 等，图 1、第 4 节', 'Qian et al., Figure 1 and Section 4'));
-text(s, t('智能体准备点击时，来电切换了前台界面', 'An incoming call changes the screen before a planned tap.'), 46, 104, 868, 110, 28, BLUE, true);
-label(s, t('规划时的问题','At planning time'), t('之前的界面上，用户要点哪个控件？','Which control fits the task on the observed screen?'), 46, 249, 410);
-label(s, t('执行时的问题','At dispatch time'), t('现在由哪个窗口接收这次输入？','Which window will receive the input now?'), 507, 249, 405);
-text(s, t('视觉原子性：相关界面在输入送达前保持有效', 'Visual atomicity assumes the observed context stays valid until dispatch.'), 46, 428, 870, 66, 18, BLUE, true);
+s = slide(2, t('来电情境示意，参见 Qian 等图 1、第 4 节', 'Illustration of a call interruption. Qian et al., Figure 1 and Section 4.'));
+text(s, t('智能体决定点击后，来电换掉了前台界面。', 'A call takes over before the planned tap lands.'), 46, 76, 865, 48, 20, BLUE, true);
+const phones = await fs.readFile(path.join(ROOT, 'assets', 'call-interruption.png'));
+s.images.add({
+  blob: new Uint8Array(phones), contentType: 'image/png',
+  alt: notes.slides[1].illustration_alt,
+  fit: 'contain', position: {left: 64, top: 119, width: 538, height: 275}
+});
+text(s, t('观察时：笔记界面','Observed: Notes'), 115, 396, 235, 42, 15, BLUE, true, 'center');
+text(s, t('执行时：来电界面','At dispatch: Call'), 315, 396, 245, 42, 15, ORANGE, true, 'center');
+mark(s, 'Illustration separator', 627, 152, 2, 257, RULE);
+text(s, t('同一个点击位置，\n两个不同的控件。','Same tap position.\nDifferent controls.'), 656, 182, 258, 83, 19, ORANGE, true);
+text(s, t('视觉原子性','Visual atomicity'), 656, 285, 258, 36, 16, BLUE, true);
+text(s, t('智能体所见的界面，在动作送达时仍然有效。','The screen the agent saw still applies when the tap arrives.'), 656, 324, 258, 110, 16);
 
 s = slide(3, t('来源：Qian 等，第 3–4 节', 'Qian et al., Sections 3–4'));
-table(s, t(
-  [['角色','权限或职责'],['用户','授权一项任务及其操作范围'],['GUI 智能体','观察界面并跨应用发送输入'],['已安装的对手应用','在论文假设中无需安卓危险权限']],
-  [['Actor','Authority or role'],['User','Authorizes the task and its scope'],['GUI agent','Reads the screen and sends input across apps'],['Adversary-controlled app','Requires no dangerous Android permissions in this model']]
-), [308,560], {height: 254});
-text(s, t('输入送错目标时，智能体原有的权限可能被用在授权范围之外。', 'A stale input can act outside the scope of the user task.'), 46, 407, 865, 75, 18, BLUE, true);
+text(s, t('用户授权了一项任务，智能体可以跨应用操作。', 'The user delegates a task. The agent can send input across apps.'), 46, 81, 868, 65, 20, BLUE, true);
+const actors = t(
+  [['用户','指定任务范围'],['GUI 智能体','读取屏幕并发出输入'],['Android','向当前目标派发输入']],
+  [['User','Defines the task'],['GUI agent','Reads the screen and sends input'],['Android','Routes input to the current target']]
+);
+actors.forEach(([heading, description], i) => {
+  const x = 46 + i * 303;
+  mark(s, heading + ' divider', x, 194, 222, 4, BLUE);
+  text(s, heading, x, 210, 245, 40, 20, BLUE, true);
+  text(s, description, x, 257, 246, 71, 17);
+  if (i < actors.length - 1) arrow(s, x + 242, 216, 37, 18);
+});
+mark(s, 'Threat model emphasis', 46, 348, 868, 108, LIGHT_ORANGE);
+text(s, t('论文的对手模型','Threat model'), 63, 365, 255, 34, 16, ORANGE, true);
+text(s, t('对手控制一个已安装应用。论文假设它没有申请危险权限。','An adversary controls an installed app with no dangerous Android permissions.'), 63, 403, 832, 47, 16);
 
-s = slide(4, t('示意图据 Qian 等第 4、5.1 节整理', 'Conceptual diagram based on Qian et al., Sections 4 and 5.1'));
-label(s, t('1  观察','1  Observe'), t('读取界面 A\n识别当前控件','Read screen A\nand identify a control'), 46, 118, 244);
-label(s, t('2  推理','2  Reason'), t('根据界面 A 决定动作\n此时界面可能变化','Plan from screen A\nThe screen may change'), 356, 118, 257);
-label(s, t('3  执行','3  Dispatch'), t('当前界面 B 接收输入\n动作目标发生错位','Screen B receives the input\nThe target can differ'), 660, 118, 262);
-text(s, '→', 296, 175, 50, 50, 25, BLUE, true);
-text(s, '→', 610, 175, 50, 50, 25, BLUE, true);
-text(s, t('动作重绑定是一种检查与使用之间的竞态（TOCTOU）。','Action rebinding is a time-of-check to time-of-use race.'), 46, 348, 870, 65, 23, BLUE, true);
-text(s, t('即使模型正确识别了界面 A，输入仍可能到达不同的控件。','Even perfect recognition of screen A leaves the dispatch target uncertain.'), 46, 433, 870, 60, 16, GRAY);
+s = slide(4, t('概念时间线，据 Qian 等第 4、5.1 节整理', 'Conceptual timeline based on Qian et al., Sections 4 and 5.1'));
+text(s, t('智能体按界面 A 规划，输入却由界面 B 接收。','The agent plans from screen A. Screen B receives the tap.'), 46, 78, 864, 50, 20, BLUE, true);
+const start = 252, change = 560, end = 814;
+mark(s, 'Observation-to-action gap', start, 152, end - start, 4, ORANGE);
+mark(s, 'Observation tick', start, 144, 3, 20, ORANGE);
+mark(s, 'Dispatch tick', end, 144, 3, 20, ORANGE);
+text(s, t('观察到执行的时间差','Observation-to-action gap'), 308, 164, 452, 34, 16, ORANGE, true, 'center');
+text(s, t('智能体','Agent'), 46, 234, 122, 33, 16, BLUE, true);
+mark(s, 'Agent lane', 167, 250, 733, 2, RULE);
+const steps = t(['观察 A','依据 A 推理','派发输入'],['Observe A','Reason from A','Dispatch']);
+[start, 491, end].forEach((x, i) => {
+  mark(s, steps[i] + ' marker', x - 7, 244, 15, 15, BLUE, 'ellipse');
+  text(s, steps[i], x - 94, 269, 188, 32, 16, BLUE, true, 'center');
+});
+text(s, t('前台界面','Foreground'), 46, 329, 127, 31, 16, BLUE, true);
+mark(s, 'Screen A interval', 169, 315, change - 169, 53, LIGHT_BLUE);
+mark(s, 'Screen B interval', change, 315, 340, 53, LIGHT_ORANGE);
+mark(s, 'Foreground switches here', change, 308, 3, 65, ORANGE);
+text(s, t('界面 A','Screen A'), 290, 331, 148, 32, 16, BLUE, true, 'center');
+text(s, t('界面 B','Screen B'), 657, 331, 145, 32, 16, ORANGE, true, 'center');
+text(s, t('时间','Time'), 798, 391, 68, 28, 12, GRAY, false, 'right');
+arrow(s, 875, 399, 25, 11, GRAY);
+takeaway(s, t('动作重绑定源于检查与使用之间的竞态（TOCTOU）。','Action rebinding is a time-of-check to time-of-use (TOCTOU) race.'), 439);
 
 s = slide(5, t('来源：Qian 等，第 6、7.3–7.4 节', 'Qian et al., Sections 6 and 7.3–7.4'));
-label(s, t('任务恢复','Task recovery'), t('异常以后，是否继续取决于界面状态和恢复策略。','Continuation depends on the interface state and how the agent recovers.'), 46, 123, 410);
-label(s, t('模型确认','Agent confirmation'), t('先前看到的界面会影响模型对后续确认框的判断。','Earlier screen content can make a later confirmation look relevant.'), 507, 123, 410);
-text(s, t('意图对齐策略（IAS）检验了界面上下文对模型判断的影响。', 'The paper tests an intent alignment strategy (IAS) at confirmation.'), 46, 310, 860, 80, 21, BLUE, true);
-text(s, t('授权仍需核对具体动作及其目标。','An authorization check needs the specific action and its target.'), 46, 417, 860, 62, 16, GRAY);
+const questions = t(
+  [['任务恢复需要什么？','应用保留界面状态','智能体从中断中恢复'],
+   ['模型会通过确认吗？','确认看起来符合任务','模型判断是否接受']],
+  [['What lets the task resume?','The app retains its state','The agent resumes after interruption'],
+   ['Will the agent accept?','The dialog appears relevant','The agent decides whether to accept']]
+);
+for (const [i, [question, state, result]] of questions.entries()) {
+  const y = 109 + i * 150;
+  const color = i === 0 ? BLUE : ORANGE;
+  const pale = i === 0 ? LIGHT_BLUE : LIGHT_ORANGE;
+  text(s, question, 46, y, 850, 40, 20, color, true);
+  mark(s, question + ' first condition', 46, y + 52, 370, 57, pale);
+  mark(s, question + ' decision', 494, y + 52, 420, 57, pale);
+  text(s, state, 61, y + 67, 338, 37, 15, INK, true, 'center');
+  if (i === 0) {
+    text(s, '+', 431, y + 60, 47, 44, 22, BLUE, true, 'center');
+  } else {
+    arrow(s, 438, y + 72, 35, 16, color);
+  }
+  text(s, result, 506, y + 67, 395, 37, 15, INK, true, 'center');
+}
+takeaway(s, t('确认实验中的意图对齐策略（IAS），让弹窗在上下文中看起来更符合任务。',
+              'Intent alignment strategy (IAS) makes the dialog look relevant.'), 429);
 
 s = slide(6, t('来源：Qian 等，第 7.3.1–7.3.2 节，表 1', 'Qian et al., Sections 7.3.1–7.3.2 and Table 1'));
-table(s, t(
-  [['指标','范围','观察结果'],['单步动作重绑定','6 个受测智能体','100%'],['多步自动恢复','表 1 的 5 个智能体','45.7%–100%']],
-  [['Outcome','Scope','Observation'],['Single-action rebinding','6 tested agents','100%'],['Multi-step auto-recovery','5 agents in Table 1','45.7%–100%']]
-), [335,295,238], {top: 113, height: 246, pt: 16});
-text(s, t('恢复只是多步流程的一环，实验选用了会保留界面状态的应用。','Recovery is one stage of a chain. The study selected apps that retain UI state.'), 46, 409, 865, 72, 18, BLUE, true);
+text(s, t('单步动作重绑定','Single-action rebinding'), 46, 109, 341, 45, 19, BLUE, true);
+text(s, '100%', 46, 156, 338, 110, 64, BLUE, true);
+text(s, t('6 个智能体\n论文报告的受测结果','6 agents\nRate in the tested setup'), 47, 283, 294, 89, 17);
+mark(s, 'Separate experiments', 379, 105, 2, 276, RULE);
+text(s, t('多步实验中的自动恢复率','Auto-recovery in the multi-step test'), 410, 87, 503, 65, 17, BLUE, true);
+s.charts.add('bar', {
+  ...chartStyle,
+  position: {left: 405, top: 141, width: 507, height: 253},
+  categories: ['AutoGLM', 'mobiagent', 'mobile-use', 'Droidrun', 'Mobile-Agent-v3'],
+  series: [{name: t('自动恢复率','Auto-recovery'), values: [0.457, 1, 0.457, 1, 1], valuesFormatCode: '0.0%', fill: BLUE}],
+  barOptions: {direction: 'bar', grouping: 'clustered', gapWidth: 70},
+  xAxis: categoryAxis,
+  yAxis: {...gridAxis, max: 1, majorUnit: 0.25, numberFormatCode: '0%'},
+  dataLabels: {showValue: true, position: 'inEnd', numberFormatCode: '0.0%', textStyle: {typeface: FONT, fontSize: 15, color: '#FFFFFF', bold: true}}
+});
+takeaway(s, t('自动恢复只是多步流程的一环。实验选用的是会保留界面状态的应用。',
+              'The recovery test used apps that retain their UI state.'), 429);
 
 s = slide(7, t('来源：Qian 等，第 7.4 节表 2，各条件汇总六行数据', 'Qian et al., Section 7.4, Table 2. Counts sum the six rows per condition.'));
-text(s, t('模型通过确认的次数','Confirmations accepted by agents'), 46, 80, 530, 37, 18, BLUE, true);
+text(s, t('智能体接受确认的次数','Confirmations accepted by agents'), 46, 79, 587, 45, 19, BLUE, true);
 s.charts.add('bar', {
-  position: {left: 46, top: 125, width: 508, height: 280},
+  ...chartStyle,
+  position: {left: 46, top: 124, width: 562, height: 298},
   categories: t(['普通上下文','意图对齐上下文'], ['Generic context','Intent-aligned context']),
-  series: [{name: t('通过次数','Accepted'), values:[1,34], valuesFormatCode:'0', fill: BLUE}],
-  hasLegend:false, barOptions:{direction:'column', grouping:'clustered', gapWidth:110},
-  chartFill:'#FFFFFF', chartLine:{fill:'none', width:0}, plotAreaFill:'#FFFFFF',
-  xAxis:{textStyle:{typeface:FONT,fontSize:17}},
-  yAxis:{min:0,max:60,majorUnit:15,numberFormatCode:'0',textStyle:{typeface:FONT,fontSize:15},
-         majorGridlines:{fill:'#DCE4ED',width:.6}},
-  dataLabels:{showValue:true,position:'outEnd',numberFormatCode:'0',textStyle:{typeface:FONT,fontSize:19,color:BLUE}}
+  series: [{name: t('通过次数','Accepted'), values: [1, 34], valuesFormatCode: '0', fill: BLUE, points: [{idx: 1, fill: ORANGE}]}],
+  barOptions: {direction: 'column', grouping: 'clustered', gapWidth: 110},
+  xAxis: {...categoryAxis, textStyle: {...categoryAxis.textStyle, fontSize: 17}},
+  yAxis: {...gridAxis, max: 60, majorUnit: 15, numberFormatCode: '0'},
+  dataLabels: {showValue: true, position: 'outEnd', numberFormatCode: '0', textStyle: {typeface: FONT, fontSize: 19, color: BLUE}}
 });
-label(s, t('每种条件 60 次','60 trials per condition'), t('6 个智能体各试验 10 次\n使用同一种确认任务','6 agents × 10 trials\nOne confirmation task'), 594, 148, 325);
-text(s, '1/60   →   34/60', 593, 298, 330, 55, 25, ORANGE, true);
-text(s, t('汇总结果描述的是这项确认实验，具体表现因智能体而异。','The pooled counts describe this test. Acceptance varied across agents.'), 46, 437, 869, 64, 17, BLUE, true);
+mark(s, 'Sample size separator', 630, 138, 2, 267, RULE);
+text(s, t('每种条件 60 次','60 trials per condition'), 653, 148, 258, 65, 18, BLUE, true);
+text(s, t('6 个智能体各做 10 次\n使用同一种确认任务','6 agents × 10 trials\nOne confirmation task'), 653, 218, 259, 70, 15);
+text(s, '1/60', 653, 305, 105, 62, 24, BLUE, true);
+text(s, '34/60', 773, 305, 137, 62, 24, ORANGE, true);
+takeaway(s, t('同一种任务中，上下文影响了模型的确认判断。各智能体的结果有差别。',
+              'Context affected acceptance. The size of the effect varied by agent.'), 441);
 
 s = slide(8, t('阅读报告提出的防护与评估建议', 'Defensive controls and evaluation proposed in the reading report'));
-const controls = t(
-  [['动作绑定','记录应用、窗口和状态版本'],['分发时核验','一旦状态失效，丢弃旧动作并重新观察'],['用户独立确认','将高风险操作的批准绑定到具体目标']],
-  [['Bind the action','Record the app, window, and state version'],['Check at dispatch','Discard stale actions and observe again'],['Require approval','Bind user approval to the exact high-risk operation']]
-);
-controls.forEach(([heading, description], i) => {
-  text(s, heading, 46, 105 + i * 83, 292, 49, 18, BLUE, true);
-  text(s, description, 348, 106 + i * 83, 567, 66, 17);
-});
-text(s, t('验证指标：输入错投、任务完成、误取消与附加时延','Measure wrong-context input, task completion, false cancellations, and delay.'), 46, 423, 868, 74, 17, BLUE, true);
+text(s, t('把动作绑定到可信的应用、窗口和界面状态版本。',
+          'Bind each action to its app, window, and UI state version.'), 46, 81, 865, 62, 20, BLUE, true);
+mark(s, 'Dispatch check', 46, 198, 293, 94, LIGHT_BLUE);
+text(s, t('分发时核对','Check at dispatch'), 63, 211, 257, 38, 18, BLUE, true, 'center');
+text(s, t('当前状态仍与观察一致？','Does the state still match?'), 63, 254, 257, 33, 14, INK, false, 'center');
+mark(s, 'Decision stem', 339, 244, 57, 3, BLUE);
+mark(s, 'Decision branch', 395, 189, 3, 115, BLUE);
+arrow(s, 397, 182, 47, 16);
+arrow(s, 397, 297, 47, 16, ORANGE);
+mark(s, 'Matching state', 445, 153, 469, 77, LIGHT_BLUE);
+text(s, t('一致：发送到已绑定目标','Match: send to the bound target'), 464, 172, 431, 47, 17, BLUE, true);
+mark(s, 'Stale state', 445, 269, 469, 77, LIGHT_ORANGE);
+text(s, t('已变：丢弃旧动作，重新观察','Changed: drop the tap and observe again'), 464, 287, 433, 55, 17, ORANGE, true);
+takeaway(s, t('不可逆操作还需用户独立确认，批准要绑定到具体动作及其目标。',
+              'For irreversible actions, get user approval for the exact action and target.'), 386);
+text(s, t('评估：输入错投、任务完成、误取消与时延','Measure misdirected input, task completion, false cancellations, and delay.'), 61, 463, 850, 32, 13, GRAY);
 
 slide(9);
 

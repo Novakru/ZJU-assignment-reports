@@ -28,6 +28,14 @@ def check_report(relative_path, expected_text):
         assert abs(page.rect.width-595.28)<1 and abs(page.rect.height-841.89)<1
     return {'report_pages_including_references':len(report)}
 
+def related_part(package, owner, element):
+    directory, name = posixpath.split(owner)
+    links = E.fromstring(package.read(posixpath.join(directory, '_rels', name + '.rels')))
+    relation = element.get('{' + NS['r'] + '}id')
+    target = next(link.get('Target') for link in links if link.get('Id') == relation)
+    return target.lstrip('/') if target.startswith('/') else posixpath.normpath(posixpath.join(directory, target))
+
+
 def check_presentation(language, deck_path, preview_path):
     notes_file = 'notes-en.json' if language == 'en' else 'notes.json'
     notes=json.loads((ROOT/'presentation'/notes_file).read_text(encoding='utf-8'))
@@ -41,8 +49,9 @@ def check_presentation(language, deck_path, preview_path):
     slide_parts=[posixpath.normpath(posixpath.join('ppt',rels[s.get('{'+NS['r']+'}id')])) for s in ids]
     xmls=[E.fromstring(z.read(n)) for n in slide_parts]
     assert [i for i,s in enumerate(xmls,1) if s.get('show')=='0']==[10,11]
-    for i in [3,6]:assert xmls[i-1].find('.//a:tbl',NS) is not None
-    assert xmls[6].find('.//c:chart',NS) is not None
+    assert any(prop.get('descr') == notes['slides'][1]['illustration_alt']
+               for prop in xmls[1].findall('.//p:pic/p:nvPicPr/p:cNvPr', NS))
+    assert [i for i, page in enumerate(xmls, 1) if page.find('.//c:chart', NS) is not None] == [6, 7]
     text='\n'.join(''.join(s.itertext()) for s in xmls)
     for value in ['22671064','100%','45.7%','1/60','34/60']:
         assert value in text,f'PPT missing {value}'
@@ -56,32 +65,30 @@ def check_presentation(language, deck_path, preview_path):
     assert '2601.12349v3' in notes_text, 'Speaker notes missing the source manuscript.'
     for item in notes['slides']:
         assert item['speech'] in notes_text,'Speaker notes were not embedded intact.'
-    charts=[n for n in z.namelist() if n.endswith('.xml') and '/charts/' in n and '/_rels/' not in n]
-    quantitative=[]
-    for name in charts:
-        chart=E.fromstring(z.read(name))
-        if chart.find('.//c:barChart',NS) is not None:
-            quantitative.append(chart)
-    assert len(quantitative)==1
-    c=quantitative[0]
-    values=[float(v.text) for v in c.findall('.//c:ser/c:val/c:numRef/c:numCache/c:pt/c:v',NS)]
-    assert values == [1, 34], values
-    chart_labels = ''.join(c.itertext())
-    for label in (['Generic context','Intent-aligned context'] if language == 'en'
-                  else ['普通上下文','意图对齐上下文']):
-        assert label in chart_labels
-    assert c.find('.//c:valAx/c:scaling/c:min',NS).get('val')=='0'
-    assert c.find('.//c:valAx/c:scaling/c:max',NS).get('val')=='60'
-    workbooks=[n for n in z.namelist() if n.startswith('ppt/embeddings/') and n.endswith('.xlsx')]
-    assert len(workbooks)==1
-    wb=zipfile.ZipFile(BytesIO(z.read(workbooks[0])))
-    numeric=[]
-    for name in wb.namelist():
-        if name.startswith('xl/worksheets/') and name.endswith('.xml'):
-            tree=E.fromstring(wb.read(name))
-            numeric.extend(float(cell.find('s:v',NS).text) for cell in tree.findall('.//s:c',NS)
-                           if cell.get('t') not in {'s','str','inlineStr'} and cell.find('s:v',NS) is not None)
-    assert numeric == [1, 34], numeric
+    expected_charts = [
+        (6, ['AutoGLM', 'mobiagent', 'mobile-use', 'Droidrun', 'Mobile-Agent-v3'],
+         [0.457, 1, 0.457, 1, 1], 1),
+        (7, ['Generic context', 'Intent-aligned context'] if language == 'en'
+         else ['普通上下文', '意图对齐上下文'], [1, 34], 60),
+    ]
+    for page, categories, values, maximum in expected_charts:
+        part = related_part(z, slide_parts[page - 1], xmls[page - 1].find('.//c:chart', NS))
+        chart = E.fromstring(z.read(part))
+        series = chart.find('.//c:barChart/c:ser', NS)
+        assert [v.text for v in series.findall('./c:cat/c:strRef/c:strCache/c:pt/c:v', NS)] == categories
+        assert [float(v.text) for v in series.findall('./c:val/c:numRef/c:numCache/c:pt/c:v', NS)] == values
+        scale = chart.find('.//c:valAx/c:scaling', NS)
+        assert float(scale.find('c:min', NS).get('val')) == 0
+        assert float(scale.find('c:max', NS).get('val')) == maximum
+        workbook = related_part(z, part, chart.find('c:externalData', NS))
+        with zipfile.ZipFile(BytesIO(z.read(workbook))) as wb:
+            numeric = []
+            for name in wb.namelist():
+                if name.startswith('xl/worksheets/') and name.endswith('.xml'):
+                    tree = E.fromstring(wb.read(name))
+                    numeric.extend(float(cell.find('s:v', NS).text) for cell in tree.findall('.//s:c', NS)
+                                   if cell.get('t') not in {'s','str','inlineStr'} and cell.find('s:v', NS) is not None)
+        assert numeric == values, (page, numeric)
     preview=fitz.open(ROOT/preview_path)
     assert len(preview)==11
     native=json.loads((ROOT/'.build'/language/'native-check.json').read_text(encoding='utf-8'))
@@ -90,7 +97,7 @@ def check_presentation(language, deck_path, preview_path):
     return {
         'total_slides':len(ids),'main_slides':9,'hidden_backup_slides':[10,11],
         'planned_main_seconds':340,'buffer_seconds':20,
-        'native_table_slides':[3,6],'native_chart_slides':[7],
+        'native_chart_slides':[6,7],
         'chart_cache_and_embedded_workbook_agree':True,
         'all_speaker_notes_embedded':True,'native_powerpoint_opened':True,
         'preview_pages':len(preview),'status':'passed'

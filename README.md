@@ -82,8 +82,8 @@ python tools/build_report.py
 `RUNTIME_NODE_MODULES`、`PRESENTATIONS_SKILL_DIR` 环境变量。
 
 `.build/`、逐页图片和下载的原文为本地构建资料，不纳入版本控制。
-PPTX 内的两张表与柱状图保持原生可编辑，柱状图带嵌入数据工作簿。
-第 4 页的时序示意依据论文第 4 和 5.1 节整理。
+第 2 页的手机界面为原创示意插图，使用 ImageGen 生成。第 4 页的双轨时间线依据论文第 4 和 5.1 节整理。
+第 6、7 页的条形图和柱状图为原生 PowerPoint 图表，均带嵌入数据工作簿。
 
 ### 工具与来源说明
 
