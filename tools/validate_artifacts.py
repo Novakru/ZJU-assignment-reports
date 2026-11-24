@@ -21,7 +21,7 @@ def check_report(relative_path, expected_text):
     report=fitz.open(ROOT/relative_path)
     assert len(report)==2,'Report exceeds the two-page requirement.'
     report_text='\n'.join(p.get_text() for p in report)
-    for value in [*expected_text,'22671064','83.6%','85.3%','85.7%','20.95','0.27']:
+    for value in [*expected_text,'Mind the Gap','22671064','100%','45.7%','1/60','34/60','2601.12349v3']:
         assert value in report_text, f'Report missing {value}'
     assert not re.search(r'First Author|author@example|ReLER|Group 6|TODO|TBD',report_text)
     for page in report:
@@ -44,7 +44,7 @@ def check_presentation(language, deck_path, preview_path):
     for i in [3,6]:assert xmls[i-1].find('.//a:tbl',NS) is not None
     assert xmls[6].find('.//c:chart',NS) is not None
     text='\n'.join(''.join(s.itertext()) for s in xmls)
-    for value in ['22671064','83.6%','85.3%','100%','1,054','20.95','US$0.27']:
+    for value in ['22671064','100%','45.7%','1/60','34/60']:
         assert value in text,f'PPT missing {value}'
     assert notes['slides'][0]['title'] in text
     if language == 'en':
@@ -53,6 +53,7 @@ def check_presentation(language, deck_path, preview_path):
     notes_parts=[n for n in z.namelist() if re.fullmatch(r'ppt/notesSlides/notesSlide\d+\.xml',n)]
     assert len(notes_parts)==11
     notes_text='\n'.join(''.join(E.fromstring(z.read(n)).itertext()) for n in notes_parts)
+    assert '2601.12349v3' in notes_text, 'Speaker notes missing the source manuscript.'
     for item in notes['slides']:
         assert item['speech'] in notes_text,'Speaker notes were not embedded intact.'
     charts=[n for n in z.namelist() if n.endswith('.xml') and '/charts/' in n and '/_rels/' not in n]
@@ -64,13 +65,13 @@ def check_presentation(language, deck_path, preview_path):
     assert len(quantitative)==1
     c=quantitative[0]
     values=[float(v.text) for v in c.findall('.//c:ser/c:val/c:numRef/c:numCache/c:pt/c:v',NS)]
-    assert values==[.95,.80,.857],values
+    assert values == [1, 34], values
     chart_labels = ''.join(c.itertext())
-    for label in (['Single tool','Multiple tools','Relational data'] if language == 'en'
-                  else ['单工具','多工具','关系数据']):
+    for label in (['Generic context','Intent-aligned context'] if language == 'en'
+                  else ['普通上下文','意图对齐上下文']):
         assert label in chart_labels
     assert c.find('.//c:valAx/c:scaling/c:min',NS).get('val')=='0'
-    assert c.find('.//c:valAx/c:scaling/c:max',NS).get('val')=='1'
+    assert c.find('.//c:valAx/c:scaling/c:max',NS).get('val')=='60'
     workbooks=[n for n in z.namelist() if n.startswith('ppt/embeddings/') and n.endswith('.xlsx')]
     assert len(workbooks)==1
     wb=zipfile.ZipFile(BytesIO(z.read(workbooks[0])))
@@ -80,7 +81,7 @@ def check_presentation(language, deck_path, preview_path):
             tree=E.fromstring(wb.read(name))
             numeric.extend(float(cell.find('s:v',NS).text) for cell in tree.findall('.//s:c',NS)
                            if cell.get('t') not in {'s','str','inlineStr'} and cell.find('s:v',NS) is not None)
-    assert numeric==[.95,.80,.857],numeric
+    assert numeric == [1, 34], numeric
     preview=fitz.open(ROOT/preview_path)
     assert len(preview)==11
     native=json.loads((ROOT/'.build'/language/'native-check.json').read_text(encoding='utf-8'))
@@ -97,9 +98,9 @@ def check_presentation(language, deck_path, preview_path):
 
 def main():
     results = {
-        'en': {**check_report('submission/report.pdf', ['Jiahao Jiang','References','follow-up']),
+        'en': {**check_report('submission/report.pdf', ['Jiahao Jiang','References','Proposed defense']),
                **check_presentation('en','submission/presentation.pptx','review/presentation-preview-en.pdf')},
-        'zh': {**check_report('review/report-zh.pdf', ['蒋佳豪','参考文献','后续研究建议']),
+        'zh': {**check_report('review/report-zh.pdf', ['蒋佳豪','参考文献','防护与验证建议']),
                **check_presentation('zh','review/presentation-zh.pptx','review/presentation-preview.pdf')},
     }
     (ROOT/'.build/course-check.json').write_text(json.dumps(results,ensure_ascii=False,indent=2),encoding='utf-8')

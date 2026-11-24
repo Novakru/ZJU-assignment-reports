@@ -46,12 +46,12 @@ def main():
                     chart=shape.Chart
             assert chart is not None
             values=list(chart.SeriesCollection(1).Values)
-            assert all(abs(a-b)<1e-12 for a,b in zip(values,[.95,.80,.857]))
-            assert chart.Axes(2).MinimumScale==0 and chart.Axes(2).MaximumScale==1
+            assert values == [1, 34]
+            assert chart.Axes(2).MinimumScale == 0 and chart.Axes(2).MaximumScale == 60
             report=json.loads(report_path.read_text(encoding='utf-8'))
             report.update({'final_file_opened_read_only':True,
                            'final_file_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),
-                           'native_chart_values':values,'native_chart_axis':[0,1]})
+                           'native_chart_values':values,'native_chart_axis':[0,60]})
             report_path.write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
             print('Final PPTX opened read-only; chart values, zero baseline and every slide exported.')
             return

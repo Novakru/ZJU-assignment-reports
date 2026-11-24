@@ -1,8 +1,7 @@
 """Refresh native numeric caches from the exact embedded worksheet cells.
 
-PowerPoint serializes 0.857 as a longer binary-float decimal in the chart cache,
-while preserving 0.857 in the workbook. Keep the two representations identical
-without changing the source data, formulas, labels or chart styling.
+PowerPoint may serialize numbers differently in the cache and embedded sheet.
+Keep the two representations identical while preserving the chart data and style.
 """
 from io import BytesIO
 from pathlib import Path

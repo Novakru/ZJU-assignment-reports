@@ -61,10 +61,10 @@ def write_speaker_notes(language):
     notes_file = 'notes-en.json' if english else 'notes.json'
     data = json.loads((ROOT/'presentation'/notes_file).read_text(encoding='utf-8'))
     total = sum(item['seconds'] for item in data['slides'])
-    lines = (['ACE English speaker notes', 'Jiahao Jiang / 22671064',
+    lines = (['Mind the Gap | English speaker notes', 'Jiahao Jiang / 22671064',
               f'Main presentation: {total} seconds with {360-total} seconds for transitions.',
               'Slides 10 and 11 are hidden backup slides.', ''] if english else
-             ['ACE 中文展示讲稿', '蒋佳豪 / Jiahao Jiang / 22671064',
+             ['Mind the Gap 中文展示讲稿', '蒋佳豪 / Jiahao Jiang / 22671064',
               f'正式部分 {total} 秒，预留 {360-total} 秒切页。',
               '第 10、11 页为隐藏备份页。', ''])
     elapsed=0

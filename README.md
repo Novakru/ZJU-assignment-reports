@@ -24,14 +24,15 @@
 
 欢迎通过 Issue 和 Pull Request 提交问题、建议与改进。
 
-## 人工智能安全：ACE 论文展示与阅读报告
+## 人工智能安全：Mind the Gap 论文展示与阅读报告
 
 当前作业分支为 `assignment-ai-security`，从 `main` 的 `cc1fa9c` 创建。
 本分支独立维护本次作业，没有合并高级人工智能 MP2 或其他课程的作业内容。
 
 课程课件名称为 **Trustworthy Artificial Intelligence**。这是个人作业，署名为
 **蒋佳豪 / Jiahao Jiang / 22671064**。选题为课程清单中的
-**ACE: A Security Architecture for LLM-Integrated App Systems（NDSS 2026）**。
+**Mind the Gap: Action Rebinding Attacks against Android GUI Agents（ACM CCS 2026）**。
+章节与实验数字采用 [arXiv v3](https://arxiv.org/abs/2601.12349v3)。
 
 | 文件 | 用途 |
 | --- | --- |
@@ -46,7 +47,7 @@
 
 课件规定展示共 6 分钟。中英文正式讲稿均按 **340 秒（5 分 40 秒）** 安排，预留 20 秒用于
 切页及口头停顿；实际用时需通过个人彩排校准。第 10、11 页在放映时默认隐藏，问答时可以跳转。
-报告和 PPT 的数据均为论文原文结果，拟议的消融实验明确标为后续建议，没有声称完成个人复现。
+报告和 PPT 的实验结果来自原文。确认通过数按表 2 汇总，执行端校验和模拟评估为阅读报告提出的建议。
 
 ### 课程要求与取舍
 
@@ -82,7 +83,7 @@ python tools/build_report.py
 
 `.build/`、逐页图片和下载的原文为本地构建资料，不纳入版本控制。
 PPTX 内的两张表与柱状图保持原生可编辑，柱状图带嵌入数据工作簿。
-图 3 取自论文原图，只有裁剪，没有改写标签或数值。
+第 4 页的时序示意依据论文第 4 和 5.1 节整理。
 
 ### 工具与来源说明
 
@@ -92,4 +93,4 @@ PPTX 内的两张表与柱状图保持原生可编辑，柱状图带嵌入数据
 科学写作辅助流程参考：Timothy Kassis, Vinayak Agarwal, Yuhuan He, Darshil Patel,
 and Aubrey M. Brueckner. *Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents*.
 2026. [doi:10.48550/arXiv.2609.00065](https://doi.org/10.48550/arXiv.2609.00065)。
-该引用记录工具流程来源，不作为 ACE 的科学证据，也不占课程报告的参考文献篇幅。
+该引用记录写作辅助流程来源。

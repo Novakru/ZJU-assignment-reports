@@ -1,11 +1,6 @@
-﻿claim_id,sha256,evidence_ids,locator,verification
-C001,f57cb3bb238ce83f099414f2b3198c9a70d2a22b52f7dcc5bb23ac8524b72b65,"E005,E007",E005 II-C; E007 pp. 1-2,agent_checked; human review not recorded
-C002,87e48634b16464393ae5dade7c7c808c5fe274ec147d8ec06ad99d4587d5bd0f,E005,"IV-B-E, pp. 6-9",agent_checked; human review not recorded
-C003,a0b2f678ed3867903844b47016500bba543fac94a4780b024342e37e489f6cf4,E005,"IV-C, p. 8; interpretive analysis",agent_checked; human review not recorded
-C004,d6dc34a2d4791bf5469730315fdf29e7924e3df9ba3ea748d1176250f0fea5f0,"E005,E008","V-B, pp. 11-12; Table II",agent_checked; human review not recorded
-C005,c1d0bbcf8a82a52189629529521129be2e931546be111db60d70715369bfddc3,"E005,E006","V-B, p. 12; full version F-C",agent_checked; human review not recorded
-C006,ee2f34b1fc7db3dab9663329086e0a0217bd452427dfc80a099c7d2e0635e147,E005,IV; interpretive analysis,agent_checked; human review not recorded
-C007,fa42d1dfff87acc57e9a6944be4ee16f64af407aa11f47d5d86d6190cdb0f671,E006,"Appendix C, pp. 16-17",agent_checked; human review not recorded
-C008,0fd475b256d5c8256ca9738dcdbe4b63e31bd50ed88a3569e4db974df687e1cc,E005,IV-B; Table IV,agent_checked; human review not recorded
-C009,d7929a04b9b37f0d7712204e85791dd497c942ce9980ee0e0c3b969e06b31823,original_proposal,"Proposed follow-up, no results claimed",agent_checked; human review not recorded
-C010,4bdc493817a00e82bf2661c317e7e643508740ad47caf408affafa1f7edd3a1a,original_proposal,"Proposed follow-up, no results claimed",agent_checked; human review not recorded
+claim_id,sha256,evidence_ids,locator,verification
+C001,63851ec24e3f166d2161d269d4a48b00a07875762bf818af6afa95d38c82de78,E005,Figure 1 and Section 4,agent checked against arXiv v3
+C002,3e3741ce510fd8cabd528802e790fb2f917dc998a9e36567d0a0d98ea854dd75,E005,Section 3,agent checked against arXiv v3
+C003,f1157da35849fd2cb2dae79d36f00c6973422217139139d744dd6ee43209f103,E005,Sections 7 and 7.3.1,agent checked against arXiv v3
+C004,6fa114f955f1362acdd2251bcf9e0b215da1f8f3d9acedc3ed94fbaa4acf2a0d,E005,"Section 7.3.2, Table 1",agent checked against arXiv v3
+C005,9e2a97b0d5d95e8c38f367487905302946a6dcec46b0c6557024b395d50ba4d7,E005,"Section 7.4, Table 2",agent checked against arXiv v3
