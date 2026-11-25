@@ -8,7 +8,7 @@
 \setmonofont{Latin Modern Mono}
 \setCJKmainfont{SimSun}[BoldFont=SimHei]
 \setCJKsansfont{SimHei}
-\usepackage{amsmath,array,booktabs,calc,caption,enumitem,fancyhdr,graphicx,pgfplots,titlesec,xcolor}
+\usepackage{amsmath,array,booktabs,calc,caption,enumitem,fancyhdr,graphicx,pgfplots,tabularx,titlesec,xcolor}
 \usepackage[most]{tcolorbox}
 \usepackage{hyperref}
 \pgfplotsset{compat=1.18}
@@ -40,7 +40,7 @@
   {\thesubsection}{0.65em}{}
 \titlespacing*{\section}{0pt}{1.8ex plus 0.5ex minus 0.2ex}{0.7ex}
 \titlespacing*{\subsection}{0pt}{1.3ex plus 0.4ex minus 0.2ex}{0.5ex}
-\captionsetup{font=small,labelfont=bf,skip=5pt}
+\captionsetup{font=small,labelfont=bf,skip=5pt,hypcap=false}
 \setlist{itemsep=5pt,topsep=4pt,leftmargin=1.6em}
 \providecommand{\tightlist}{}
 
@@ -208,7 +208,7 @@
 \textbf{(a)\quad 白杯遮挡测试}\par\smallskip
 \begin{tikzpicture}
 \begin{axis}[
-  scale only axis, width=46mm, height=55mm,
+  scale only axis, width=46mm, height=46mm,
   xmin=0.55, xmax=2.45, ymin=0, ymax=100,
   ybar, bar width=13pt,
   xtick={1,2}, xticklabels={20\%--30\%,80\%--90\%},
@@ -231,7 +231,7 @@
 \textbf{(b)\quad 计划生成对照}\par\smallskip
 \begin{tikzpicture}
 \begin{axis}[
-  scale only axis, width=54mm, height=55mm,
+  scale only axis, width=54mm, height=46mm,
   xmin=0, xmax=1, ymin=0.5, ymax=3.5,
   xtick={0,0.25,0.50,0.75,1},
   xticklabels={0,0.25,0.50,0.75,1.00},
@@ -241,7 +241,7 @@
   tick label style={font=\small}, label style={font=\small},
   axis x line*=bottom, axis y line*=left,
   xmajorgrids, grid style={draw=gray!25},
-  legend style={at={(0.5,-0.30)},anchor=north,legend columns=2,
+  legend style={at={(0.5,-0.32)},anchor=north,legend columns=2,
     draw=none,font=\small,column sep=8pt,cells={anchor=west}},
   clip=false
 ]
@@ -270,47 +270,49 @@
 \end{minipage}
 \end{center}
 
-\clearpage
 \begin{center}
 \begin{minipage}{\linewidth}
-\captionof{table}{三类验证所支持的结论}
-\label{tab:evidence}
 \centering
+\captionof{table}{三类证据支持的结论与验证缺口}
+\label{tab:evidence}
 \small
-\renewcommand{\arraystretch}{1.28}
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.19\linewidth}
-  >{\raggedright\arraybackslash}p{0.34\linewidth}
-  >{\raggedright\arraybackslash}p{0.40\linewidth}@{}}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\linewidth}{
+  @{}>{\raggedright\arraybackslash\bfseries}p{0.15\linewidth}
+  >{\raggedright\arraybackslash}p{0.36\linewidth}
+  >{\raggedright\arraybackslash}X@{}}
 \toprule
-\textbf{原文证据} & \textbf{能支持的结论} & \textbf{后续验证所需证据} \\
+证据类型 & \textbf{可以得出的结论} & \textbf{还需要的证据} \\
 \midrule
-实物演示\newline 原文图 2、图 6、补充视频 1
-  & 所设场景下，机械臂可以把多个操作步骤串联起来。
-  & 在相同成功判据下重复整项任务，报告成功次数、试验总数和失败环节。 \\
-\addlinespace[5pt]
-模块测量\newline 第 595 页、原文图 4
-  & 白杯识别随重度遮挡下降，力反馈可在所述低速条件下估计倾倒量。
-  & 报告各档遮挡试验数和不同容器、速度条件下的倒水误差分布。 \\
-\addlinespace[5pt]
-规划对照\newline 第 595--596 页
-  & 在 80 条生成请求的评价中，采用动态检索的回答忠实度更高。
-  & 说明评分过程及对照实现，并测量两种设置下实物任务是否成功。 \\
+实物演示 & 机械臂在所设场景中完成了咖啡制作和盘子装饰。
+  & 重复整项任务，报告成功次数、试验总数和失败环节。 \\
+\addlinespace[3pt]
+模块测量 & 重度遮挡降低白杯识别率。低速倾倒可用力反馈计量。
+  & 报告各遮挡组试验数，以及不同速度和容器下的倾倒误差。 \\
+\addlinespace[3pt]
+规划对照 & 在 80 条生成请求中，动态检索条件的回答忠实度更高。
+  & 说明评分与基线实现，比较两种设置的实物任务完成率。 \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{minipage}
 \end{center}
 
-若要把三类证据连起来，可在同一机械臂和任务集上运行两种检索设置，并固定提示词、底层控制与扰动条件。每次试验同时记录生成计划的忠实度、实物任务是否完成，以及失败发生的环节。这样的配对设计可以检验忠实度提升是否伴随实物完成率改善。
-
+\clearpage
 \section{写作上的不足与修改建议}
 
-\textbf{把关键术语写成可观察条件。} 标题和摘要使用“不可预测环境”，引言还讨论“类人智能”。建议在引言用杯子移动、目标遮挡和抽屉开合方式说明实验涵盖的变化，再定义各子任务和整项任务怎样算完成。这样读者可以按同一标准检查结果与结论。
+\subsection*{把关键术语写成可观察条件}
+标题和摘要使用“不可预测环境”，引言还讨论“类人智能”。建议在引言用杯子移动、目标遮挡和抽屉开合方式说明实验涵盖的变化，再定义各子任务和整项任务怎样算完成。这样读者可以按同一标准检查结果与结论。
 
-\textbf{把对照实验的设置交代完整。} 正文将静态上下文基线称为 VoxPoser，却未在该段说明复用了哪些原方法组件。建议报告基线与 ELLMER 的共同输入，以及提示词、知识库内容、检索设置和忠实度评分方法。计划忠实度、视觉识别率和实物任务完成率应各自对应具体的评价过程。
+\subsection*{把对照实验的设置交代完整}
+正文将静态上下文基线称为 VoxPoser，却未在该段说明复用了哪些原方法组件。建议报告基线与 ELLMER 的共同输入，以及提示词、知识库内容、检索设置和忠实度评分方法。计划忠实度、视觉识别率和实物任务完成率应各自对应具体的评价过程。
 
-\textbf{用试验细节支持量化表述。} 原文图 4 的力曲线有助于解释不同操作的接触特征。若同时报告重复次数、测量误差和失败类型，读者便可判断这条曲线是否具有代表性。第 595 页用线速度单位 m/s 表示“pitch velocity”，建议核对速度的物理量、记录位置和单位，并说明它如何影响倒水误差。
+若要把三类证据连起来，可在同一机械臂和任务集上运行两种检索设置，并固定提示词、底层控制与扰动条件。每次试验同时记录生成计划的忠实度、实物任务是否完成，以及失败发生的环节。这样的配对设计可以检验忠实度提升是否伴随实物完成率改善。
 
-\textbf{将结论收束到数据覆盖的范围。} 原文在 Results 和 Discussion 交代了重度遮挡、高速倾倒和中途切换任务的限制。摘要和结论可明确写出已有演示的设备、任务和扰动条件。可扩展性和执行效率则分别需要随知识库规模变化的测试，以及与其他系统在同一任务上的耗时对照。
+\subsection*{用试验细节支持量化表述}
+原文图 4 的力曲线有助于解释不同操作的接触特征。若同时报告重复次数、测量误差和失败类型，读者便可判断这条曲线是否具有代表性。第 595 页用线速度单位 m/s 表示“pitch velocity”，建议核对速度的物理量、记录位置和单位，并说明它如何影响倒水误差。
+
+\subsection*{将结论收束到数据覆盖的范围}
+原文在 Results 和 Discussion 交代了重度遮挡、高速倾倒和中途切换任务的限制。摘要和结论可明确写出已有演示的设备、任务和扰动条件。可扩展性和执行效率则分别需要随知识库规模变化的测试，以及与其他系统在同一任务上的耗时对照。
 
 \section{原论文附件}
 
