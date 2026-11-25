@@ -19,8 +19,6 @@ const result=await finalizePresentation({
  integrityValidatorPath:path.join(SKILL,'container_tools/inspect_presentation_package_integrity.py'),
  layoutValidatorPath:path.join(SKILL,'container_tools/inspect_presentation_layout_geometry.py'),
  layoutArgs:['--expected-slide-size-emu','9144000,5143500','--validate-bullet-geometry','--validate-heading-fit'],
- requiredNativeChartOwnerSlides:[6,7],
- materializeLiteralChartWorkbooks:candidate.includes('assembled'),
  fontPolicy:{basis:'reference',families:['微软雅黑','黑体','Arial','Calibri'],referencePath:source,referenceSha256:createHash('sha256').update(await fs.readFile(source)).digest('hex'),scriptFonts:{ea:'微软雅黑'}},
  verifyArtifactToolImport:true,
  receiptPath:path.join(ROOT,'.build/checks',path.basename(destination)+'.'+receiptId+'.validation.json')

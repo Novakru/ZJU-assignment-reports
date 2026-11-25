@@ -92,12 +92,8 @@ def build_presentation(language, env, node, temporary):
     native = temporary/'native.pptx'
     run([sys.executable,'tools/native_presentation.py','--input',checked,'--output',native,
          *language_args],env,f'powerpoint-native-check-{language}')
-    refreshed = temporary/'refreshed.pptx'
-    run([sys.executable,'tools/refresh_chart_cache.py',native,refreshed],env,f'chart-cache-refresh-{language}')
     final = temporary/'final.pptx'
-    run([node,'tools/finalize_presentation.mjs',refreshed,final],env,f'pptx-final-check-{language}')
-    if refreshed.read_bytes()!=final.read_bytes():
-        raise RuntimeError('Finalization changed the verified chart data.')
+    run([node,'tools/finalize_presentation.mjs',native,final],env,f'pptx-final-check-{language}')
     english = language == 'en'
     destination = 'submission/presentation.pptx' if english else 'review/presentation-zh.pptx'
     preview = 'review/presentation-preview-en.pdf' if english else 'review/presentation-preview.pdf'

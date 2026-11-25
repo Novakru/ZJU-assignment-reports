@@ -40,32 +40,28 @@ def main():
             pres.Export(str(images),'PNG',1600,900)
             print_range=pres.PrintOptions.Ranges.Add(1,pres.Slides.Count)
             pres.ExportAsFixedFormat(str(pdf),2,1,False,1,1,True,print_range,1)
-            checked_charts = {}
-            for slide_number, expected, maximum in [
-                (6, [0.457, 1, 0.457, 1, 1], 1),
-                (7, [1, 34], 60),
-            ]:
-                charts = [shape.Chart for shape in pres.Slides(slide_number).Shapes if shape.HasChart]
-                assert len(charts) == 1, f'Expected one chart on slide {slide_number}.'
-                chart = charts[0]
-                values = list(chart.SeriesCollection(1).Values)
-                assert values == expected, (slide_number, values)
-                axis = chart.Axes(2)
-                assert axis.MinimumScale == 0 and axis.MaximumScale == maximum
-                checked_charts[slide_number] = {'values': values, 'axis': [0, maximum]}
+            checked_images = []
+            for n, item in enumerate(notes['slides'], 1):
+                expected = item.get('images')
+                if expected:
+                    descriptions = [shape.AlternativeText for shape in pres.Slides(n).Shapes if shape.Type == 13]
+                    assert descriptions == [image['alt'] for image in expected], (n, descriptions)
+                    checked_images.append(n)
             report=json.loads(report_path.read_text(encoding='utf-8'))
             report.update({'final_file_opened_read_only':True,
                            'final_file_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),
-                           'native_charts':checked_charts})
+                           'paper_image_slides':checked_images})
             report_path.write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
-            print('Final PPTX opened read-only; chart values, zero baseline and every slide exported.')
+            print('Final PPTX opened read-only; source images verified and all slides exported.')
             return
         for i, item in enumerate(notes['slides'],1):
             slide = pres.Slides(i)
-            if alt := item.get('illustration_alt'):
+            if figures := item.get('images'):
                 pictures = [shape for shape in slide.Shapes if shape.Type == 13]
-                assert len(pictures) == 1, f'Expected one illustration on slide {i}.'
-                pictures[0].AlternativeText = alt
+                assert len(pictures) == len(figures), f'Unexpected picture count on slide {i}.'
+                for picture, figure in zip(pictures, figures, strict=True):
+                    picture.Name = figure['file']
+                    picture.AlternativeText = figure['alt']
             slide.SlideShowTransition.Hidden = bool(item.get('hidden',False))
             slide.SlideShowTransition.AdvanceOnClick = True
             slide.SlideShowTransition.AdvanceOnTime = False

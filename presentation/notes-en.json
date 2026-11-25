@@ -9,92 +9,122 @@
     {
       "title": "Mind the Gap",
       "seconds": 15,
-      "speech": "Hi, I'm Jiahao Jiang. This CCS 2026 paper asks what happens when an Android agent acts on a screen that has changed since it looked.",
+      "speech": "Hi, I’m Jiahao Jiang. This CCS 2026 paper follows one simple question. When an Android agent sees one screen and acts on another, what can happen to the task the user authorized?",
       "sources": [
-        "Qian et al., Title and abstract. https://arxiv.org/html/2601.12349v3"
+        "Qian et al., title and abstract. https://arxiv.org/pdf/2601.12349v3"
       ]
     },
     {
-      "title": "When a Call Interrupts a Tap",
-      "seconds": 35,
-      "speech": "Imagine asking the agent to add a note. Point to the orange circles. Both circles mark the same position on the phone. On the left, that position belongs to the add-note control. On the right, the call has taken over the screen. The paper calls the assumption that the observed screen still applies when the tap arrives visual atomicity. An ordinary call makes it easy to see how that assumption can fail.",
+      "title": "One Tap, Two Screens",
+      "seconds": 40,
+      "speech": "Start with the left phone in the authors’ Figure 1. The agent sees a text ready to send. In the blue thinking bubble it picks the SMS control. Follow the red labels to the right. A call takes the foreground before the input arrives. The same position now belongs to the answer button. The last phone shows the result of that input. The paper uses this everyday interruption to introduce action rebinding. On the next slide we can see where the two states diverge.",
       "sources": [
-        "Qian et al., Figure 1 and Section 4. https://arxiv.org/html/2601.12349v3"
+        "Qian et al., Figure 1, PDF p. 1. https://arxiv.org/pdf/2601.12349v3#page=1"
       ],
-      "illustration_alt": "Two phones show a notes window and an incoming call. The same point marks different controls."
-    },
-    {
-      "title": "Who Authorizes and Who Acts?",
-      "seconds": 35,
-      "speech": "Start with the user at the left. The user delegates a specific task. The GUI agent in the middle can read screens and send input across applications. Android delivers that input to the current target. In the paper’s threat model, the adversary controls one installed app with no dangerous permissions. The security issue is how the agent’s existing ability to act across apps can take an operation beyond the user’s task.",
-      "sources": [
-        "Qian et al., Section 3. https://arxiv.org/html/2601.12349v3"
+      "images": [
+        {
+          "file": "figure-1.png",
+          "alt": "Figure 1 shows the agent preparing to send a text. A call arrives and the same tap reaches Answer."
+        }
       ]
     },
     {
-      "title": "How a Tap Changes Targets",
-      "seconds": 60,
-      "speech": "Read this timeline from left to right. The top row tracks the agent and the lower row tracks the foreground screen. At the first dot, the agent observes screen A. At the second dot it is still reasoning from that observation. The orange tick below marks a foreground change. By dispatch, screen B is in front. The tap still comes from the decision about A, but B can receive it. The authors call this action rebinding. The TOCTOU analogy is that the check uses the observed state and the use happens against the live state. Accurate recognition at the first dot only tells us what was there then.",
+      "title": "Where the Two States Diverge",
+      "seconds": 45,
+      "speech": "Read the two lanes together. At the first blue dot the agent observes the text screen. While it reasons from that observation, the foreground changes, as shown by the orange tick below. At the final dot Android delivers the pending input against the live screen. Visual atomicity is the assumption that the relevant state survives from observation through execution. In security terms, the observation is the check and input dispatch is the use. The figure gives us a TOCTOU race even when the initial screen recognition is accurate. The authors ask what happens when an app can influence the foreground state.",
       "sources": [
-        "Qian et al., Sections 4 and 5.1. https://arxiv.org/html/2601.12349v3"
+        "Qian et al., Sections 1 and 4, PDF pp. 1 and 4. https://arxiv.org/pdf/2601.12349v3#page=4"
       ]
     },
     {
-      "title": "When a Task Takes More Than One Tap",
+      "title": "From an Interruption to a Security Test",
+      "seconds": 45,
+      "speech": "Figure 2 gives the paper’s motivating case. On the left, the user asks the agent to write a note. On the right, the authors depict a completed purchase. The test asks whether an app influencing the foreground can cause an authorized agent to act in another app. The agent already has cross-app input authority. In the threat model, the app influencing the foreground does not need permission to make the purchase itself. That is how a change of receiving context can put an action outside the user’s request. The figure shows the requested task and illustrated outcome. The next slide shows how the authors measured outcomes beyond this one case.",
+      "sources": [
+        "Qian et al., Section 3 and Figure 2, PDF pp. 3–4. https://arxiv.org/pdf/2601.12349v3#page=4"
+      ],
+      "images": [
+        {
+          "file": "figure-2-task.png",
+          "alt": "Figure 2 task excerpt: the user asks the agent to write a note."
+        },
+        {
+          "file": "figure-2-outcome.png",
+          "alt": "Figure 2 outcome excerpt: the shopping interface displays a successful purchase."
+        }
+      ]
+    },
+    {
+      "title": "What Did the Authors Measure?",
       "seconds": 40,
-      "speech": "The paper asks two follow-up questions. Read the blue row first. Can the agent resume after an interruption? A longer sequence depends on the app retaining state and the agent recovering. Then read the orange row. If the agent sees a confirmation, will it accept? The paper’s intent alignment strategy, or IAS, tests how task-related context influences that decision. We will look at recovery and confirmation in separate experiments.",
+      "speech": "The evaluation used six Android GUI agents and fifteen representative tasks. First, the authors recorded whether each specified outcome happened end to end. Every tested agent reached at least ten of the fifteen outcomes and two reached all fifteen. Next they examined why the outcome differed when several actions were needed. The middle line points us to acceptance and recovery as separate checks. The third line is a distinct verification-gate experiment, where the confirmation task stays fixed. We will read the last two comparisons from the original tables.",
       "sources": [
-        "Qian et al., Sections 6 and 7.3–7.4. https://arxiv.org/html/2601.12349v3"
+        "Qian et al., Sections 7.1–7.4, PDF Tables 2–4, pp. 7–9. https://arxiv.org/pdf/2601.12349v3#page=8"
       ]
     },
     {
-      "title": "Single Actions and Multi-Step Recovery",
+      "title": "Reliable Single Taps, Uneven Recovery",
       "seconds": 50,
-      "speech": "Start with the number at the left. The paper reports one hundred percent single-action rebinding across the six agents in its tested setup. The bars at the right answer a different question from a separate test. They show how often each agent automatically recovered in a multi-step sequence. Three agents reached one hundred percent. Mobile-use and AutoGLM reached forty-five point seven percent. The study used apps that retain their UI state. Read the bars as recovery rates for that stage under those conditions.",
+      "speech": "The figure at the right is the paper’s reported single-action success in the tested setup across all six agents. Now look left at original Table 3, which covers five agents in the multi-step test. The middle column asks whether the agent followed the action expected by the displayed cue. The right column asks whether the agent returned to the original task app. All values in the middle are at least eighty-seven point five percent. Recovery falls to forty-five point seven percent for mobile-use and AutoGLM. A longer sequence needs prior progress to survive the switch and the agent to recover. The authors selected apps that retain UI state, so this column isolates the recovery stage. A verification dialog creates another decision point.",
       "sources": [
-        "Qian et al., Sections 7.3.1–7.3.2 and Table 1. https://arxiv.org/html/2601.12349v3"
+        "Qian et al., Sections 7.3.1–7.3.2, PDF Table 3, p. 8. https://arxiv.org/pdf/2601.12349v3#page=8",
+        "Table 3 in the PDF corresponds to Table 1 in the HTML rendition. https://arxiv.org/html/2601.12349v3"
+      ],
+      "images": [
+        {
+          "file": "table-3.png",
+          "alt": "Original PDF Table 3. The acceptance and auto-recovery rates are reported for five agents. Three recover at 100 percent and two at 45.7 percent."
+        }
       ]
     },
     {
-      "title": "When the Agent Handles the Confirmation",
-      "seconds": 40,
-      "speech": "Each bar pools six agents, with ten trials per agent per condition. The generic context produced one acceptance in sixty trials. When the context made the confirmation look relevant to the task, agents accepted thirty-four in sixty. This was one confirmation task and the individual agents differed. It shows why a confirmation handled by the same model can depend on what the model saw earlier.",
+      "title": "What Happens at the Confirmation?",
+      "seconds": 55,
+      "speech": "Look at the two data columns in original Table 4. The authors test one confirmation task and compare a generic preceding context with IAS, their intent alignment strategy, where the preceding interface makes the dialog appear related to the task. Each row is an agent with ten trials in each column. In the middle column only one attempt was accepted. The right column sums to thirty-four. The totals on the right use all six agents, so the denominator is sixty in either condition. The IAS column spans three to ten acceptances out of ten across agents. The experiment suggests that a confirmation handled by the same model can inherit the context of its earlier observations.",
       "sources": [
-        "Qian et al., Section 7.4 and Table 2. https://arxiv.org/html/2601.12349v3"
+        "Qian et al., Sections 6.3 and 7.4, PDF Table 4, p. 9. https://arxiv.org/pdf/2601.12349v3#page=9",
+        "Table 4 in the PDF corresponds to Table 2 in the HTML rendition. https://arxiv.org/html/2601.12349v3"
+      ],
+      "images": [
+        {
+          "file": "table-4.png",
+          "alt": "Original PDF Table 4. Six agents across two contexts with ten trials each. The generic column totals one acceptance and the IAS column totals thirty-four."
+        }
       ]
     },
     {
-      "title": "The Check Belongs at Dispatch",
-      "seconds": 60,
-      "speech": "Here is the design I propose in the report. Follow the two branches. A dispatcher compares the trusted application, window and UI state version with the planned action. When they still match, it can send the action to its bound target. When they have changed, it drops the old tap and observes again. Checking the app name alone can miss a change inside that app. For irreversible actions, I would also require independent approval of the action and target from the user. I would test this on a mock interface with ordinary UI changes and measure wrong-target input, task completion, false cancellations and delay.",
+      "title": "Where the System Can Check the Target",
+      "seconds": 45,
+      "speech": "Go back to the call. The Send action should be tied to the app, window, and version of the screen the agent used. My proposal is for the dispatcher to verify that context when delivering the input. If a call has taken over, drop the pending tap and observe again. For an irreversible operation, also ask the user to approve the specific action and target through a trusted flow. I would evaluate this on a mock interface with ordinary interruptions and measure wrong-target events together with completion, false cancellations, and delay. The paper’s security lesson is to verify which object actually receives the agent’s action.",
       "sources": [
-        "Qian et al., Section 4. Controls and evaluation are proposed in the reading report.. https://arxiv.org/html/2601.12349v3"
+        "Dispatch check and evaluation are proposals in the reading report. Mechanism: Qian et al., Section 4. https://arxiv.org/pdf/2601.12349v3#page=4"
       ]
     },
     {
       "title": "THANK YOU",
       "seconds": 5,
-      "speech": "Thank you. I'm happy to take questions.",
+      "speech": "Thank you. I’m happy to take questions.",
       "sources": []
     },
     {
-      "title": "Backup: Reading the Benchmarks",
+      "title": "Backup: How to Read the Three Measures",
       "seconds": 0,
-      "hidden": true,
-      "speech": "Section 7.3.1 reports single-action success for the tested configurations. Table 1 measures one stage of a multi-step chain and lists five agents. Table 2 covers six agents and one confirmation task. The counts shown on slide 7 sum the individual rows. Different tests and denominators serve different questions.",
+      "speech": "Table 2 records end-to-end outcomes by task. Table 3 measures acceptance and recovery within selected multi-step tasks, with state persistence as a precondition. Table 4 counts acceptance of a single confirmation task in two conditions. The denominators and the tested outcomes differ.",
       "sources": [
-        "Qian et al., Sections 7.3–7.4 and Tables 1–2. https://arxiv.org/html/2601.12349v3"
-      ]
+        "Qian et al., Sections 7.2–7.4, PDF Tables 2–4. https://arxiv.org/pdf/2601.12349v3"
+      ],
+      "hidden": true
     },
     {
-      "title": "Backup: Paper and Data Sources",
+      "title": "Backup: Author Figures and Tables",
       "seconds": 0,
-      "hidden": true,
-      "speech": "The conference list confirms the accepted title and authors. All section and table references in this deck refer to the July 15 arXiv v3 manuscript.",
+      "speech": "Figure 1 is the authors’ example of a call interrupting a text. Figure 2 shows the motivating purchase scenario. The exact table numbering in this deck is from the PDF. The HTML rendition numbers recovery and confirmation Tables 1 and 2.",
       "sources": [
-        "https://www.sigsac.org/ccs/CCS2026/program/accepted-papers.html",
-        "https://arxiv.org/abs/2601.12349v3"
-      ]
+        "https://arxiv.org/pdf/2601.12349v3",
+        "https://arxiv.org/html/2601.12349v3",
+        "https://www.sigsac.org/ccs/CCS2026/program/accepted-papers.html"
+      ],
+      "hidden": true
     }
   ]
 }

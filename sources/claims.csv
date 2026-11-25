@@ -2,5 +2,6 @@ claim_id,sha256,evidence_ids,locator,verification
 C001,63851ec24e3f166d2161d269d4a48b00a07875762bf818af6afa95d38c82de78,E005,Figure 1 and Section 4,agent checked against arXiv v3
 C002,3e3741ce510fd8cabd528802e790fb2f917dc998a9e36567d0a0d98ea854dd75,E005,Section 3,agent checked against arXiv v3
 C003,f1157da35849fd2cb2dae79d36f00c6973422217139139d744dd6ee43209f103,E005,Sections 7 and 7.3.1,agent checked against arXiv v3
-C004,6fa114f955f1362acdd2251bcf9e0b215da1f8f3d9acedc3ed94fbaa4acf2a0d,E005,"Section 7.3.2, Table 1",agent checked against arXiv v3
-C005,9e2a97b0d5d95e8c38f367487905302946a6dcec46b0c6557024b395d50ba4d7,E005,"Section 7.4, Table 2",agent checked against arXiv v3
+C004,6fa114f955f1362acdd2251bcf9e0b215da1f8f3d9acedc3ed94fbaa4acf2a0d,E005,"Section 7.3.2, PDF Table 3 (HTML Table 1)",agent checked against arXiv v3
+C005,9e2a97b0d5d95e8c38f367487905302946a6dcec46b0c6557024b395d50ba4d7,E005,"Section 7.4, PDF Table 4 (HTML Table 2)",agent checked against arXiv v3
+C006,9d25eec035d077085ae6100a63dbc0496297455f62d8046804a6cec809721c9b,E005,"PDF Section 7.2 and Table 2, pp. 7–8",agent checked against arXiv v3 PDF

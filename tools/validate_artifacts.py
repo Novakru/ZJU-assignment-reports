@@ -1,5 +1,4 @@
 """Check meaningful course requirements and cross-format numeric consistency."""
-from io import BytesIO
 import hashlib
 import json
 from pathlib import Path
@@ -14,8 +13,7 @@ ROOT=Path(__file__).resolve().parents[1]
 NS={'p':'http://schemas.openxmlformats.org/presentationml/2006/main',
     'a':'http://schemas.openxmlformats.org/drawingml/2006/main',
     'r':'http://schemas.openxmlformats.org/officeDocument/2006/relationships',
-    'c':'http://schemas.openxmlformats.org/drawingml/2006/chart',
-    's':'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
+    'c':'http://schemas.openxmlformats.org/drawingml/2006/chart'}
 
 def check_report(relative_path, expected_text):
     report=fitz.open(ROOT/relative_path)
@@ -28,10 +26,9 @@ def check_report(relative_path, expected_text):
         assert abs(page.rect.width-595.28)<1 and abs(page.rect.height-841.89)<1
     return {'report_pages_including_references':len(report)}
 
-def related_part(package, owner, element):
+def related_part(package, owner, relation):
     directory, name = posixpath.split(owner)
     links = E.fromstring(package.read(posixpath.join(directory, '_rels', name + '.rels')))
-    relation = element.get('{' + NS['r'] + '}id')
     target = next(link.get('Target') for link in links if link.get('Id') == relation)
     return target.lstrip('/') if target.startswith('/') else posixpath.normpath(posixpath.join(directory, target))
 
@@ -49,9 +46,27 @@ def check_presentation(language, deck_path, preview_path):
     slide_parts=[posixpath.normpath(posixpath.join('ppt',rels[s.get('{'+NS['r']+'}id')])) for s in ids]
     xmls=[E.fromstring(z.read(n)) for n in slide_parts]
     assert [i for i,s in enumerate(xmls,1) if s.get('show')=='0']==[10,11]
-    assert any(prop.get('descr') == notes['slides'][1]['illustration_alt']
-               for prop in xmls[1].findall('.//p:pic/p:nvPicPr/p:cNvPr', NS))
-    assert [i for i, page in enumerate(xmls, 1) if page.find('.//c:chart', NS) is not None] == [6, 7]
+    images_verified = []
+    manifest = json.loads((ROOT/'sources/source-manifest.json').read_text(encoding='utf-8'))
+    asset_hashes = {item['file']: item['sha256'] for item in manifest['presentation_paper_assets']}
+    for page, (item, part, slide) in enumerate(zip(notes['slides'], slide_parts, xmls, strict=True), 1):
+        if not (expected := item.get('images')):
+            continue
+        pictures = slide.findall('.//p:pic', NS)
+        assert len(pictures) == len(expected), page
+        for picture, figure in zip(pictures, expected, strict=True):
+            prop = picture.find('./p:nvPicPr/p:cNvPr', NS)
+            assert prop.get('name') == figure['file'] and prop.get('descr') == figure['alt'], page
+            relation = picture.find('.//a:blip', NS).get('{' + NS['r'] + '}embed')
+            part_name = related_part(z, part, relation)
+            asset = 'assets/paper/' + figure['file']
+            digest = hashlib.sha256((ROOT/asset).read_bytes()).hexdigest()
+            assert digest == asset_hashes[asset]
+            assert hashlib.sha256(z.read(part_name)).hexdigest() == digest, asset
+        images_verified.append(page)
+    assert images_verified == [2, 4, 6, 7]
+    for table_page in [6, 7]:
+        assert xmls[table_page - 1].find('.//c:chart', NS) is None, table_page
     text='\n'.join(''.join(s.itertext()) for s in xmls)
     for value in ['22671064','100%','45.7%','1/60','34/60']:
         assert value in text,f'PPT missing {value}'
@@ -65,40 +80,17 @@ def check_presentation(language, deck_path, preview_path):
     assert '2601.12349v3' in notes_text, 'Speaker notes missing the source manuscript.'
     for item in notes['slides']:
         assert item['speech'] in notes_text,'Speaker notes were not embedded intact.'
-    expected_charts = [
-        (6, ['AutoGLM', 'mobiagent', 'mobile-use', 'Droidrun', 'Mobile-Agent-v3'],
-         [0.457, 1, 0.457, 1, 1], 1),
-        (7, ['Generic context', 'Intent-aligned context'] if language == 'en'
-         else ['普通上下文', '意图对齐上下文'], [1, 34], 60),
-    ]
-    for page, categories, values, maximum in expected_charts:
-        part = related_part(z, slide_parts[page - 1], xmls[page - 1].find('.//c:chart', NS))
-        chart = E.fromstring(z.read(part))
-        series = chart.find('.//c:barChart/c:ser', NS)
-        assert [v.text for v in series.findall('./c:cat/c:strRef/c:strCache/c:pt/c:v', NS)] == categories
-        assert [float(v.text) for v in series.findall('./c:val/c:numRef/c:numCache/c:pt/c:v', NS)] == values
-        scale = chart.find('.//c:valAx/c:scaling', NS)
-        assert float(scale.find('c:min', NS).get('val')) == 0
-        assert float(scale.find('c:max', NS).get('val')) == maximum
-        workbook = related_part(z, part, chart.find('c:externalData', NS))
-        with zipfile.ZipFile(BytesIO(z.read(workbook))) as wb:
-            numeric = []
-            for name in wb.namelist():
-                if name.startswith('xl/worksheets/') and name.endswith('.xml'):
-                    tree = E.fromstring(wb.read(name))
-                    numeric.extend(float(cell.find('s:v', NS).text) for cell in tree.findall('.//s:c', NS)
-                                   if cell.get('t') not in {'s','str','inlineStr'} and cell.find('s:v', NS) is not None)
-        assert numeric == values, (page, numeric)
     preview=fitz.open(ROOT/preview_path)
     assert len(preview)==11
     native=json.loads((ROOT/'.build'/language/'native-check.json').read_text(encoding='utf-8'))
-    assert native['opened'] and not native['text_fit_findings']
+    assert native['opened'] and native['final_file_opened_read_only'] and not native['text_fit_findings']
+    assert native['paper_image_slides'] == images_verified
     assert native['final_file_sha256'] == hashlib.sha256(deck.read_bytes()).hexdigest()
     return {
         'total_slides':len(ids),'main_slides':9,'hidden_backup_slides':[10,11],
         'planned_main_seconds':340,'buffer_seconds':20,
-        'native_chart_slides':[6,7],
-        'chart_cache_and_embedded_workbook_agree':True,
+        'paper_image_slides':images_verified,
+        'embedded_paper_assets_match_crops':True,
         'all_speaker_notes_embedded':True,'native_powerpoint_opened':True,
         'preview_pages':len(preview),'status':'passed'
     }
