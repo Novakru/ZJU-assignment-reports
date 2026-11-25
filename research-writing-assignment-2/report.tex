@@ -1,0 +1,225 @@
+% Adapted from ../zju-tech-report/zju-tech-report.tex (technical report mode).
+% Compile directly with XeLaTeX. Build instructions are in README.md.
+\documentclass[UTF8,11pt,a4paper,twoside,fontset=none,heading=false]{ctexart}
+
+\usepackage[left=22mm,right=22mm,top=15mm,bottom=21mm,includehead,headheight=14pt,headsep=6mm,footskip=12mm]{geometry}
+\setmainfont{TeX Gyre Termes}
+\setsansfont{Latin Modern Sans}
+\setmonofont{Latin Modern Mono}
+\setCJKmainfont{SimSun}[BoldFont=SimHei]
+\setCJKsansfont{SimHei}
+\usepackage{amsmath,array,booktabs,calc,caption,enumitem,fancyhdr,graphicx,longtable,titlesec,xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{hyperref}
+
+% Qiushi Blue and the ZJUI mark follow the repository template.
+\definecolor{QiushiBlue}{RGB}{0,63,136}
+\colorlet{ReportBlue}{QiushiBlue}
+\definecolor{TextGray}{HTML}{555B66}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=ReportBlue,
+  urlcolor=ReportBlue,
+  pdftitle={具身大语言模型机器人论文写作评析},
+  pdfauthor={蒋佳豪（22671064）}
+}
+\newcommand{\ReportTitle}{具身大语言模型机器人论文写作评析}
+\newcommand{\ReportShortTitle}{具身大语言模型机器人论文写作评析}
+\newcommand{\ReportAuthors}{蒋佳豪（22671064）}
+\newcommand{\ReportInstitution}{浙江大学国际联合学院}
+\newcommand{\ReportTypeLabel}{科学研究与写作指导 作业二}
+\newcommand{\ReportDate}{2026年12月8日}
+\newcommand{\ZJULogo}{../zju-tech-report/assets/zjui-horizontal-color.pdf}
+
+\titleformat{\section}
+  {\rmfamily\bfseries\fontsize{14}{18}\selectfont\color{ReportBlue}}
+  {\thesection}{0.65em}{}
+\titleformat{\subsection}
+  {\rmfamily\bfseries\fontsize{12}{16}\selectfont\color{ReportBlue}}
+  {\thesubsection}{0.65em}{}
+\titlespacing*{\section}{0pt}{1.8ex plus 0.5ex minus 0.2ex}{0.7ex}
+\titlespacing*{\subsection}{0pt}{1.3ex plus 0.4ex minus 0.2ex}{0.5ex}
+\captionsetup{font=small,labelfont=bf,skip=5pt}
+\setlist{itemsep=5pt,topsep=4pt,leftmargin=1.6em}
+\providecommand{\tightlist}{}
+\newcounter{none}
+\linespread{1.12}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{2em}
+\clubpenalty=10000
+\widowpenalty=10000
+\setcounter{secnumdepth}{2}
+
+\newcommand{\makezjutitle}{%
+  \noindent
+  \raisebox{-0.5mm}{\includegraphics[clip,height=10.5mm]{\ZJULogo}}%
+  \hfill
+  {\small\color{TextGray}\ReportTypeLabel}\par
+  \vspace{5pt}\noindent\textcolor{QiushiBlue}{\rule{\linewidth}{0.8pt}}\par
+  \vspace{13pt}
+  {\centering\rmfamily\bfseries\fontsize{18}{24}\selectfont\ReportTitle\par}
+  \vspace{10pt}\noindent\textcolor{QiushiBlue}{\rule{\linewidth}{0.8pt}}\par
+  \vspace{9pt}
+  {\centering\rmfamily\bfseries\fontsize{12}{16}\selectfont\ReportAuthors\par}
+  \vspace{3pt}
+  {\centering\rmfamily\fontsize{10}{14}\selectfont\ReportInstitution\par}
+  \vspace{10pt}
+  \begin{tcolorbox}[
+    enhanced,
+    colback=white,
+    colframe=QiushiBlue,
+    boxrule=0.8pt,
+    arc=2mm,
+    left=8mm,right=8mm,top=4mm,bottom=4mm,
+    before skip=0pt,after skip=0pt
+  ]
+  {\centering\bfseries\color{ReportBlue}报告提要\par}
+  \vspace{3pt}
+  {\small 本报告分析 Mon-Williams 等人的 ELLMER 论文，逐项检查摘要、引言和正文如何提出问题、说明方法并报告结果。真实机械臂演示支持该方案在实验场景中的可行性。规划文本的对比结果进一步支持检索增强生成的作用。论文可以通过补充整项任务的统计、说明基线设置和限定结论范围，使主张与证据更容易对应。\par}
+  \vspace{4pt}
+  {\footnotesize\textbf{提交日期}\quad\ReportDate\par}
+  \end{tcolorbox}
+  \vspace{13pt}
+  \thispagestyle{plain}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[RO,RE]{\footnotesize\rmfamily\color{TextGray}\ReportShortTitle}
+\fancyfoot[C]{\footnotesize\rmfamily\color{TextGray}\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\footnotesize\rmfamily\color{TextGray}\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+\begin{document}
+\makezjutitle
+\section{参考论文信息}\label{ux53c2ux8003ux8bbaux6587ux4fe1ux606f}
+
+\textbf{题目}　Embodied large language models enable robots to complete complex tasks in unpredictable environments
+
+\textbf{作者}　Ruaridh Mon-Williams（1、2、3）、Gen Li（1）、Ran Long（1）、Wenqian Du（1、4）、Christopher G. Lucas（1）
+
+\textbf{作者单位}　（1）英国爱丁堡大学，（2）美国麻省理工学院，（3）美国普林斯顿大学，（4）英国艾伦·图灵研究所
+
+\textbf{期刊与发表时间}　\emph{Nature Machine Intelligence}，第 7 卷，592--601 页。2025 年 3 月 19 日在线发表，收入 2025 年 4 月刊。\href{https://doi.org/10.1038/s42256-025-01005-x}{DOI 10.1038/s42256-025-01005-x}
+
+\section{摘要的四个要点}\label{ux6458ux8981ux7684ux56dbux4e2aux8981ux70b9}
+
+以下四项按原文摘要（第 592 页）的内容判断。
+
+\subsection{研究问题是什么}\label{ux7814ux7a76ux95eeux9898ux662fux4ec0ux4e48}
+
+\textbf{已说明。} 机器人需要在环境发生变化时完成连续操作。摘要将难点引向语言理解与感觉运动控制的结合，为后文同时引入大语言模型和传感器反馈提供了理由。摘要未举例说明哪些环境变化由系统处理，读者需到引言才知道杯子被移动、抽屉开启方式未知等具体情形。
+
+\subsection{过去做了什么}\label{ux8fc7ux53bbux505aux4e86ux4ec0ux4e48}
+
+\textbf{未具体说明。} 摘要提到人类的感觉运动能力和受生物启发的机器智能。这些内容交代了研究动机。已有系统如何把语言指令转成动作，以及它们在哪些接触任务中仍遇到困难，留到了引言。
+
+\subsection{本文有什么新意}\label{ux672cux6587ux6709ux4ec0ux4e48ux65b0ux610f}
+
+\textbf{已说明。} ELLMER 用 GPT-4 理解指令，再用检索增强生成（RAG）从知识库选取相关的动作示例。生成的计划调用视觉和力反馈来调整执行。摘要由此交代了系统贡献，即把语言规划、示例检索和感知控制接入同一套机器人系统。
+
+\subsection{主要发现是什么}\label{ux4e3bux8981ux53d1ux73b0ux662fux4ec0ux4e48}
+
+\textbf{已报告演示结果。} 机械臂完成了制作咖啡和装饰盘子。摘要点出开抽屉、倒水等子任务需要不同反馈，但没有报告重复次数、整项任务完成率或对照结果。可在结果句补入一个有明确条件的指标，例如第 595 页的白杯遮挡测试，并说明它衡量的是识别性能。
+
+四项中，摘要缺少对既有研究的具体交代。主要发现已有定性描述，量化证据可进一步补充。
+
+\section{引言的写作评析}\label{ux5f15ux8a00ux7684ux5199ux4f5cux8bc4ux6790}
+
+\subsection{引言有没有说清研究问题}\label{ux5f15ux8a00ux6709ux6ca1ux6709ux8bf4ux6e05ux7814ux7a76ux95eeux9898}
+
+\textbf{基本说清。} 开篇以深蓝能否自行移动棋子引出具身认知，随后用厨房场景说明工程问题。机器人收到高层指令后，要找杯子、判断抽屉如何打开、计量倒水，还需在杯子被移动时继续执行。这个例子让读者看到研究涉及任务分解、物体定位和接触控制。引言末尾给出了机器人能否为人制作咖啡的可检验问题。开头对“类人智能”的讨论范围更广，可在提出实验时明确本研究考察的是哪些可观察的操作能力（第 592--593 页）。
+
+\subsection{已有哪些方法解决这个问题}\label{ux5df2ux6709ux54eaux4e9bux65b9ux6cd5ux89e3ux51b3ux8fd9ux4e2aux95eeux9898}
+
+\textbf{交代了主要路线。} 引言提到强化学习可通过交互获得动作策略，模仿学习可从示范中学习操作，也介绍了用语言模型规划动作、用视觉语言模型迁移知识和用分层策略生成轨迹的路线。作者由此指出，长流程任务还需要处理执行中的环境扰动和接触力变化，并提出把可检索的动作示例与视觉和力反馈结合。这里可以更清楚地说明哪些已有系统已能处理扰动，以及本文新增了哪类反馈和任务条件（第 593 页）。
+
+\subsection{引文是否说明了各项工作的具体贡献}\label{ux5f15ux6587ux662fux5426ux8bf4ux660eux4e86ux5404ux9879ux5de5ux4f5cux7684ux5177ux4f53ux8d21ux732e}
+
+\textbf{部分符合。} 原文逐项介绍 VoxPoser、RT-2 和层级扩散策略，其余若干判断用成组编号支撑。以下沿用原论文编号，说明关键引文与本文论证的关系。
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{{[}15{]} VoxPoser（Huang 等）}用语言模型推断操作目标与约束，再通过三维价值图生成机器人轨迹。该系统已有闭环操作能力。与 ELLMER 对比时，应具体讨论视觉与力反馈如何进入各自的执行过程。\href{https://proceedings.mlr.press/v229/huang23b.html}{会议论文}
+\item
+  \textbf{{[}27{]} 零样本语言规划（Huang 等）}从预训练语言模型中提取任务步骤，并将这些步骤映射到环境中可执行的动作。该工作为本文使用语言模型分解任务提供先例。\href{https://proceedings.mlr.press/v162/huang22a.html}{会议论文}
+\item
+  \textbf{{[}29{]} RT-2（Zitkovich 等）}用网络视觉语言数据和机器人轨迹共同微调模型，将知识迁移到机器人控制。它为陌生物体和新指令的适应能力提供证据，代表一种端到端路线。\href{https://proceedings.mlr.press/v229/zitkovich23a.html}{会议论文}
+\item
+  \textbf{{[}30{]} 层级扩散策略（Ma 等）}由高层预测下一个末端执行器位姿，再由低层扩散策略生成符合运动学约束的轨迹。它提供了分层控制的参照。描述这项前作时，应明确高层输出的是目标位姿。\href{https://openaccess.thecvf.com/content/CVPR2024/html/Ma_Hierarchical_Diffusion_Policy_for_Kinematics-Aware_Multi-Task_Robotic_Manipulation_CVPR_2024_paper.html}{会议论文}
+\item
+  \textbf{{[}32{]} 检索增强生成（Lewis 等）}在语言生成时从外部语料检索相关内容。ELLMER 借用了这种机制，将检索对象改为机器人动作的代码示例。\href{https://proceedings.nips.cc/paper/2020/hash/6b493230205f780e1bc26945df7481e5-Abstract.html}{会议论文}
+\end{itemize}
+
+第 593 页用 {[}16{]} 至 {[}23{]} 支撑模仿学习的适应性限制，又以 {[}36{]} 至 {[}53{]} 指向补充背景，正文未逐篇说明这些引文的作用。比如，{[}16{]} 研究机器人倒饮料，{[}19{]}（CLIPort）处理语言指令与空间操作位置的对应。用一个句子分别交代任务、成果和实验边界，能让读者看出各文献支持的是哪一项判断。
+
+\subsection{引言是否按章节预告全文结构}\label{ux5f15ux8a00ux662fux5426ux6309ux7ae0ux8282ux9884ux544aux5168ux6587ux7ed3ux6784}
+
+\textbf{缺少章节导览。} 引言末段提出 ELLMER 和咖啡制作实验，并指向图 1。图 1 提供系统概览。若补写篇章安排，可以说明 Results 报告任务演示和模块评估，Discussion 解释适用条件，Methods 交代硬件、检索与控制实现。这样的导览也能帮助读者在先见到结果、后读到方法的期刊结构中找到评价细节。
+
+\section{正文的四个问题}\label{ux6b63ux6587ux7684ux56dbux4e2aux95eeux9898}
+
+\subsection{正文要解决什么问题}\label{ux6b63ux6587ux8981ux89e3ux51b3ux4ec0ux4e48ux95eeux9898}
+
+作者要让一台机械臂把开放式的口头请求分解成有先后依赖的动作，并根据现场观测调整这些动作。以制作热饮为例，杯子能否直接找到会决定是否插入开抽屉的动作。倒水时杯位会影响末端轨迹，液体重量又决定何时停止。图 1 将这一问题落实为图像与语言输入、动作代码生成、机械臂执行和传感器反馈（第 593、597--598 页）。
+
+\subsection{作者为什么选择这些方法}\label{ux4f5cux8005ux4e3aux4ec0ux4e48ux9009ux62e9ux8fd9ux4e9bux65b9ux6cd5}
+
+\textbf{用语言模型分解任务。} GPT-4 根据指令和初始图像选择任务并生成代码。作者在方法节注明，可执行控制代码的思路继承自 Code as Policies {[}65{]}，该工作已用语言模型生成能够接收感知反馈的机器人程序。\href{https://ieeexplore.ieee.org/abstract/document/10160591/}{会议论文}
+
+\textbf{用 RAG 检索动作示例。} 系统按请求检索开抽屉、舀取、倒水等已有函数，使模型可以组合并调整经过验证的动作。作者选用自定义 GPT 的内置检索功能，理由是实现方便，而且在其任务设置中能稳定提供相关示例。知识库扩大后的检索质量与计算代价仍需单独测量（第 594、598 页）。
+
+\textbf{用视觉定位、用力反馈控制接触。} RGB-D 视觉估计物体位姿，帮助机械臂重新定位被移动的杯子。力和力矩传感器提供接触信息，可用于判断放杯、估计倒水量和控制画笔压力。ROS 控制器接收生成的代码并执行反馈控制，感知更新速度因模块而异（图 1，第 595、598 页）。
+
+\subsection{作者做了哪些假设}\label{ux4f5cux8005ux505aux4e86ux54eaux4e9bux5047ux8bbe}
+
+\textbf{感知与动作先验。} 讨论节列出两项前提，即视觉模块能正确识别物体，并且系统掌握器具的可供性，亦即器具可以怎样被抓取或操作。实验给定了水壶、勺子和门把手的相关信息。知识库也预先包含主要动作示例（第 594、597 页）。
+
+\textbf{低层控制与实验范围。} 方法节假设低层控制负责避障，并在动作函数中设置速度、力和工作空间限制。实验使用一台机械臂和一组预设的厨房物件。这些条件决定了文中结论首先适用于所测试的环境和扰动（第 597--599 页）。
+
+\textbf{倒水的准静态近似。} 作者假设倒水足够缓慢，传感器测得的竖直力变化主要来自液体质量变化。加速度增大后，惯性和质心变化会进入测量值。第 595 页报告的高速条件下误差增加，与该近似的适用范围相符（第 595、598 页）。
+
+\subsection{作者如何验证结果}\label{ux4f5cux8005ux5982ux4f55ux9a8cux8bc1ux7ed3ux679c}
+
+\textbf{整项任务。} 图 2、图 6 和补充视频 1 展示了从指令到咖啡制作与盘子装饰的过程。照片记录了开门、取放、舀取、倒水和绘画等步骤。这组证据支持整套流程在该实验场景中可以运行。若要估计系统执行的稳定性，还需要各情形下的试验次数、完成率和失败记录（第 593--594、597 页）。
+
+\textbf{感知和接触操作。} 白杯遮挡比例为 20\% 至 30\% 时，平均识别率约为 90\%。遮挡达到 80\% 至 90\% 时，约为 20\%。图 4 给出操作阶段的力、速度与位置曲线。作者报告在较低倾倒速度下，每 100 克液体的计量误差约为 5.4 克。这些结果分别刻画了遮挡对识别的影响，以及特定条件下力反馈用于计量的精度（第 595 页，图 3、图 4）。
+
+\textbf{生成计划的对照。} 作者用语言模型生成 80 条覆盖知识库任务范围的请求，对比动态检索和将知识库静态纳入上下文的基线。原文将后者与 VoxPoser 联系起来。表中指标是生成回答的忠实度，三种模型均在使用 RAG 时取得更高分数。完整机械臂系统的对照仍需在相同任务与扰动下执行，再按统一的成功判据比较（第 595--596 页）。
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lrr@{}}
+\toprule\noalign{}
+语言模型 & 静态上下文 & 动态检索 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+GPT-4 & 0.74 & 0.88 \\
+GPT-3.5-turbo & 0.78 & 0.86 \\
+Zephyr-7B-beta & 0.37 & 0.44 \\
+\end{longtable}
+}
+
+\section{写作上的不足与修改建议}\label{ux5199ux4f5cux4e0aux7684ux4e0dux8db3ux4e0eux4feeux6539ux5efaux8bae}
+
+\textbf{把关键术语写成可观察条件。} 标题和摘要使用“不可预测环境”，引言还讨论“类人智能”。建议在引言用杯子移动、目标遮挡和抽屉开合方式说明实验涵盖的变化，再定义各子任务和整项任务怎样算完成。这样读者可以按同一标准检查结果与结论。
+
+\textbf{把对照实验的设置交代完整。} 正文将静态上下文基线称为 VoxPoser，却未在该段说明复用了哪些原方法组件。建议报告基线与 ELLMER 的共同输入，以及提示词、知识库内容、检索设置和忠实度评分方法。计划忠实度、视觉识别率和实物任务完成率应各自对应具体的评价过程。
+
+\textbf{用试验细节支持量化表述。} 图 4 的力曲线有助于解释不同操作的接触特征。若同时报告重复次数、测量误差和失败类型，读者便可判断这条曲线是否具有代表性。第 595 页用线速度单位 m/s 表示“pitch velocity”，建议核对速度的物理量、记录位置和单位，并说明它如何影响倒水误差。
+
+\textbf{将结论收束到数据覆盖的范围。} 原文在 Results 和 Discussion 交代了重度遮挡、高速倾倒和中途切换任务的限制。摘要和结论可明确写出已有演示的设备、任务和扰动条件。可扩展性和执行效率则分别需要随知识库规模变化的测试，以及与其他系统在同一任务上的耗时对照。
+
+\section{原论文附件}\label{ux539fux8bbaux6587ux9644ux4ef6}
+
+期刊发表版全文随附，文件名为 ELLMER\_Nature\_Machine\_Intelligence\_2025.pdf。正文页码、图号和方括号内的文献编号均沿用该论文。
+\end{document}
