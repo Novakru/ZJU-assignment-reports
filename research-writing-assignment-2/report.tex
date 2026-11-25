@@ -9,11 +9,10 @@
 \setCJKmainfont{SimSun}[BoldFont=SimHei]
 \setCJKsansfont{SimHei}
 \usepackage{amsmath,array,booktabs,calc,caption,enumitem,fancyhdr,graphicx,pgfplots,tabularx,titlesec,xcolor}
-\usepackage[most]{tcolorbox}
 \usepackage{hyperref}
 \pgfplotsset{compat=1.18}
 
-% Qiushi Blue and the ZJUI mark follow the repository template.
+% Qiushi Blue follows the repository template.
 \definecolor{QiushiBlue}{RGB}{0,63,136}
 \colorlet{ReportBlue}{QiushiBlue}
 \definecolor{TextGray}{HTML}{555B66}
@@ -26,11 +25,7 @@
 }
 \newcommand{\ReportTitle}{具身大语言模型机器人论文写作评析}
 \newcommand{\ReportShortTitle}{具身大语言模型机器人论文写作评析}
-\newcommand{\ReportAuthors}{蒋佳豪（22671064）}
-\newcommand{\ReportInstitution}{浙江大学国际联合学院}
-\newcommand{\ReportTypeLabel}{科学研究与写作指导 作业二}
 \newcommand{\ReportDate}{2026年12月8日}
-\newcommand{\ZJULogo}{../zju-tech-report/assets/zjui-horizontal-color.pdf}
 
 \titleformat{\section}
   {\rmfamily\bfseries\fontsize{14}{18}\selectfont\color{ReportBlue}}
@@ -52,39 +47,24 @@
 \widowpenalty=10000
 \setcounter{secnumdepth}{2}
 
-\newcommand{\makezjutitle}{%
-  \noindent
-  \raisebox{-0.5mm}{\includegraphics[clip,height=10.5mm]{\ZJULogo}}%
-  \hfill
-  {\small\color{TextGray}\ReportTypeLabel}\par
-  \vspace{5pt}\noindent\textcolor{QiushiBlue}{\rule{\linewidth}{0.8pt}}\par
-  \vspace{13pt}
-  {\centering\rmfamily\bfseries\fontsize{18}{24}\selectfont\ReportTitle\par}
-  \vspace{10pt}\noindent\textcolor{QiushiBlue}{\rule{\linewidth}{0.8pt}}\par
-  \vspace{9pt}
-  {\centering\rmfamily\bfseries\fontsize{12}{16}\selectfont\ReportAuthors\par}
+\newcommand{\makecoursetitle}{%
+  {\centering\fontsize{18}{24}\selectfont
+    2026秋季班：写作课程作业：\par}
+  \vspace{12pt}
+  {\fontsize{12}{17}\selectfont
+    课程名称：\textbf{科学研究与写作指导，开\ 课\ 号：}\par
+    \textbf{开课院系：国际联合学院（海宁国际校区）ZJUI，学期：2026-2027学年秋冬学期}\par
+    \textbf{开课教师：李尔平教授，\mbox{liep@zju.edu.cn}}\par}
+  \vspace{12pt}
+  {\centering\bfseries\fontsize{16}{21}\selectfont\ReportTitle\par}
   \vspace{3pt}
-  {\centering\rmfamily\fontsize{10}{14}\selectfont\ReportInstitution\par}
-  \vspace{10pt}
-  \begin{tcolorbox}[
-    enhanced,
-    colback=white,
-    colframe=QiushiBlue,
-    boxrule=0.8pt,
-    arc=2mm,
-    left=8mm,right=8mm,top=4mm,bottom=4mm,
-    before skip=0pt,after skip=0pt
-  ]
-  {\centering\bfseries\color{ReportBlue}报告提要\par}
-  \vspace{3pt}
-  {\small 本报告分析 Mon-Williams 等人的 ELLMER 论文，逐项检查摘要、引言和正文如何提出问题、说明方法并报告结果。真实机械臂演示支持该方案在实验场景中的可行性。规划文本的对比结果进一步支持检索增强生成的作用。论文可以通过补充整项任务的统计、说明基线设置和限定结论范围，使主张与证据更容易对应。\par}
-  \vspace{4pt}
-  {\footnotesize\textbf{提交日期}\quad\ReportDate\par}
-  \end{tcolorbox}
-  \vspace{13pt}
+  {\centering 蒋佳豪（22671064）\quad 提交日期：\ReportDate\par}
+  \vspace{11pt}
+  \textbf{报告提要}\quad
+  本报告分析 Mon-Williams 等人的 ELLMER 论文，逐项检查摘要、引言和正文如何提出问题、说明方法并报告结果。真实机械臂演示支持该方案在实验场景中的可行性。规划文本的对比结果进一步支持检索增强生成的作用。论文可以通过补充整项任务的统计、说明基线设置和限定结论范围，使主张与证据更容易对应。\par
+  \vspace{8pt}
   \thispagestyle{plain}
 }
-
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[RO,RE]{\footnotesize\rmfamily\color{TextGray}\ReportShortTitle}
@@ -99,7 +79,7 @@
 }
 
 \begin{document}
-\makezjutitle
+\makecoursetitle
 \section{参考论文信息}
 
 \textbf{题目}　Embodied large language models enable robots to complete complex tasks in unpredictable environments
